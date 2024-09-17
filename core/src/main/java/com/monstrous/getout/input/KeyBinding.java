@@ -1,8 +1,9 @@
-package com.monstrous.getout;
+package com.monstrous.getout.input;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Preferences;
+import com.monstrous.getout.Settings;
 
 public enum KeyBinding {
     FORWARD ("Move forward", Keys.W),

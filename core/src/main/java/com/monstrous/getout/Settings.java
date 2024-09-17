@@ -8,7 +8,7 @@ public class Settings {
 
     public static String        title = "Get The Heck Out";
 
-    public static float         ambientLightLevel = 0.3f; //0.03f;
+    public static float         ambientLightLevel = 0.1f; //0.03f;
     public static float         directionalLightLevel = 0.0f;
 
     // shadows
@@ -49,12 +49,13 @@ public class Settings {
     static public boolean invertLook = false;
     static public boolean freeLook = true;
     static public float headBobDuration = 0.6f; // s
-    static public float headBobHeight = 0.02f;  // m
+    static public float headBobHeight = 0.04f;  // m
     static public float degreesPerPixel = 0.05f; // mouse sensitivity
 
 
     static public boolean noClip = true;
 
     static public boolean postFilter = true;   // post-processing shader effects
+    static public boolean camStabilisation = false;
 
 }

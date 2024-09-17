@@ -1,4 +1,4 @@
-package com.monstrous.getout;
+package com.monstrous.getout.input;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.IntIntMap;
+import com.monstrous.getout.Settings;
+import com.monstrous.getout.World;
 
 
 public class CameraController extends InputAdapter {
@@ -129,7 +131,8 @@ public class CameraController extends InputAdapter {
 //        if(Settings.noClip || world.canReach(newPos, 3f))
             camera.position.set(newPos);
 
-        camera.up.set(Vector3.Y);
+        if(Settings.camStabilisation)
+            camera.up.set(Vector3.Y);
 
         camera.position.y = Settings.eyeHeight + jumpHeight + bobHeight( bobSpeed, deltaTime); // apply some head bob if we're moving
 

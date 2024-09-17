@@ -5,7 +5,9 @@ import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
+import com.monstrous.getout.filters.PostProcessor;
 import com.monstrous.getout.filters.VCRFilter;
+import com.monstrous.getout.input.CameraController;
 import net.mgsx.gltf.scene3d.attributes.PBRCubemapAttribute;
 import net.mgsx.gltf.scene3d.attributes.PBRFloatAttribute;
 import net.mgsx.gltf.scene3d.attributes.PBRTextureAttribute;
@@ -33,7 +35,7 @@ public class GameView implements Disposable {
     private CascadeShadowMap csm;
     public CameraController camController;     // public so that GameScreen can link it to input multiplexer
     private FrameBuffer fbo;
-    private VCRFilter filter;
+    private PostProcessor filter;
 
 
     public GameView() {
@@ -89,7 +91,7 @@ public class GameView implements Disposable {
         skybox = new SceneSkybox(environmentCubemap);
         sceneManager.setSkyBox(skybox);
 
-        filter = new VCRFilter();
+        filter = new PostProcessor();
 
     }
 
