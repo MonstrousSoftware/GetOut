@@ -8,8 +8,12 @@ public class Settings {
 
     public static String        title = "Get The Heck Out";
 
+    public static boolean       release = false;
+
     public static float         ambientLightLevel = 0.1f; //0.03f;
     public static float         directionalLightLevel = 0.0f;
+
+    static public Color         fogColour = new Color(.0f, 0.0f, 0.0f, 1f);
 
     // shadows
     public static int           shadowMapSize = 2048;
@@ -48,14 +52,14 @@ public class Settings {
 
     static public boolean invertLook = false;
     static public boolean freeLook = true;
-    static public float headBobDuration = 0.6f; // s
+    static public float headBobDuration = 0.5f; // s
     static public float headBobHeight = 0.04f;  // m
     static public float degreesPerPixel = 0.05f; // mouse sensitivity
 
 
-    static public boolean noClip = true;
+    static public boolean noClip = false;
 
-    static public boolean postFilter = true;   // post-processing shader effects
-    static public boolean camStabilisation = false;
+    static public boolean postFilter = release;   // post-processing shader effects
+    static public boolean camStabilisation = !release;
 
 }

@@ -2,12 +2,15 @@ package com.monstrous.getout;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.g3d.shaders.DepthShader;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
 import com.monstrous.getout.filters.PostProcessor;
 import com.monstrous.getout.filters.VCRFilter;
 import com.monstrous.getout.input.CameraController;
+import net.mgsx.gltf.scene3d.attributes.FogAttribute;
 import net.mgsx.gltf.scene3d.attributes.PBRCubemapAttribute;
 import net.mgsx.gltf.scene3d.attributes.PBRFloatAttribute;
 import net.mgsx.gltf.scene3d.attributes.PBRTextureAttribute;
@@ -16,6 +19,9 @@ import net.mgsx.gltf.scene3d.scene.CascadeShadowMap;
 import net.mgsx.gltf.scene3d.scene.Scene;
 import net.mgsx.gltf.scene3d.scene.SceneManager;
 import net.mgsx.gltf.scene3d.scene.SceneSkybox;
+import net.mgsx.gltf.scene3d.shaders.PBRDepthShaderProvider;
+import net.mgsx.gltf.scene3d.shaders.PBRShaderConfig;
+import net.mgsx.gltf.scene3d.shaders.PBRShaderProvider;
 import net.mgsx.gltf.scene3d.utils.IBLBuilder;
 
 import static com.badlogic.gdx.Gdx.gl;
@@ -40,16 +46,33 @@ public class GameView implements Disposable {
 
     public GameView() {
 
-        sceneManager = new SceneManager();
+        PBRShaderConfig colorConfig = new PBRShaderConfig();
+
+        // todo tweak
+        colorConfig.numDirectionalLights = 1;
+        colorConfig.numPointLights = 0;
+        colorConfig.numSpotLights = 0;
+        colorConfig.numBones = 12;      // patrol bot has 12 bones
+
+        DepthShader.Config depthConfig= new DepthShader.Config();
+        depthConfig.numBones = 12;
+
+        sceneManager = new SceneManager(
+            new PBRShaderProvider(colorConfig),
+            new PBRDepthShaderProvider(depthConfig)
+        );
+
+        //sceneManager = new SceneManager();
 
         // setup camera
-        camera = new PerspectiveCamera(60f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        camera = new PerspectiveCamera(40, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camDist = 5f;
         camera.near = 0.1f;
         camera.far = 150f;
-        camera.position.set(-3,1.8f, 5).nor().scl(camDist);
+        camera.position.set(0,1.8f, 5).nor().scl(camDist);
+        camera.position.set(0,1.8f, 0);
         camera.up.set(Vector3.Y);
-        camera.lookAt(Vector3.Zero);
+        camera.lookAt(0, 1.8f, 100f);
         camera.update();
         sceneManager.setCamera(camera);
 
@@ -62,7 +85,7 @@ public class GameView implements Disposable {
         light.direction.set(0.3f, -1f, -0.5f).nor();
         light.color.set(Color.WHITE);
         light.intensity = Settings.directionalLightLevel;
-//        sceneManager.environment.add(light);
+//        sceneManager.environment.add(light);      // sunlight
 
         if(Settings.cascadedShadows) {
             csm = new CascadeShadowMap(Settings.numCascades);
@@ -86,6 +109,10 @@ public class GameView implements Disposable {
         sceneManager.environment.set(new PBRTextureAttribute(PBRTextureAttribute.BRDFLUTTexture, brdfLUT));
         sceneManager.environment.set(PBRCubemapAttribute.createSpecularEnv(specularCubemap));
         sceneManager.environment.set(PBRCubemapAttribute.createDiffuseEnv(diffuseCubemap));
+
+        sceneManager.environment.set(new ColorAttribute(ColorAttribute.Fog, Settings.fogColour));
+        sceneManager.environment.set(new FogAttribute(FogAttribute.FogEquation).set(2, 15, 4.0f));  // close fog
+
 
         // setup skybox
         skybox = new SceneSkybox(environmentCubemap);

@@ -1,8 +1,10 @@
 package com.monstrous.getout;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g3d.model.Node;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import net.mgsx.gltf.loaders.gltf.GLTFLoader;
@@ -17,12 +19,14 @@ public class World implements Disposable {
     private Array<Scene> deleteList;
     public Scene patrolBot;
     public Scene bullet;
+    private Colliders colliders;
 
 
     public World() {
         scenes = new Array();
         bullets = new Array<>();
         deleteList = new Array<>();
+        colliders = new Colliders();
         reload();
     }
 
@@ -38,9 +42,33 @@ public class World implements Disposable {
         patrolBot.animationController.setAnimation("Idle", 1);
 //        scenes.add(patrolBot);
 
-        sceneAsset2 = new GLTFLoader().load(Gdx.files.internal("models/officeMaze.gltf"));
-        scenes.add( new Scene(sceneAsset2.scene) );
 
+//        sceneAsset2 = new GLTFLoader().load(Gdx.files.internal("models/coltest.gltf"));
+//        Scene level = new Scene(sceneAsset2.scene);
+//        parseLevel( level );
+//        scenes.add( level  );
+
+
+        sceneAsset2 = new GLTFLoader().load(Gdx.files.internal("models/officeMaze.gltf"));
+        Scene level = new Scene(sceneAsset2.scene);
+        parseLevel( level );
+        scenes.add( level  );
+
+    }
+
+    private void parseLevel(Scene level){
+        BoundingBox bbox = new BoundingBox();
+        Vector3 ctr = new Vector3();
+
+        for(Node node : level.modelInstance.nodes ){
+            node.calculateBoundingBox(bbox);
+            bbox.getCenter(ctr);
+            Gdx.app.log("node:", node.id + " " +bbox.toString());
+
+            if(!node.id.contentEquals("OuterWall"))         // not a collider as its wall face inwards, todo boundary
+                colliders.add(node.id, bbox);
+        }
+        Gdx.app.log("nodes:", ""+level.modelInstance.nodes.size);
     }
 
 
@@ -67,10 +95,26 @@ public class World implements Disposable {
     public static final float MAX_BULLET_DIST = 50f;    // maximum distance from origin before bullet is deleted
     private Vector3 vec = new Vector3();
 
-    public void update( float deltaTime ){
-        deleteList.clear();
+    public boolean canReach( Vector3 position ) {
+
+        String colliderId = colliders.collisionTest(position);
+        if (colliderId != null) {
+            Gdx.app.log("collision", colliderId);
+            return false;
+        }
+        return true;
+    }
+
+    public void update( Vector3 cameraPosition, float deltaTime ){
+
+//        String colliderId = colliders.collisionTest(cameraPosition);
+//        if (colliderId != null) {
+//            Gdx.app.log("collided!", colliderId);
+//        }
+
 
         // animate bullets
+        deleteList.clear();
         for(Scene bullet : bullets){
             vec.set(0,0,1f);    // forward vector
             vec.rot(bullet.modelInstance.transform);    // rotate with bullet orientation

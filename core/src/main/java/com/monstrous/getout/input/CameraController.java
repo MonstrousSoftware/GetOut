@@ -128,7 +128,9 @@ public class CameraController extends InputAdapter {
         newPos.set(fwdHorizontal).scl(deltaTime * speed);
         newPos.add(sideChange);
         newPos.add(camera.position);
-//        if(Settings.noClip || world.canReach(newPos, 3f))
+        world.canReach(newPos);
+
+        //if(Settings.noClip || world.canReach(newPos))
             camera.position.set(newPos);
 
         if(Settings.camStabilisation)
@@ -196,7 +198,7 @@ public class CameraController extends InputAdapter {
         float bobHeight = 0;
         if(Math.abs(speed) > 0.1f ) {
             bobAngle += deltaTime * 2.0f * Math.PI / Settings.headBobDuration;
-            bobAngle += MathUtils.random(0.4f) - 0.2f;  // add bit of noise to the angle
+            bobAngle += MathUtils.random(1f) - 0.5f;  // add bit of noise to the angle
 
             // move the head up and down in a sine wave
             bobHeight = (float) (Settings.headBobHeight * Math.sin(bobAngle));

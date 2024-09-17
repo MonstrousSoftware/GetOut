@@ -8,6 +8,14 @@ A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://git
 
 
 
+
+to do:
+- collision detection
+- pickup cards
+- show cards in HUD
+- activate exit
+
+
 This project was generated with a template including simple application launchers and a main class extending `Game` that sets the first screen.
 
 ## Platforms

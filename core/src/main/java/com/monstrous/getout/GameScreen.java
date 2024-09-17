@@ -44,7 +44,7 @@ public class GameScreen extends ScreenAdapter {
             Gdx.app.exit();
 
         botController.update(world, deltaTime, gameView.camera);
-        world.update(deltaTime);
+        world.update(gameView.camera.position, deltaTime);
         gameView.render( world, deltaTime );
       }
 
