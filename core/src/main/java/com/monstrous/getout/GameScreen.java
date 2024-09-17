@@ -11,6 +11,7 @@ public class GameScreen extends ScreenAdapter {
     private final Main game;
     public World world;
     public GameView gameView;
+    private ColliderView colliderView;
     private PatrolBotController botController;
 
     public GameScreen(Main game) {
@@ -23,6 +24,7 @@ public class GameScreen extends ScreenAdapter {
 
         gameView = new GameView();
         world = new World();
+        colliderView = new ColliderView( world );
 
         botController = new PatrolBotController();
 
@@ -46,6 +48,9 @@ public class GameScreen extends ScreenAdapter {
         botController.update(world, deltaTime, gameView.camera);
         world.update(gameView.camera.position, deltaTime);
         gameView.render( world, deltaTime );
+
+        if(Settings.showColliders)
+            colliderView.render(gameView.camera);
       }
 
     @Override
@@ -66,6 +71,7 @@ public class GameScreen extends ScreenAdapter {
         // Destroy screen's assets here.
         gameView.dispose();
         world.dispose();
+        colliderView.dispose();
         Gdx.input.setCursorCatched(false);
     }
 }

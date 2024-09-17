@@ -1,9 +1,20 @@
 package com.monstrous.getout;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.VertexAttributes;
+import com.badlogic.gdx.graphics.g3d.Material;
+import com.badlogic.gdx.graphics.g3d.Model;
+import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
+import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
+import com.badlogic.gdx.graphics.g3d.utils.shapebuilders.BoxShapeBuilder;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Disposable;
 
 
 // to improve:
@@ -11,44 +22,75 @@ import com.badlogic.gdx.utils.Array;
 // sphere/bbox intersection
 // collision response: bounce player of wall normal
 
-public class Colliders {
-    static final float RADIUS = 1f;
+public class Colliders implements Disposable {
+    static final float RADIUS = .5f;
 
-    private Array<Collider> colliders;
+    public Array<Collider> colliders;
     private BoundingBox player;
     private Vector3 min;
     private Vector3 max;
+    private Vector3 ctr;
+    private ModelBuilder modelBuilder;
+    private Material material;
+    private Array<Disposable> disposables;
+
 
     public Colliders() {
         colliders = new Array<>();
         player = new BoundingBox();
         min = new Vector3();
         max = new Vector3();
+        ctr = new Vector3();
+        modelBuilder = new ModelBuilder();
+        material = new Material(ColorAttribute.createDiffuse(Color.WHITE));
+        disposables = new Array<>();
     }
 
-    public void add(String id, BoundingBox bbox){
+    public void add(String id, BoundingBox bbox) {
         Collider col = new Collider(id, bbox);
         colliders.add(col);
+        addDebugModel(col);
     }
 
     // returns null if no collision, otherwise the node id
-    public String collisionTest( Vector3 position ){
+    public String collisionTest(Vector3 position) {
         // define a bounding box for the player
+        // collide at height .5m above ground (e.g. to collide into desks)
         min.set(position);
         min.x -= RADIUS;
         min.z -= RADIUS;
+        min.y = .5f;
         max.set(position);
         max.x += RADIUS;
         max.z += RADIUS;
+        max.y = .5f;
         player.set(min, max);
 
         // test collision of player with a collider by bounding box intersection
-        for(Collider collider : colliders){
-            if(collider.bbox.intersects(player))
+        for (Collider collider : colliders) {
+            if (collider.bbox.intersects(player))
                 return collider.id;
         }
         return null;
     }
 
+    private void addDebugModel(Collider collider) {
+        // create a debug model matching the collision geom shape
+        modelBuilder.begin();
+        MeshPartBuilder meshBuilder;
+        meshBuilder =modelBuilder.part("part", GL20.GL_LINES, VertexAttributes.Usage.Position ,material);
+        BoundingBox bb = collider.bbox;
+        BoxShapeBuilder.build(meshBuilder, bb.getWidth(), bb.getHeight(), bb.getDepth());
+        Model modelShape = modelBuilder.end();
+        disposables.add(modelShape);
+        bb.getCenter(ctr);
+        collider.debugInstance = new ModelInstance(modelShape, ctr);
+    }
 
+
+    @Override
+    public void dispose() {
+        for(Disposable d : disposables)
+            d.dispose();
+    }
 }

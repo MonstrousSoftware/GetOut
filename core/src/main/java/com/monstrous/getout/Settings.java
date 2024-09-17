@@ -58,8 +58,11 @@ public class Settings {
 
 
     static public boolean noClip = false;
+    static public boolean showColliders = true;
 
     static public boolean postFilter = release;   // post-processing shader effects
     static public boolean camStabilisation = !release;
+
+
 
 }

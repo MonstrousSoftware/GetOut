@@ -69,8 +69,8 @@ public class GameView implements Disposable {
         camDist = 5f;
         camera.near = 0.1f;
         camera.far = 150f;
-        camera.position.set(0,1.8f, 5).nor().scl(camDist);
-        camera.position.set(0,1.8f, 0);
+        //camera.position.set(0,1.8f, 5).nor().scl(camDist);
+        camera.position.set(4,1.8f, -7);
         camera.up.set(Vector3.Y);
         camera.lookAt(0, 1.8f, 100f);
         camera.update();

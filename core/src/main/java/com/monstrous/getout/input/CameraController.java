@@ -128,9 +128,9 @@ public class CameraController extends InputAdapter {
         newPos.set(fwdHorizontal).scl(deltaTime * speed);
         newPos.add(sideChange);
         newPos.add(camera.position);
-        world.canReach(newPos);
+        //world.canReach(newPos);
 
-        //if(Settings.noClip || world.canReach(newPos))
+        if(Settings.noClip || world.canReach(newPos))
             camera.position.set(newPos);
 
         if(Settings.camStabilisation)
