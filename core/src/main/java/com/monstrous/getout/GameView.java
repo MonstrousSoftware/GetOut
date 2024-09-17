@@ -1,13 +1,11 @@
 package com.monstrous.getout;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Cubemap;
-import com.badlogic.gdx.graphics.PerspectiveCamera;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.utils.ScreenUtils;
+import com.monstrous.getout.filters.VCRFilter;
 import net.mgsx.gltf.scene3d.attributes.PBRCubemapAttribute;
 import net.mgsx.gltf.scene3d.attributes.PBRFloatAttribute;
 import net.mgsx.gltf.scene3d.attributes.PBRTextureAttribute;
@@ -17,6 +15,8 @@ import net.mgsx.gltf.scene3d.scene.Scene;
 import net.mgsx.gltf.scene3d.scene.SceneManager;
 import net.mgsx.gltf.scene3d.scene.SceneSkybox;
 import net.mgsx.gltf.scene3d.utils.IBLBuilder;
+
+import static com.badlogic.gdx.Gdx.gl;
 
 public class GameView implements Disposable {
 
@@ -32,7 +32,8 @@ public class GameView implements Disposable {
     private float time;
     private CascadeShadowMap csm;
     public CameraController camController;     // public so that GameScreen can link it to input multiplexer
-
+    private FrameBuffer fbo;
+    private VCRFilter filter;
 
 
     public GameView() {
@@ -44,7 +45,7 @@ public class GameView implements Disposable {
         camDist = 5f;
         camera.near = 0.1f;
         camera.far = 150f;
-        camera.position.set(-3,1.5f, 5).nor().scl(camDist);
+        camera.position.set(-3,1.8f, 5).nor().scl(camDist);
         camera.up.set(Vector3.Y);
         camera.lookAt(Vector3.Zero);
         camera.update();
@@ -87,10 +88,17 @@ public class GameView implements Disposable {
         // setup skybox
         skybox = new SceneSkybox(environmentCubemap);
         sceneManager.setSkyBox(skybox);
+
+        filter = new VCRFilter();
+
     }
 
     public void resize(int width, int height) {
         sceneManager.updateViewport(width, height);
+        if(fbo != null)
+            fbo.dispose();
+        fbo = new FrameBuffer(Pixmap.Format.RGBA8888, width, height, true);
+        filter.resize(width, height);
     }
 
     public void refresh(World world) {
@@ -125,10 +133,19 @@ public class GameView implements Disposable {
         }
 
         // render
-        ScreenUtils.clear(Color.WHITE, true);
-
         sceneManager.update(deltaTime);
-        sceneManager.render();
+        if(Settings.postFilter) {
+            sceneManager.renderShadows();
+            fbo.begin();
+            gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+            sceneManager.renderColors();
+            fbo.end();
+            filter.render(fbo);
+        }
+        else {
+            gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+            sceneManager.render();
+        }
     }
 
 
@@ -141,5 +158,6 @@ public class GameView implements Disposable {
         specularCubemap.dispose();
         brdfLUT.dispose();
         skybox.dispose();
+        filter.dispose();
     }
 }

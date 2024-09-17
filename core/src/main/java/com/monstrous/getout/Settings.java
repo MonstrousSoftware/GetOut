@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Vector3;
 public class Settings {
 
 
-    public static String        title = "PatrolBotTest";
+    public static String        title = "Get The Heck Out";
 
     public static float         ambientLightLevel = 0.3f; //0.03f;
     public static float         directionalLightLevel = 0.0f;
@@ -52,13 +52,9 @@ public class Settings {
     static public float headBobHeight = 0.02f;  // m
     static public float degreesPerPixel = 0.05f; // mouse sensitivity
 
-    static public Color fogColour = new Color(.8f, 0.7f, 0.8f, 1f);
-
-    static public Vector3 gunPosition = new Vector3(.16f, -.15f, -.18f); // gun position in gun camera view
-    static public float gunScale = 0.5f;
-    static public float gunPitch = 5.0f;
-
 
     static public boolean noClip = true;
+
+    static public boolean postFilter = true;   // post-processing shader effects
 
 }
