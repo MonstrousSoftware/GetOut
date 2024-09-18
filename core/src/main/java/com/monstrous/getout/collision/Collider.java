@@ -12,7 +12,7 @@ public class Collider {
     public ModelInstance debugInstance;
 
     public  enum Type {
-        DEFAULT, PICKUP;
+        DEFAULT, PICKUP, OPEN_DOOR, CLOSED_DOOR;
     }
 
     public Collider(String id, Node node, BoundingBox bbox, Type type) {

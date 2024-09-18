@@ -25,6 +25,7 @@ public class World implements Disposable {
     public Colliders colliders;
     public int numElements;
     public boolean[] foundCard;
+    public Collider exitDoor;
 
 
     public World() {
@@ -78,14 +79,23 @@ public class World implements Disposable {
                 continue;
             if(node.id.startsWith("Floor"))
                 continue;
-            if(node.id.startsWith("OuterWall"))     // not a collider as its wall face inwards, todo boundary
-                continue;
 
             if(node.id.startsWith("Card"))
                 type = Collider.Type.PICKUP;
 
-            colliders.add( new Collider(node.id, node, bbox, type));
+            if(node.id.startsWith("ExitDoor"))
+                type = Collider.Type.CLOSED_DOOR;
+
+            if(node.id.startsWith("OpenExitDoor"))
+                type = Collider.Type.OPEN_DOOR;
+
+            Collider collider = new Collider(node.id, node, bbox, type);
+            colliders.add( collider );
             count++;
+
+            if( type == Collider.Type.CLOSED_DOOR)
+                exitDoor = collider;
+
         }
         Gdx.app.log("nodes:", ""+count);
     }
@@ -123,6 +133,10 @@ public class World implements Disposable {
                 pickUp(collider);
                 return true;
             }
+            if(collider.type == Collider.Type.OPEN_DOOR) {
+                exitLevel(collider);
+                return true;
+            }
             return false;
         }
         return true;
@@ -143,6 +157,19 @@ public class World implements Disposable {
             foundCard[2] = true;
         if(collider.id.contentEquals("Card.003"))
             foundCard[3] = true;
+
+        if(numElements == 4){
+            colliders.remove(exitDoor); // remove exit door collider
+            for(NodePart part : exitDoor.node.parts)        // hide Exit Door
+                part.enabled = false;
+        }
+    }
+
+    private void exitLevel(Collider collider){
+        Gdx.app.log("all done",  collider.id);
+        colliders.remove(collider);
+        // play sound
+        // fanfare etc.
     }
 
     public void update( Vector3 cameraPosition, float deltaTime ){
