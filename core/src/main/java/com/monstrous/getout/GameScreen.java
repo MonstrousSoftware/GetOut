@@ -1,9 +1,7 @@
 package com.monstrous.getout;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.*;
+import com.badlogic.gdx.graphics.Cursor;
 import com.monstrous.getout.input.PatrolBotController;
 
 
@@ -36,6 +34,11 @@ public class GameScreen extends ScreenAdapter {
         // hide the mouse cursor and fix it to screen centre, so it doesn't go out the window canvas
         Gdx.input.setCursorCatched(true);
         Gdx.input.setCursorPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
+
+        // on teavm setCursorCatched() doesn't work so hide the cursor and let the user turn with the keyboard
+        // (you can turn a bit with the mouse, until it reaches the side of the canvas).
+        if (Gdx.app.getType() == Application.ApplicationType.WebGL)
+            Gdx.graphics.setSystemCursor(Cursor.SystemCursor.None);     // hide cursor
 
 
     }
@@ -73,5 +76,7 @@ public class GameScreen extends ScreenAdapter {
         world.dispose();
         colliderView.dispose();
         Gdx.input.setCursorCatched(false);
+        if(Gdx.app.getType() == Application.ApplicationType.WebGL)
+            Gdx.graphics.setSystemCursor(Cursor.SystemCursor.Arrow);     // show cursor
     }
 }

@@ -20,6 +20,13 @@ Done - collision detection
 - fps indicator
 
 
+
+Notes:
+- textures need to be power of two for teavm version
+- mouse capture doesn't work on web version, user wil have to use keyboard (A/D) to turn instead of mouse.
+
+
+
 This project was generated with a template including simple application launchers and a main class extending `Game` that sets the first screen.
 
 ## Platforms

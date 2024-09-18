@@ -8,7 +8,7 @@ public class Settings {
 
     public static String        title = "Get The Heck Out";
 
-    public static boolean       release = false;
+    public static boolean       release = true;
 
     public static float         ambientLightLevel = 0.1f; //0.03f;
     public static float         directionalLightLevel = 0.0f;
@@ -58,7 +58,7 @@ public class Settings {
 
 
     static public boolean noClip = false;
-    static public boolean showColliders = true;
+    static public boolean showColliders = false;
 
     static public boolean postFilter = release;   // post-processing shader effects
     static public boolean camStabilisation = !release;

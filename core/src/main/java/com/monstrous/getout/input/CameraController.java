@@ -86,10 +86,10 @@ public class CameraController extends InputAdapter {
 
 
         if (keys.containsKey(KeyBinding.TURN_LEFT.getKeyCode())) {
-            camera.direction.rotate(camera.up, deltaTime * 30f);
+            camera.direction.rotate(camera.up, deltaTime * 120f);
         }
         if (keys.containsKey(KeyBinding.TURN_RIGHT.getKeyCode())) {
-            camera.direction.rotate(camera.up, -deltaTime * 30f);
+            camera.direction.rotate(camera.up, -deltaTime * 120f);
         }
 
         if (keys.containsKey(KeyBinding.JUMP.getKeyCode()) && !isJumping) {
