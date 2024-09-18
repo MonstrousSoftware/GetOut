@@ -24,6 +24,7 @@ public class World implements Disposable {
     public Scene bullet;
     public Colliders colliders;
     public int numElements;
+    public boolean[] foundCard;
 
 
     public World() {
@@ -54,6 +55,9 @@ public class World implements Disposable {
         scenes.add( level  );
 
         numElements = 0;
+        foundCard = new boolean[4];
+        for(int i = 0; i < 4; i++)
+            foundCard[i] = false;
 
     }
 
@@ -131,6 +135,14 @@ public class World implements Disposable {
             part.enabled = false;
         // play sound
         numElements++;
+        if(collider.id.contentEquals("Card"))
+            foundCard[0] = true;
+        if(collider.id.contentEquals("Card.001"))
+            foundCard[1] = true;
+        if(collider.id.contentEquals("Card.002"))
+            foundCard[2] = true;
+        if(collider.id.contentEquals("Card.003"))
+            foundCard[3] = true;
     }
 
     public void update( Vector3 cameraPosition, float deltaTime ){

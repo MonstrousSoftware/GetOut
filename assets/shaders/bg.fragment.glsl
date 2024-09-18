@@ -62,6 +62,6 @@ void main()
 //    t *= bright;
 //    gl_FragColor = vec4(t * vec3(pow(t, 0.5-t), 0.3, 0.4*t ), 1.0);
 
-    gl_FragColor = vec4(uv.s, uv.t, uv.s-uv.t, 1.0);
+    gl_FragColor = vec4(1.0-uv.t, uv.s, uv.s-uv.t, 1.0);
 
 }

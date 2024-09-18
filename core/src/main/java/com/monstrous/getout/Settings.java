@@ -8,7 +8,7 @@ public class Settings {
 
     public static String        title = "Get The Heck Out";
 
-    public static boolean       release = true;
+    public static boolean       release = false;
 
     public static float         ambientLightLevel = 0.1f; //0.03f;
     public static float         directionalLightLevel = 0.0f;

@@ -2,6 +2,7 @@ package com.monstrous.getout.screens;
 
 import com.badlogic.gdx.Game;
 import com.monstrous.getout.Assets;
+import com.monstrous.getout.Settings;
 import com.monstrous.getout.input.KeyBinding;
 import com.monstrous.getout.screens.GameScreen;
 
@@ -18,7 +19,10 @@ public class Main extends Game {
         assets = new Assets();
         KeyBinding.load();
         assets.finishLoading();
-        setScreen(new MainMenuScreen(this));
+        if(Settings.release)
+            setScreen(new MainMenuScreen(this));
+        else
+            setScreen(new GameScreen(this));
     }
 
     @Override

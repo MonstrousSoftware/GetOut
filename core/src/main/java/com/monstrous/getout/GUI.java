@@ -2,10 +2,14 @@ package com.monstrous.getout;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -23,6 +27,9 @@ public class GUI implements Disposable {
     private Label elementsLabel;
     private int numElements;
     private World world;
+    private Image[] cards;
+    private Texture[] textures;
+
 
     public GUI(Main game, World world) {
         this.world = world;
@@ -31,6 +38,14 @@ public class GUI implements Disposable {
         stage = new Stage(new ScreenViewport());
         skin = game.assets.SKIN;
         numElements = -1;
+        cards = new Image[4];
+        textures = new Texture[5];
+        textures[0] = new Texture(Gdx.files.internal("images/cardEmpty.png"));
+        textures[1]  = new Texture(Gdx.files.internal("images/cardEarth.png"));
+        textures[2]  = new Texture(Gdx.files.internal("images/cardWater.png"));
+        textures[3]  = new Texture(Gdx.files.internal("images/cardAir.png"));
+        textures[4]  = new Texture(Gdx.files.internal("images/cardFire.png"));
+
         //rebuild();
     }
 
@@ -55,6 +70,24 @@ public class GUI implements Disposable {
         screenTable.pack();
 
         stage.addActor(screenTable);
+
+        Table screenTable2 = new Table();
+        screenTable2.setFillParent(true);
+
+
+
+        for(int i = 0; i < 4; i++){
+            Image card;
+            if(world.foundCard[i])
+                card = new Image(textures[i+1]);
+            else
+                card = new Image(textures[0]);
+            screenTable2.add(card);
+        }
+        screenTable2.bottom().right();
+        screenTable2.pack();
+
+        stage.addActor(screenTable2);
     }
 
     public void showMessage( String text, boolean priority ){
@@ -94,6 +127,7 @@ public class GUI implements Disposable {
             // compare with local variable to avoid string concatenation at every frame
             elementsLabel.setText("ELEMENTS: " + world.numElements);
             numElements = world.numElements;
+            rebuild();
         }
     }
 
