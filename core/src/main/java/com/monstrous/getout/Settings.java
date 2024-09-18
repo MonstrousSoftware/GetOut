@@ -37,33 +37,34 @@ public class Settings {
     public static boolean       useGLprofiler = false;      // set to true to get GL errors reported (NB big impact on frame rate)
 
 
-    static public boolean supportControllers = true;       // disable in case it causes issues
-    static public float verticalReadjustSpeed = 4f;
+    static public boolean       supportControllers = true;       // disable in case it causes issues
+    static public float         verticalReadjustSpeed = 4f;
 
-    static public float eyeHeight = 1.2f;   // meters
+    static public float         eyeHeight = 1.2f;   // meters
 
-    static public float walkSpeed = 10f;    // m/s
-    static public float runFactor = 2f;     // multiplier for walk speed
-    static public float turnSpeed = 120f;   // degrees/s
-    static public float jumpForce = 5.0f;
-    static public float groundRayLength = 1.2f;
-    static public float navHeight = 1.6f;       // should be about half the height of the characters
-
-
-    static public boolean invertLook = false;
-    static public boolean freeLook = true;
-    static public float headBobDuration = 0.5f; // s
-    static public float headBobHeight = 0.04f;  // m
-    static public float degreesPerPixel = 0.05f; // mouse sensitivity
+    static public float         walkSpeed = 10f;    // m/s
+    static public float         runFactor = 2f;     // multiplier for walk speed
+    static public float         turnSpeed = 120f;   // degrees/s
+    static public float         jumpForce = 5.0f;
+    static public float         groundRayLength = 1.2f;
+    static public float         navHeight = 1.6f;       // should be about half the height of the characters
 
 
-    static public boolean noClip = false;
-    static public boolean showColliders = false;
+    static public boolean       invertLook = false;
+    static public boolean       freeLook = true;
+    static public float         headBobDuration = 0.5f; // s
+    static public float         headBobHeight = 0.04f;  // m
+    static public float         degreesPerPixel = 0.05f; // mouse sensitivity
 
-    static public boolean postFilter = false;   // post-processing shader effects
-    static public boolean camStabilisation = !release;
 
-    static public boolean   fullScreen = false;
+    static public boolean       noClip = false;
+    static public boolean       showColliders = false;
+    static public boolean       showFPS = true;
+
+    static public boolean       postFilter = false;   // post-processing shader effects
+    static public boolean       camStabilisation = !release;
+
+    static public boolean       fullScreen = false;
 
 
 }

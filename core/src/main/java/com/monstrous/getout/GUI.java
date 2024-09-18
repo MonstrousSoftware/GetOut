@@ -36,7 +36,7 @@ public class GUI implements Disposable {
         Table screenTable = new Table();
         screenTable.setFillParent(true);
 
-        screenTable.add(new Label("FPS: ", skin, labelType)).left().pad(5);
+
         fpsLabel = new Label("", skin, labelType);
         screenTable.add(fpsLabel).left();
         screenTable.row();
@@ -73,12 +73,12 @@ public class GUI implements Disposable {
     }
 
     private void updateLabels(){
-        float fps = Gdx.graphics.getFramesPerSecond();
-//        int frameTime = 0;
-//        if(fps > 0)
-//            frameTime = (int)(1000000/ Gdx.graphics.getFramesPerSecond());
-//        fpsLabel.setText( fps + " " + frameTime +" us");
-        fpsLabel.setText( (int)fps );
+        if(Settings.showFPS) {
+            float fps = Gdx.graphics.getFramesPerSecond();
+            fpsLabel.setText((int) fps);
+        }
+        else
+            fpsLabel.setText("");
     }
 
     public void render(float deltaTime) {

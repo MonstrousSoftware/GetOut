@@ -16,14 +16,20 @@ Done - collision detection
 - activate exit
 - add col det for outer wall
 - recognize specific colliders to interact (cards, exit).
-- settings menu
-- fps indicator
+- smaller text button style for key menu
 
+
+Done:
+- key bindings menu
+- main menu
+- fps indicator
+- settings menu
 
 
 Notes:
 - textures need to be power of two for teavm version
 - mouse capture doesn't work on web version, user wil have to use keyboard (A/D) to turn instead of mouse.
+- ESC is not handy for web. Use another key to call menu (and to cancel key binding).
 
 
 

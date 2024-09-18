@@ -11,6 +11,7 @@ import static com.badlogic.gdx.Gdx.input;
 
 
 // abstract menu screen to derive from, this is the base class for different menu screens
+// Provides a common look and feel for all menu screens
 
 
 public class MenuScreen extends StdScreenAdapter {
@@ -24,16 +25,17 @@ public class MenuScreen extends StdScreenAdapter {
 
     public MenuScreen(Main game) {
         this.game = game;
-    }
-
-    @Override
-    public void show() {
         viewport = new ScreenViewport();
 
         skin = game.assets.SKIN;
         stage = new ControllerMenuStage(new ScreenViewport());          // we can use this even without controllers, although it doesn't seem to work with teavm + Chrome browser
-        rebuild();
         input.setInputProcessor(stage);
+    }
+
+    @Override
+    public void show() {
+        rebuild();
+
         input.setCatchKey(Input.Keys.UP, true);
         input.setCatchKey(Input.Keys.DOWN, true);
 //        if(Settings.supportControllers)

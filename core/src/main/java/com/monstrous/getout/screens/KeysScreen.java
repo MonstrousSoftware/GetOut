@@ -20,26 +20,17 @@ import com.monstrous.getout.input.KeyBinding;
 // key bindings menu
 // shows key bindings and allows the user to modify them
 
-public class KeysScreen extends InputAdapter implements Screen {
+public class KeysScreen extends MenuScreen implements InputProcessor {
+    // can't extend InputAdapter because we are already extending MenuScreen.
 
-    private Main game;
-    private Viewport viewport;
-    private Stage stage;      // from gdx-controllers-utils
-    private Skin skin;
     private TextButton pressedButton;
     private KeyBinding selectedBinding;
     private Label debugLabel;
+    private GameScreen gameScreen;
 
-    public KeysScreen(Main game) {
-        this.game = game;
-    }
-
-
-    @Override
-    public void show() {
-        viewport = new ScreenViewport();
-        skin = game.assets.SKIN;
-        stage = new Stage(new ScreenViewport());
+    public KeysScreen(Main game, GameScreen gameScreen) {
+        super(game);
+        this.gameScreen = gameScreen;
         InputMultiplexer im = new InputMultiplexer();
         im.addProcessor(stage);
         im.addProcessor(this);
@@ -47,28 +38,22 @@ public class KeysScreen extends InputAdapter implements Screen {
         selectedBinding = null;
     }
 
-    @Override
-    public void render(float deltaTime) {
-        ScreenUtils.clear(Color.BLACK);
-        stage.act(deltaTime);
-        stage.draw();
-    }
-
     private String keyName( int keycode ){
         return Input.Keys.toString(keycode);
         //return Main.keyName.getKeyName(keycode);
     }
 
-
-    private void rebuild(boolean fade) {
+    @Override
+    public void rebuild() {
         stage.clear();
+        String style = "small";
 
         Table screenTable = new Table();
         screenTable.setFillParent(true);
 
         Table keyTable = new Table();
         for(KeyBinding binding : KeyBinding.values()) {
-            keyTable.add(new Label(binding.getDescription(), skin)).left();
+            keyTable.add(new Label(binding.getDescription(), skin, style)).left();
             int keycode = binding.getKeyCode();
 
 
@@ -108,10 +93,6 @@ public class KeysScreen extends InputAdapter implements Screen {
         screenTable.add(okay).width(200).pad(10).row();
         screenTable.pack();
 
-        if(fade) {
-            screenTable.setColor(1, 1, 1, 0);                   // set alpha to zero
-            screenTable.addAction(Actions.fadeIn(2f));           // fade in
-        }
         stage.addActor(screenTable);
 
         okay.addListener(new ClickListener() {
@@ -119,7 +100,10 @@ public class KeysScreen extends InputAdapter implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 KeyBinding.save();          // save changes to file
-                game.setScreen(new MainMenuScreen(game));
+                if(gameScreen != null)
+                    game.setScreen(new PauseMenuScreen( game, gameScreen ));
+                else
+                    game.setScreen(new MainMenuScreen( game ));
             }
         });
 
@@ -129,7 +113,7 @@ public class KeysScreen extends InputAdapter implements Screen {
                 super.clicked(event, x, y);
                 for(KeyBinding binding : KeyBinding.values())
                     binding.resetKeyBinding();
-                rebuild(false);  // update button labels
+                rebuild();  // update button labels
             }
         });
 
@@ -143,6 +127,7 @@ public class KeysScreen extends InputAdapter implements Screen {
         debugLabel.setText("Press the key to assign to this action (ESC to cancel)");
     }
 
+
     @Override
     public boolean keyDown(int keycode) {
         if(selectedBinding == null)
@@ -153,12 +138,13 @@ public class KeysScreen extends InputAdapter implements Screen {
             removeDupes(selectedBinding, keycode);
         }
         pressedButton.setText(keyName(selectedBinding.getKeyCode()));
-        //pressedButton.setText(Input.Keys.toString(selectedBinding.getKeyCode()));
         pressedButton.setColor(Color.WHITE);
         selectedBinding = null;
 
         return true;
     }
+
+
 
     // clear other keybindings to the same keycode
     private void removeDupes(KeyBinding changedBinding, int keycode ) {
@@ -172,16 +158,48 @@ public class KeysScreen extends InputAdapter implements Screen {
             }
         }
         if(changed)
-            rebuild(false);
+            rebuild();
     }
 
 
     @Override
-    public void resize(int width, int height) {
-        // Resize your screen here. The parameters represent the new window size.
-        viewport.update(width, height, true);
-        stage.getViewport().update(width, height, true);
-        rebuild(true);
+    public boolean keyUp(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyTyped(char character) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchCancelled(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(float amountX, float amountY) {
+        return false;
     }
 
     @Override
@@ -194,13 +212,6 @@ public class KeysScreen extends InputAdapter implements Screen {
 
     @Override
     public void hide() {
-    }
-
-    @Override
-    public void dispose() {
-        // Destroy screen's assets here.
-        stage.dispose();
-
     }
 
 

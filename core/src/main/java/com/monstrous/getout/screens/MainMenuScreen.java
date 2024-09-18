@@ -73,7 +73,7 @@ public class MainMenuScreen extends MenuScreen {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 playSelectNoise();
-                //game.setScreen(new OptionsScreen( game, null ));
+                game.setScreen(new OptionsScreen( game, null ));
             }
         });
 
@@ -82,7 +82,7 @@ public class MainMenuScreen extends MenuScreen {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 playSelectNoise();
-                game.setScreen(new KeysScreen( game ));
+                game.setScreen(new KeysScreen( game, null ));
             }
         });
 

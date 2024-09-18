@@ -16,19 +16,17 @@ public class GameScreen extends ScreenAdapter {
 
     public GameScreen(Main game) {
         this.game = game;
+        gameView = new GameView();
+        world = new World();
+        colliderView = new ColliderView( world );
+        gui = new GUI(game);
+        botController = new PatrolBotController();
     }
 
 
     @Override
     public void show() {
 
-        gameView = new GameView();
-        world = new World();
-        colliderView = new ColliderView( world );
-        gui = new GUI(game);
-        gui.showMessage("WELCOME", false);
-
-        botController = new PatrolBotController();
 
         InputMultiplexer im = new InputMultiplexer();
         im.addProcessor(botController);
@@ -44,13 +42,12 @@ public class GameScreen extends ScreenAdapter {
         if (Gdx.app.getType() == Application.ApplicationType.WebGL)
             Gdx.graphics.setSystemCursor(Cursor.SystemCursor.None);     // hide cursor
 
-
     }
 
     @Override
     public void render(float deltaTime) {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
-            game.setScreen(new MainMenuScreen(game));
+            game.setScreen(new PauseMenuScreen(game, this));
             return;
         }
 
@@ -76,18 +73,22 @@ public class GameScreen extends ScreenAdapter {
     @Override
     public void hide() {
         // This method is called when another screen replaces this one.
-        dispose();
+        // dispose what is created in show()
+        Gdx.input.setCursorCatched(false);
+        if(Gdx.app.getType() == Application.ApplicationType.WebGL)
+            Gdx.graphics.setSystemCursor(Cursor.SystemCursor.Arrow);     // show cursorGUI
+
     }
 
     @Override
     public void dispose() {
-        // Destroy screen's assets here.
+        // dispose what is created in constructor
+        // called from PauseMenuScreen when the game is quit
+
         gameView.dispose();
         world.dispose();
         colliderView.dispose();
-        Gdx.input.setCursorCatched(false);
-        if(Gdx.app.getType() == Application.ApplicationType.WebGL)
-            Gdx.graphics.setSystemCursor(Cursor.SystemCursor.Arrow);     // show cursorGUI
+
         gui.dispose();
     }
 }

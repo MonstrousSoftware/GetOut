@@ -34,8 +34,8 @@ public class MenuBackground implements Disposable {
 
         // full screen post processing shader
         program = new ShaderProgram(
-            Gdx.files.internal("shaders\\worley.vertex.glsl"),
-            Gdx.files.internal("shaders\\worley.fragment.glsl"));
+            Gdx.files.internal("shaders\\bg.vertex.glsl"),
+            Gdx.files.internal("shaders\\bg.fragment.glsl"));
         if (!program.isCompiled())
             throw new GdxRuntimeException(program.getLog());
         ShaderProgram.pedantic = false;
