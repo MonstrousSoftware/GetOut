@@ -3,7 +3,7 @@ package com.monstrous.getout.gwt;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
-import com.monstrous.getout.Main;
+import com.monstrous.getout.screens.Main;
 
 /** Launches the GWT application. */
 public class GwtLauncher extends GwtApplication {

@@ -8,20 +8,23 @@ import com.monstrous.getout.Settings;
 public enum KeyBinding {
     FORWARD ("Move forward", Keys.W),
     BACK ("Move back", Keys.S),
+    TURN_LEFT ("Turn left", Keys.A),
+    TURN_RIGHT ("Turn right", Keys.D),
     STRAFE_LEFT("Strafe left", Keys.Q),
     STRAFE_RIGHT("Strafe right", Keys.E),
     JUMP ("Jump", Keys.SPACE),
-    TURN_LEFT ("Turn left", Keys.A),
-    TURN_RIGHT ("Turn right", Keys.D),
     RUN ("Run modifier", Keys.SHIFT_LEFT),
     CROUCH ("Crouch", Keys.C),
+
     BOT_FORWARD ("Move bot forward", Keys.UP),
     BOT_BACK ("Move bot back", Keys.DOWN),
     BOT_TURN_LEFT ("Turn bot left", Keys.LEFT),
     BOT_TURN_RIGHT ("Turn bot right", Keys.RIGHT),
     BOT_FIRE ("Fire bot weapon", Keys.FORWARD_DEL),
     BOT_COLLAPSE ("Bot Collapse", Keys.END),
-    BOT_REVIVE ("Bot Revive", Keys.HOME);
+    BOT_REVIVE ("Bot Revive", Keys.HOME),
+
+    TOGGLE_FULLSCREEN ("Toggle Full-Screen", Keys.F11);
 
     private final String description;      // action
     private final int defaultKeyCode;     // original code, used on reset

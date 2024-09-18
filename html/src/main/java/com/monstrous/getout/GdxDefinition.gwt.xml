@@ -18,7 +18,7 @@
   <inherits name="GLTF" />
   <inherits name="com.badlogic.gdx.controllers" />
   <inherits name="com.badlogic.gdx.controllers.controllers-gwt" />
-  <inherits name="com.monstrous.getout.Main" />
+  <inherits name="com.monstrous.getout.screens.Main" />
   <inherits name="de.golfgl.gdx.controllers.controller_scene2d" />
 
   <!-- You must change this if you rename packages later, or rename GwtLauncher. -->

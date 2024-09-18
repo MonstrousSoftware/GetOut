@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g3d.utils.AnimationController;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.IntIntMap;
-import com.monstrous.getout.Main;
+import com.monstrous.getout.screens.Main;
 import com.monstrous.getout.World;
 import net.mgsx.gltf.scene3d.scene.Scene;
 

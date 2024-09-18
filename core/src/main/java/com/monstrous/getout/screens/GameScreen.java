@@ -1,7 +1,8 @@
-package com.monstrous.getout;
+package com.monstrous.getout.screens;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Cursor;
+import com.monstrous.getout.*;
 import com.monstrous.getout.input.PatrolBotController;
 
 
@@ -11,6 +12,7 @@ public class GameScreen extends ScreenAdapter {
     public GameView gameView;
     private ColliderView colliderView;
     private PatrolBotController botController;
+    private GUI gui;
 
     public GameScreen(Main game) {
         this.game = game;
@@ -23,6 +25,8 @@ public class GameScreen extends ScreenAdapter {
         gameView = new GameView();
         world = new World();
         colliderView = new ColliderView( world );
+        gui = new GUI(game);
+        gui.showMessage("WELCOME", false);
 
         botController = new PatrolBotController();
 
@@ -45,8 +49,11 @@ public class GameScreen extends ScreenAdapter {
 
     @Override
     public void render(float deltaTime) {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))
-            Gdx.app.exit();
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
+            game.setScreen(new MainMenuScreen(game));
+            return;
+        }
+
 
         botController.update(world, deltaTime, gameView.camera);
         world.update(gameView.camera.position, deltaTime);
@@ -54,12 +61,15 @@ public class GameScreen extends ScreenAdapter {
 
         if(Settings.showColliders)
             colliderView.render(gameView.camera);
+
+        gui.render(deltaTime);
       }
 
     @Override
     public void resize(int width, int height) {
         // Resize your screen here. The parameters represent the new window size.
         gameView.resize(width, height);
+        gui.resize(width, height);
     }
 
 
@@ -77,6 +87,7 @@ public class GameScreen extends ScreenAdapter {
         colliderView.dispose();
         Gdx.input.setCursorCatched(false);
         if(Gdx.app.getType() == Application.ApplicationType.WebGL)
-            Gdx.graphics.setSystemCursor(Cursor.SystemCursor.Arrow);     // show cursor
+            Gdx.graphics.setSystemCursor(Cursor.SystemCursor.Arrow);     // show cursorGUI
+        gui.dispose();
     }
 }
