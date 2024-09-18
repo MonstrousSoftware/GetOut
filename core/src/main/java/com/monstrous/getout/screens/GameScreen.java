@@ -3,6 +3,7 @@ package com.monstrous.getout.screens;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Cursor;
 import com.monstrous.getout.*;
+import com.monstrous.getout.collision.ColliderView;
 import com.monstrous.getout.input.PatrolBotController;
 
 
@@ -19,8 +20,10 @@ public class GameScreen extends ScreenAdapter {
         gameView = new GameView();
         world = new World();
         colliderView = new ColliderView( world );
-        gui = new GUI(game);
+        gui = new GUI(game, world);
         botController = new PatrolBotController();
+
+
     }
 
 
@@ -67,6 +70,7 @@ public class GameScreen extends ScreenAdapter {
         // Resize your screen here. The parameters represent the new window size.
         gameView.resize(width, height);
         gui.resize(width, height);
+        gui.showMessage("WELCOME", true);
     }
 
 

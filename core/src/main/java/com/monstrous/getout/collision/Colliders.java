@@ -1,6 +1,5 @@
-package com.monstrous.getout;
+package com.monstrous.getout.collision;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.VertexAttributes;
@@ -46,14 +45,17 @@ public class Colliders implements Disposable {
         disposables = new Array<>();
     }
 
-    public void add(String id, BoundingBox bbox) {
-        Collider col = new Collider(id, bbox);
-        colliders.add(col);
-        addDebugModel(col);
+    public void add(Collider collider) {
+        colliders.add(collider);
+        addDebugModel(collider);
+    }
+
+    public void remove(Collider collider) {
+        colliders.removeValue(collider, true);
     }
 
     // returns null if no collision, otherwise the node id
-    public String collisionTest(Vector3 position) {
+    public Collider collisionTest(Vector3 position) {
         // define a bounding box for the player
         // collide at height .5m above ground (e.g. to collide into desks)
         min.set(position);
@@ -69,7 +71,7 @@ public class Colliders implements Disposable {
         // test collision of player with a collider by bounding box intersection
         for (Collider collider : colliders) {
             if (collider.bbox.intersects(player))
-                return collider.id;
+                return collider;
         }
         return null;
     }

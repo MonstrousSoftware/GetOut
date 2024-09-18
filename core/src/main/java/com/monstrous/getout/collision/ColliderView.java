@@ -1,10 +1,10 @@
-package com.monstrous.getout;
+package com.monstrous.getout.collision;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
-import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.utils.Disposable;
+import com.monstrous.getout.World;
 
 
 public class ColliderView implements Disposable {

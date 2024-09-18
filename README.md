@@ -17,7 +17,7 @@ Done - collision detection
 - add col det for outer wall
 - recognize specific colliders to interact (cards, exit).
 - smaller text button style for key menu
-
+- free look to be done
 
 Done:
 - key bindings menu

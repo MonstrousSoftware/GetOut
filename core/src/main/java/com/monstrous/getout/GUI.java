@@ -13,18 +13,25 @@ import com.monstrous.getout.screens.Main;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
+// note: a resize will clear any active messages
+
 public class GUI implements Disposable {
 
     private Stage stage;
     private Skin skin;
     private Label fpsLabel;
+    private Label elementsLabel;
+    private int numElements;
+    private World world;
 
-    public GUI(Main game) {
+    public GUI(Main game, World world) {
+        this.world = world;
         //this.assets = assets;
 
         stage = new Stage(new ScreenViewport());
         skin = game.assets.SKIN;
-        //skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
+        numElements = -1;
+        //rebuild();
     }
 
 
@@ -39,6 +46,9 @@ public class GUI implements Disposable {
 
         fpsLabel = new Label("", skin, labelType);
         screenTable.add(fpsLabel).left();
+
+        elementsLabel = new Label("", skin, labelType);
+        screenTable.add(elementsLabel).right().expandX();
         screenTable.row();
 
         screenTable.bottom().left();
@@ -79,6 +89,12 @@ public class GUI implements Disposable {
         }
         else
             fpsLabel.setText("");
+
+        if(world.numElements != numElements) {
+            // compare with local variable to avoid string concatenation at every frame
+            elementsLabel.setText("ELEMENTS: " + world.numElements);
+            numElements = world.numElements;
+        }
     }
 
     public void render(float deltaTime) {

@@ -2,11 +2,14 @@ package com.monstrous.getout;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g3d.model.Node;
+import com.badlogic.gdx.graphics.g3d.model.NodePart;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
+import com.monstrous.getout.collision.Collider;
+import com.monstrous.getout.collision.Colliders;
 import net.mgsx.gltf.loaders.gltf.GLTFLoader;
 import net.mgsx.gltf.scene3d.scene.Scene;
 import net.mgsx.gltf.scene3d.scene.SceneAsset;
@@ -20,6 +23,7 @@ public class World implements Disposable {
     public Scene patrolBot;
     public Scene bullet;
     public Colliders colliders;
+    public int numElements;
 
 
     public World() {
@@ -49,6 +53,7 @@ public class World implements Disposable {
         parseLevel( level );
         scenes.add( level  );
 
+        numElements = 0;
 
     }
 
@@ -61,7 +66,10 @@ public class World implements Disposable {
             node.calculateBoundingBox(bbox);
             bbox.getCenter(ctr);
             Gdx.app.log("node:", node.id + " " +bbox.toString());
+            Collider.Type type = Collider.Type.DEFAULT;
 
+
+            // ignore nodes that you cannot collide with
             if(node.id.startsWith("Ceiling"))
                 continue;
             if(node.id.startsWith("Floor"))
@@ -69,7 +77,10 @@ public class World implements Disposable {
             if(node.id.startsWith("OuterWall"))     // not a collider as its wall face inwards, todo boundary
                 continue;
 
-            colliders.add(node.id, bbox);
+            if(node.id.startsWith("Card"))
+                type = Collider.Type.PICKUP;
+
+            colliders.add( new Collider(node.id, node, bbox, type));
             count++;
         }
         Gdx.app.log("nodes:", ""+count);
@@ -101,12 +112,25 @@ public class World implements Disposable {
 
     public boolean canReach( Vector3 position ) {
 
-        String colliderId = colliders.collisionTest(position);
-        if (colliderId != null) {
-            Gdx.app.log("collision", colliderId);
+        Collider collider = colliders.collisionTest(position);
+        if (collider != null) {
+            Gdx.app.log("collision", collider.id);
+            if(collider.type == Collider.Type.PICKUP) {
+                pickUp(collider);
+                return true;
+            }
             return false;
         }
         return true;
+    }
+
+    private void pickUp(Collider collider){
+        Gdx.app.log("pickup",  collider.id);
+        colliders.remove(collider);
+        for(NodePart part : collider.node.parts)        // hide node
+            part.enabled = false;
+        // play sound
+        numElements++;
     }
 
     public void update( Vector3 cameraPosition, float deltaTime ){
