@@ -116,7 +116,7 @@ public class GameView implements Disposable {
         sceneManager.environment.set(PBRCubemapAttribute.createDiffuseEnv(diffuseCubemap));
 
         sceneManager.environment.set(new ColorAttribute(ColorAttribute.Fog, Settings.fogColour));
-        sceneManager.environment.set(new FogAttribute(FogAttribute.FogEquation).set(2, 15, 4.0f));  // close fog
+        sceneManager.environment.set(new FogAttribute(FogAttribute.FogEquation).set(2, 35, 2.0f));  // close fog
 
 
         // setup skybox

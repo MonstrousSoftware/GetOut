@@ -3,6 +3,7 @@ package com.monstrous.getout;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g3d.model.Node;
 import com.badlogic.gdx.graphics.g3d.model.NodePart;
+import com.badlogic.gdx.math.CatmullRomSpline;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
@@ -10,6 +11,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.monstrous.getout.collision.Collider;
 import com.monstrous.getout.collision.Colliders;
+import com.monstrous.getout.input.BotPatrols;
 import net.mgsx.gltf.loaders.gltf.GLTFLoader;
 import net.mgsx.gltf.scene3d.scene.Scene;
 import net.mgsx.gltf.scene3d.scene.SceneAsset;
@@ -26,6 +28,10 @@ public class World implements Disposable {
     public int numElements;
     public boolean[] foundCard;
     public Collider exitDoor;
+    //private Array<Vector3> wayPoints;    // one robot
+
+    private BotPatrols botPatrols;
+
 
 
     public World() {
@@ -33,6 +39,7 @@ public class World implements Disposable {
         bullets = new Array<>();
         deleteList = new Array<>();
         colliders = new Colliders();
+        botPatrols = new BotPatrols();
         reload();
     }
 
@@ -46,8 +53,7 @@ public class World implements Disposable {
         sceneAsset = new GLTFLoader().load(Gdx.files.internal("models/patrolbot.gltf"));
         patrolBot = new Scene(sceneAsset.scene, "Armature");
         patrolBot.animationController.setAnimation("Idle", 1);
-//        scenes.add(patrolBot);
-
+        scenes.add(patrolBot);
 
         sceneAsset2 = new GLTFLoader().load(Gdx.files.internal("models/officeMaze.gltf"));
         //sceneAsset2 = new GLTFLoader().load(Gdx.files.internal("models/coltest.gltf"));
@@ -65,6 +71,8 @@ public class World implements Disposable {
     private void parseLevel(Scene level){
         BoundingBox bbox = new BoundingBox();
         Vector3 ctr = new Vector3();
+        Array<Vector3> wayPoints = new Array<>();
+
 
         int count = 0;
         for(Node node : level.modelInstance.nodes ){
@@ -79,6 +87,11 @@ public class World implements Disposable {
                 continue;
             if(node.id.startsWith("Floor"))
                 continue;
+            if(node.id.startsWith("Waypoint")) {    // we assume they are found in the right order
+                addWaypoint(wayPoints, node);
+                hideNode(node);
+                continue;
+            }
 
             if(node.id.startsWith("Card"))
                 type = Collider.Type.PICKUP;
@@ -98,6 +111,14 @@ public class World implements Disposable {
 
         }
         Gdx.app.log("nodes:", ""+count);
+        botPatrols.setPatrolBot(patrolBot, wayPoints);
+    }
+
+    private void addWaypoint( Array<Vector3> wayPoints, Node node ){
+        Vector3 pos = new Vector3();
+        node.calculateWorldTransform();
+        node.globalTransform.getTranslation(pos);
+        wayPoints.add(pos);
     }
 
 
@@ -145,8 +166,8 @@ public class World implements Disposable {
     private void pickUp(Collider collider){
         Gdx.app.log("pickup",  collider.id);
         colliders.remove(collider);
-        for(NodePart part : collider.node.parts)        // hide node
-            part.enabled = false;
+        hideNode( collider.node );
+
         // play sound
         numElements++;
         if(collider.id.contentEquals("Card"))
@@ -160,9 +181,13 @@ public class World implements Disposable {
 
         if(numElements == 4){
             colliders.remove(exitDoor); // remove exit door collider
-            for(NodePart part : exitDoor.node.parts)        // hide Exit Door
-                part.enabled = false;
+            hideNode(exitDoor.node);
         }
+    }
+
+    private void hideNode( Node node ){
+        for(NodePart part : node.parts)        // hide node parts
+            part.enabled = false;
     }
 
     private void exitLevel(Collider collider){
@@ -173,6 +198,10 @@ public class World implements Disposable {
     }
 
     public void update( Vector3 cameraPosition, float deltaTime ){
+
+
+
+        botPatrols.update(deltaTime);
 
 //        String colliderId = colliders.collisionTest(cameraPosition);
 //        if (colliderId != null) {

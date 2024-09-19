@@ -12,7 +12,7 @@ public class GameScreen extends ScreenAdapter {
     public World world;
     public GameView gameView;
     private ColliderView colliderView;
-    private PatrolBotController botController;
+    //private PatrolBotController botController;
     private GUI gui;
 
     public GameScreen(Main game) {
@@ -21,7 +21,7 @@ public class GameScreen extends ScreenAdapter {
         world = new World();
         colliderView = new ColliderView( world );
         gui = new GUI(game, world);
-        botController = new PatrolBotController();
+        //botController = new PatrolBotController();
 
 
     }
@@ -32,7 +32,7 @@ public class GameScreen extends ScreenAdapter {
 
 
         InputMultiplexer im = new InputMultiplexer();
-        im.addProcessor(botController);
+        //im.addProcessor(botController);
         im.addProcessor(gameView.camController);
         Gdx.input.setInputProcessor(im);
 
@@ -55,7 +55,7 @@ public class GameScreen extends ScreenAdapter {
         }
 
 
-        botController.update(world, deltaTime, gameView.camera);
+        //botController.update(world, deltaTime, gameView.camera);
         world.update(gameView.camera.position, deltaTime);
         gameView.render( world, deltaTime );
 
