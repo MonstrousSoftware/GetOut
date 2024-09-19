@@ -24,20 +24,18 @@ public class GUI implements Disposable {
     private Stage stage;
     private Skin skin;
     private Label fpsLabel;
-    private Label elementsLabel;
-    private int numElements;
     private World world;
     private Image[] cards;
     private Texture[] textures;
 
 
     public GUI(Main game, World world) {
+        Gdx.app.log("GUI constructor", "");
         this.world = world;
         //this.assets = assets;
 
         stage = new Stage(new ScreenViewport());
         skin = game.assets.SKIN;
-        numElements = -1;
         cards = new Image[4];
         textures = new Texture[5];
         textures[0] = new Texture(Gdx.files.internal("images/cardEmpty.png"));
@@ -50,7 +48,8 @@ public class GUI implements Disposable {
     }
 
 
-    private void rebuild() {
+    public void rebuild() {
+        Gdx.app.log("GUI rebuild", "");
         stage.clear();
 
         String labelType  = "default";
@@ -61,10 +60,6 @@ public class GUI implements Disposable {
 
         fpsLabel = new Label("", skin, labelType);
         screenTable.add(fpsLabel).left();
-
-        elementsLabel = new Label("", skin, labelType);
-        screenTable.add(elementsLabel).right().expandX();
-        screenTable.row();
 
         screenTable.bottom().left();
         screenTable.pack();
@@ -90,29 +85,20 @@ public class GUI implements Disposable {
         stage.addActor(screenTable2);
     }
 
-    public void showMessage( String text, boolean priority ){
+    public void showMessage( String text ){
         Table screenTable = new Table();
         screenTable.setFillParent(true);
 
         Label message = new Label(text, skin);
 
-        screenTable.align(Align.bottom);
-        if(priority)
-            screenTable.align(Align.top);
+        screenTable.align(Align.top);
         screenTable.add(message).pad(50);
         screenTable.pack();
 
-        if(!priority) {
-            screenTable.setColor(1,1,1,0);                   // set alpha to zero
-            screenTable.addAction(sequence(fadeIn(3f), delay(2f), fadeOut(1f), removeActor()));           // fade in .. fade out, then remove this actor
-        }
-        else {
-            screenTable.setColor(Color.WHITE);
-            screenTable.addAction(sequence(delay(0.5f), removeActor()));           // fade in .. fade out, then remove this actor
-        }
+        screenTable.setColor(1,1,1,0);                   // set alpha to zero
+        screenTable.addAction(sequence(fadeIn(2f), delay(1f), fadeOut(1f), removeActor()));           // fade in .. fade out, then remove this actor
 
         stage.addActor(screenTable);
-
     }
 
     private void updateLabels(){
@@ -122,13 +108,6 @@ public class GUI implements Disposable {
         }
         else
             fpsLabel.setText("");
-
-        if(world.numElements != numElements) {
-            // compare with local variable to avoid string concatenation at every frame
-            elementsLabel.setText("ELEMENTS: " + world.numElements);
-            numElements = world.numElements;
-            rebuild();
-        }
     }
 
     public void render(float deltaTime) {

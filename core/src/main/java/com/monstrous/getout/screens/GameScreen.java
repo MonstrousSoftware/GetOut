@@ -14,14 +14,15 @@ public class GameScreen extends ScreenAdapter {
     private ColliderView colliderView;
     //private PatrolBotController botController;
     private GUI gui;
+    private int numElements = 0;
 
     public GameScreen(Main game) {
         this.game = game;
-        gameView = new GameView();
+
         world = new World();
-        colliderView = new ColliderView( world );
-        gui = new GUI(game, world);
+        gameView = new GameView();  // need to keep persistent because it holds camera (player) position
         //botController = new PatrolBotController();
+
 
         if(Settings.playMusic){
             game.assets.MUSIC.play();
@@ -33,6 +34,9 @@ public class GameScreen extends ScreenAdapter {
 
     @Override
     public void show() {
+        gui = new GUI(game, world);
+        colliderView = new ColliderView( world );
+
 
         InputMultiplexer im = new InputMultiplexer();
         //im.addProcessor(botController);
@@ -65,15 +69,24 @@ public class GameScreen extends ScreenAdapter {
         if(Settings.showColliders)
             colliderView.render(gameView.camera);
 
+        if(world.numElements != numElements){   // force gui rebuild when new element is found
+            numElements = world.numElements;
+            gui.rebuild();
+        }
+
+        if(world.message != null){
+            gui.showMessage(world.message);
+            world.message = null;
+        }
         gui.render(deltaTime);
       }
 
     @Override
     public void resize(int width, int height) {
         // Resize your screen here. The parameters represent the new window size.
+        Gdx.app.log("GameScreen.resize", "");
         gameView.resize(width, height);
         gui.resize(width, height);
-        gui.showMessage("WELCOME", true);
     }
 
 
@@ -85,6 +98,9 @@ public class GameScreen extends ScreenAdapter {
         if(Gdx.app.getType() == Application.ApplicationType.WebGL)
             Gdx.graphics.setSystemCursor(Cursor.SystemCursor.Arrow);     // show cursorGUI
 
+
+        colliderView.dispose();
+        gui.dispose();
     }
 
     @Override
@@ -95,8 +111,6 @@ public class GameScreen extends ScreenAdapter {
 
         gameView.dispose();
         world.dispose();
-        colliderView.dispose();
 
-        gui.dispose();
     }
 }

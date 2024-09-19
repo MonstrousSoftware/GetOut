@@ -21,16 +21,13 @@ public class World implements Disposable {
     public Array<Scene> scenes;
     public Array<Scene> bullets;
     private Array<Scene> deleteList;
-    //public Scene patrolBot;
     public Scene bullet;
     public Colliders colliders;
     public int numElements;
     public boolean[] foundCard;
     public Collider exitDoor;
-    //private Array<Vector3> wayPoints;    // one robot
-
     private PatrolBots patrolBots;
-
+    public String message = null;   // to show in GUI via GameScreen
 
 
     public World() {
@@ -64,6 +61,8 @@ public class World implements Disposable {
         foundCard = new boolean[4];
         for(int i = 0; i < 4; i++)
             foundCard[i] = false;
+
+        message = "Find your way out";
 
     }
 
@@ -178,6 +177,8 @@ public class World implements Disposable {
                 exitLevel(collider);
                 return true;
             }
+            if(collider.type == Collider.Type.CLOSED_DOOR)
+                message = "You lack the elements to open the door.";
             return false;
         }
         return true;
@@ -190,16 +191,25 @@ public class World implements Disposable {
 
         // play sound
         numElements++;
-        if(collider.id.contentEquals("Card"))
+        if(collider.id.contentEquals("Card")) {
             foundCard[0] = true;
-        if(collider.id.contentEquals("Card.001"))
+            message = "You have found an element: EARTH";
+        }
+        if(collider.id.contentEquals("Card.001")) {
             foundCard[1] = true;
-        if(collider.id.contentEquals("Card.002"))
+            message = "You have found an element: WATER";
+        }
+        if(collider.id.contentEquals("Card.002")) {
             foundCard[2] = true;
-        if(collider.id.contentEquals("Card.003"))
+            message = "You have found an element: AIR";
+        }
+        if(collider.id.contentEquals("Card.003")) {
             foundCard[3] = true;
+            message = "You have found an element: FIRE";
+        }
 
         if(numElements == 4){
+            message = "You have all the elements. Now you can escape!";
             colliders.remove(exitDoor); // remove exit door collider
             hideNode(exitDoor.node);
         }
@@ -212,6 +222,7 @@ public class World implements Disposable {
 
     private void exitLevel(Collider collider){
         Gdx.app.log("all done",  collider.id);
+        message = "You have escaped!";
         colliders.remove(collider);
         // play sound
         // fanfare etc.

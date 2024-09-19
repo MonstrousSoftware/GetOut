@@ -59,14 +59,14 @@ public class Settings {
 
     static public boolean       noClip = false;
     static public boolean       showColliders = false;
-    static public boolean       showFPS = true;
+    static public boolean       showFPS = false;
 
     static public boolean       postFilter = false;   // post-processing shader effects
     static public boolean       camStabilisation = !release;
 
     static public boolean       fullScreen = false;
 
-    static public boolean       playMusic = true;
+    static public boolean       playMusic = release;
 
 
 }
