@@ -33,9 +33,10 @@ public class PatrolBotController extends InputAdapter {
     private Matrix4 bulletTransform;
     protected final IntIntMap keys = new IntIntMap();
     private AnimationController.AnimationDesc walkAnimation;
+    private Scene patrolBot;
 
-    public PatrolBotController() {
-
+    public PatrolBotController(Scene scene) {
+        this.patrolBot = scene;
     }
 
 
@@ -49,14 +50,14 @@ public class PatrolBotController extends InputAdapter {
             walkAnimation = null;
             Main.assets.MOTOR.stop();
             motorSoundPlaying = false;
-            world.patrolBot.animationController.setAnimation("Collapse", 1);
+            patrolBot.animationController.setAnimation("Collapse", 1);
         }
         if (collapsed && keys.containsKey(KeyBinding.BOT_REVIVE.getKeyCode())) {
             speed = 0;
             fireTimer = -1;
             collapsed = false;
             walkAnimation = null;
-            world.patrolBot.animationController.setAnimation("Idle", -1);
+            patrolBot.animationController.setAnimation("Idle", -1);
         }
         if(collapsed)
             return;
@@ -67,7 +68,7 @@ public class PatrolBotController extends InputAdapter {
             walkAnimation = null;
             Main.assets.MOTOR.stop();
             motorSoundPlaying = false;
-            world.patrolBot.animationController.setAnimation("Fire", 1);
+            patrolBot.animationController.setAnimation("Fire", 1);
             Scene bullet = world.spawnBullet();
             bulletTransform = bullet.modelInstance.transform;
             bulletSoundId = Main.assets.BUZZ.play();
@@ -78,7 +79,7 @@ public class PatrolBotController extends InputAdapter {
         else if (fireTimer > 0) {
             fireTimer -= deltaTime;
             if(fireTimer < 0) {
-                world.patrolBot.animationController.setAnimation("Idle", -1);
+                patrolBot.animationController.setAnimation("Idle", -1);
                 bulletSoundId = -1;
                 bulletSoundPlaying = false;
             }
@@ -87,7 +88,7 @@ public class PatrolBotController extends InputAdapter {
         if (keys.containsKey(KeyBinding.BOT_FORWARD.getKeyCode())) {
             speed = WALK_SPEED;
             if(walkAnimation == null) {
-                walkAnimation = world.patrolBot.animationController.setAnimation("Forward", -1);
+                walkAnimation = patrolBot.animationController.setAnimation("Forward", -1);
                 motorSoundId = Main.assets.MOTOR.loop();
                 motorSoundPlaying = true;
             }
@@ -96,7 +97,7 @@ public class PatrolBotController extends InputAdapter {
         if (keys.containsKey(KeyBinding.BOT_BACK.getKeyCode())) {
             speed = -WALK_SPEED;
             if(walkAnimation == null) {
-                walkAnimation = world.patrolBot.animationController.setAnimation("Forward", -1);    // will be played in reverse
+                walkAnimation = patrolBot.animationController.setAnimation("Forward", -1);    // will be played in reverse
                 motorSoundId = Main.assets.MOTOR.loop();
                 motorSoundPlaying = true;
             }
@@ -110,7 +111,7 @@ public class PatrolBotController extends InputAdapter {
                 walkAnimation = null;
                 Main.assets.MOTOR.stop();
                 motorSoundPlaying = false;
-                world.patrolBot.animationController.setAnimation("Idle", -1);
+                patrolBot.animationController.setAnimation("Idle", -1);
             }
         }
 
@@ -119,11 +120,11 @@ public class PatrolBotController extends InputAdapter {
             walkAnimation.speed = speed * 100f;     // can be negative if reversing
 
         isTurning = false;
-        Matrix4 transform = world.patrolBot.modelInstance.transform;
+        Matrix4 transform = patrolBot.modelInstance.transform;
         if (keys.containsKey(KeyBinding.BOT_TURN_LEFT.getKeyCode())) {
             transform.rotate(Vector3.Y, deltaTime * TURN_SPEED);
             isTurning = true;
-            walkAnimation = world.patrolBot.animationController.setAnimation("Forward", -1);
+            walkAnimation = patrolBot.animationController.setAnimation("Forward", -1);
             if(!motorSoundPlaying) {
                 motorSoundId = Main.assets.MOTOR.loop();
                 motorSoundPlaying = true;
@@ -132,7 +133,7 @@ public class PatrolBotController extends InputAdapter {
         if (keys.containsKey(KeyBinding.BOT_TURN_RIGHT.getKeyCode())) {
             transform.rotate(Vector3.Y, -deltaTime * TURN_SPEED);
             isTurning = true;
-            walkAnimation = world.patrolBot.animationController.setAnimation("Forward", -1);
+            walkAnimation = patrolBot.animationController.setAnimation("Forward", -1);
             if(!motorSoundPlaying) {
                 motorSoundId = Main.assets.MOTOR.loop();
                 motorSoundPlaying = true;
@@ -145,7 +146,7 @@ public class PatrolBotController extends InputAdapter {
             Main.assets.MOTOR.stop();
             motorSoundPlaying = false;
             walkAnimation = null;
-            world.patrolBot.animationController.setAnimation("Idle", -1);
+            patrolBot.animationController.setAnimation("Idle", -1);
         }
 
         if(motorSoundPlaying)

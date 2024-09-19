@@ -3,7 +3,6 @@ package com.monstrous.getout;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g3d.model.Node;
 import com.badlogic.gdx.graphics.g3d.model.NodePart;
-import com.badlogic.gdx.math.CatmullRomSpline;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
@@ -11,7 +10,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.monstrous.getout.collision.Collider;
 import com.monstrous.getout.collision.Colliders;
-import com.monstrous.getout.input.BotPatrols;
+import com.monstrous.getout.input.PatrolBots;
 import net.mgsx.gltf.loaders.gltf.GLTFLoader;
 import net.mgsx.gltf.scene3d.scene.Scene;
 import net.mgsx.gltf.scene3d.scene.SceneAsset;
@@ -22,7 +21,7 @@ public class World implements Disposable {
     public Array<Scene> scenes;
     public Array<Scene> bullets;
     private Array<Scene> deleteList;
-    public Scene patrolBot;
+    //public Scene patrolBot;
     public Scene bullet;
     public Colliders colliders;
     public int numElements;
@@ -30,7 +29,7 @@ public class World implements Disposable {
     public Collider exitDoor;
     //private Array<Vector3> wayPoints;    // one robot
 
-    private BotPatrols botPatrols;
+    private PatrolBots patrolBots;
 
 
 
@@ -39,7 +38,7 @@ public class World implements Disposable {
         bullets = new Array<>();
         deleteList = new Array<>();
         colliders = new Colliders();
-        botPatrols = new BotPatrols();
+        patrolBots = new PatrolBots();
         reload();
     }
 
@@ -51,9 +50,9 @@ public class World implements Disposable {
 
         // create scene
         sceneAsset = new GLTFLoader().load(Gdx.files.internal("models/patrolbot.gltf"));
-        patrolBot = new Scene(sceneAsset.scene, "Armature");
-        patrolBot.animationController.setAnimation("Idle", 1);
-        scenes.add(patrolBot);
+//        patrolBot = new Scene(sceneAsset.scene, "Armature");
+//        //patrolBot.animationController.setAnimation("Idle", 1);
+//        scenes.add(patrolBot);
 
         sceneAsset2 = new GLTFLoader().load(Gdx.files.internal("models/officeMaze.gltf"));
         //sceneAsset2 = new GLTFLoader().load(Gdx.files.internal("models/coltest.gltf"));
@@ -72,6 +71,7 @@ public class World implements Disposable {
         BoundingBox bbox = new BoundingBox();
         Vector3 ctr = new Vector3();
         Array<Vector3> wayPoints = new Array<>();
+        String group = null;
 
 
         int count = 0;
@@ -88,9 +88,21 @@ public class World implements Disposable {
             if(node.id.startsWith("Floor"))
                 continue;
             if(node.id.startsWith("Waypoint")) {    // we assume they are found in the right order
-                addWaypoint(wayPoints, node);
-                hideNode(node);
-                continue;
+                if(group == null){
+                    group = node.id.substring(0, 9);    // name of first group e.g. "Waypoint1"
+                }
+                if(node.id.substring(0, 9).contentEquals(group)) {  // same group
+                    addWaypoint(wayPoints, node);
+                } else { // new group
+                    Scene patrolBot = new Scene(sceneAsset.scene, "Armature");
+                    scenes.add(patrolBot);
+                    patrolBots.setPatrolBot(patrolBot, wayPoints);
+                    wayPoints.clear();
+                    group = node.id.substring(0, 9);    // name of new group e.g. "Waypoint2"
+                    addWaypoint(wayPoints, node);
+                }
+                hideNode(node); // make invisible
+                continue;   // not a collider
             }
 
             if(node.id.startsWith("Card"))
@@ -111,7 +123,14 @@ public class World implements Disposable {
 
         }
         Gdx.app.log("nodes:", ""+count);
-        botPatrols.setPatrolBot(patrolBot, wayPoints);
+
+        if(wayPoints.size > 0) {
+            Scene patrolBot = new Scene(sceneAsset.scene, "Armature");
+            scenes.add(patrolBot);
+            patrolBots.setPatrolBot(patrolBot, wayPoints);
+            wayPoints.clear();
+        }
+
     }
 
     private void addWaypoint( Array<Vector3> wayPoints, Node node ){
@@ -131,13 +150,14 @@ public class World implements Disposable {
 
     private Matrix4 bulletTransform = new Matrix4();
 
+    // todo
     public Scene spawnBullet(){
         bullet = new Scene(sceneAsset.scene, "Bullet");
-        bulletTransform.set(patrolBot.modelInstance.transform);
-        bulletTransform.translate(-0.32f, 0.69f, 0.595f);   // offset for barrel
-        bullet.modelInstance.transform.set(bulletTransform);
-        //scenes.add(bullet);
-        bullets.add(bullet);
+//        bulletTransform.set(patrolBot.modelInstance.transform);
+//        bulletTransform.translate(-0.32f, 0.69f, 0.595f);   // offset for barrel
+//        bullet.modelInstance.transform.set(bulletTransform);
+//        //scenes.add(bullet);
+//        bullets.add(bullet);
         return bullet;
     }
 
@@ -201,7 +221,7 @@ public class World implements Disposable {
 
 
 
-        botPatrols.update(deltaTime);
+        patrolBots.update(deltaTime);
 
 //        String colliderId = colliders.collisionTest(cameraPosition);
 //        if (colliderId != null) {
