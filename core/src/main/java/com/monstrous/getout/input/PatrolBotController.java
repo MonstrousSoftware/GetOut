@@ -69,7 +69,7 @@ public class PatrolBotController extends InputAdapter {
             Main.assets.MOTOR.stop();
             motorSoundPlaying = false;
             patrolBot.animationController.setAnimation("Fire", 1);
-            Scene bullet = world.spawnBullet();
+            Scene bullet = world.spawnBullet(patrolBot.modelInstance.transform);
             bulletTransform = bullet.modelInstance.transform;
             bulletSoundId = Main.assets.BUZZ.play();
             bulletSoundPlaying = true;

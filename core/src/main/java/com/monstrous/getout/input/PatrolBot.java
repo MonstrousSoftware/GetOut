@@ -47,9 +47,9 @@ public class PatrolBot {
         vec = new Vector3();
         side = new Vector3();
 
-//        walkAnimation = scene.animationController.setAnimation("Forward", -1);
-//        motorSoundId = Main.assets.MOTOR.loop();
-//        motorSoundPlaying = true;
+        walkAnimation = scene.animationController.setAnimation("Forward", -1);
+        motorSoundId = Main.assets.MOTOR.loop();
+        motorSoundPlaying = true;
     }
 
     public void update(float deltaTime, Camera camera ) {
@@ -61,7 +61,7 @@ public class PatrolBot {
         if (fireTimer < -5f) {
             speed = 1;  // restart the patrol
             walkAnimation = scene.animationController.setAnimation("Forward", -1);
-            motorSoundId = Main.assets.MOTOR.loop();
+            Main.assets.MOTOR.resume(motorSoundId);
             motorSoundPlaying = true;
         }
 
@@ -91,7 +91,7 @@ public class PatrolBot {
         canSee = false;
 
         vec.set(playerPosition).sub(pos);
-        if(vec.len() < 15){
+        if(vec.len() < 10){
             //Gdx.app.log("bot", "close by");
             vec.nor();
             fwd.set(Vector3.Z).rot(scene.modelInstance.transform);  // direction vector
@@ -105,7 +105,7 @@ public class PatrolBot {
         if(canSee) {
             speed = 0;
             walkAnimation = null;
-            Main.assets.MOTOR.stop();
+            Main.assets.MOTOR.pause(motorSoundId);
             motorSoundPlaying = false;
 
             // turn towards player
@@ -128,7 +128,7 @@ public class PatrolBot {
             fireTimer = 1f; // allow time for fire animation
 
             scene.animationController.setAnimation("Fire", 1);
-            Scene bullet = world.spawnBullet();
+            Scene bullet = world.spawnBullet(scene.modelInstance.transform);
 //            bulletTransform = bullet.modelInstance.transform;
            Main.assets.BUZZ.play();
 //            bulletSoundPlaying = true;
@@ -138,7 +138,7 @@ public class PatrolBot {
     }
 
 
-    private static float SOUND_MAX_DISTANCE = 16f;
+    private static float SOUND_MAX_DISTANCE = 32f;
     private Vector3 dir = new Vector3();
 
     // sound is affected by first person camera position and orientation

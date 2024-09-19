@@ -150,14 +150,14 @@ public class World implements Disposable {
 
     private Matrix4 bulletTransform = new Matrix4();
 
-    // todo
-    public Scene spawnBullet(){
+
+    public Scene spawnBullet(Matrix4 botTransform){
         bullet = new Scene(sceneAsset.scene, "Bullet");
-//        bulletTransform.set(patrolBot.modelInstance.transform);
-//        bulletTransform.translate(-0.32f, 0.69f, 0.595f);   // offset for barrel
-//        bullet.modelInstance.transform.set(bulletTransform);
-//        //scenes.add(bullet);
-//        bullets.add(bullet);
+        bulletTransform.set(botTransform);
+        bulletTransform.translate(-0.32f, 0.69f, 0.595f);   // offset for barrel
+        bullet.modelInstance.transform.set(bulletTransform);
+        //scenes.add(bullet);
+        bullets.add(bullet);
         return bullet;
     }
 
