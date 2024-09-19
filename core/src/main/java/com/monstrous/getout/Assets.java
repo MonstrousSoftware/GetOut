@@ -2,6 +2,7 @@ package com.monstrous.getout;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Disposable;
@@ -14,6 +15,8 @@ public class Assets implements Disposable {
     public Sound    SHOT;
     public Sound    BUZZ;
     public Sound    MENU_CLICK;
+
+    public Music    MUSIC;
 
     private AssetManager assets;
 
@@ -28,6 +31,8 @@ public class Assets implements Disposable {
         assets.load("sounds/buzz.mp3", Sound.class);
         assets.load("sounds/motor.mp3", Sound.class);
         assets.load("sounds/click_002.ogg", Sound.class);
+
+        assets.load("music/bossa-nova-echo.ogg", Music.class);
     }
 
 
@@ -44,6 +49,8 @@ public class Assets implements Disposable {
         BUZZ = assets.get("sounds/buzz.mp3");
         MOTOR = assets.get("sounds/motor.mp3");
         MENU_CLICK = assets.get("sounds/click_002.ogg");
+
+        MUSIC = assets.get("music/bossa-nova-echo.ogg");
     }
 
     public float getProgress() {

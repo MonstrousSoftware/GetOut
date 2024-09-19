@@ -23,13 +23,16 @@ public class GameScreen extends ScreenAdapter {
         gui = new GUI(game, world);
         //botController = new PatrolBotController();
 
-
+        if(Settings.playMusic){
+            game.assets.MUSIC.play();
+            game.assets.MUSIC.setLooping(true);
+            game.assets.MUSIC.setVolume(0.5f);
+        }
     }
 
 
     @Override
     public void show() {
-
 
         InputMultiplexer im = new InputMultiplexer();
         //im.addProcessor(botController);
@@ -88,6 +91,7 @@ public class GameScreen extends ScreenAdapter {
     public void dispose() {
         // dispose what is created in constructor
         // called from PauseMenuScreen when the game is quit
+        game.assets.MUSIC.stop();
 
         gameView.dispose();
         world.dispose();

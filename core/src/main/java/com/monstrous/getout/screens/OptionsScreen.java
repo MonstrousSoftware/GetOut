@@ -93,6 +93,8 @@ public class OptionsScreen extends MenuScreen {
        Table screenTable = new Table();
        screenTable.setFillParent(true);
 
+       CheckBox music = new CheckBox("Music", skin);
+       music.setChecked(Settings.playMusic);
 
        CheckBox fullScreen = new CheckBox("Full Screen", skin);
        fullScreen.setChecked(Settings.fullScreen);
@@ -123,6 +125,7 @@ public class OptionsScreen extends MenuScreen {
 
        int pad = 10;
 
+       screenTable.add(music).pad(pad).left().row();
        screenTable.add(fullScreen).pad(pad).left().row();
        screenTable.add(invertLook).pad(pad).left().row();
        screenTable.add(freeLook).pad(pad).left().row();
@@ -145,6 +148,7 @@ public class OptionsScreen extends MenuScreen {
        if(Settings.supportControllers) {
            ControllerMenuStage cStage = (ControllerMenuStage) stage;
            cStage.clearFocusableActors();
+           cStage.addFocusableActor(music);
            cStage.addFocusableActor(fullScreen);
            cStage.addFocusableActor(invertLook);
            cStage.addFocusableActor(freeLook);
@@ -158,6 +162,21 @@ public class OptionsScreen extends MenuScreen {
            cStage.setEscapeActor(done);
        }
 
+
+       music.addListener(new ChangeListener() {
+           @Override
+           public void changed(ChangeEvent event, Actor actor) {
+               playSelectNoise();
+               Settings.playMusic = music.isChecked();
+               if(!Settings.playMusic && game.assets.MUSIC.isPlaying())
+                   game.assets.MUSIC.stop();
+               else if(Settings.playMusic && !game.assets.MUSIC.isPlaying() && gameScreen != null) {
+                   game.assets.MUSIC.play();
+                   game.assets.MUSIC.setLooping(true);
+                   game.assets.MUSIC.setVolume(0.5f);
+               }
+           }
+       });
        fullScreen.addListener(new ChangeListener() {
            @Override
            public void changed(ChangeEvent event, Actor actor) {

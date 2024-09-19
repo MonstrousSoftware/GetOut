@@ -35,6 +35,9 @@ Notes:
 
 
 
+Music:
+Music by <a href="https://pixabay.com/users/lesfm-22579021/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=10900">Oleksii Kaplunskyi</a> from <a href="https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=10900">Pixabay</a>
+
 This project was generated with a template including simple application launchers and a main class extending `Game` that sets the first screen.
 
 ## Platforms

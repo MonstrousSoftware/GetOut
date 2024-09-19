@@ -66,5 +66,7 @@ public class Settings {
 
     static public boolean       fullScreen = false;
 
+    static public boolean       playMusic = true;
+
 
 }

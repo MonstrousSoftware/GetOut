@@ -198,7 +198,7 @@ public class CameraController extends InputAdapter {
         float bobHeight = 0;
         if(Math.abs(speed) > 0.1f ) {
             bobAngle += deltaTime * 2.0f * Math.PI / Settings.headBobDuration;
-            bobAngle += MathUtils.random(1f) - 0.5f;  // add bit of noise to the angle
+            //bobAngle += MathUtils.random(1f) - 0.5f;  // add bit of noise to the angle
 
             // move the head up and down in a sine wave
             bobHeight = (float) (Settings.headBobHeight * Math.sin(bobAngle));
