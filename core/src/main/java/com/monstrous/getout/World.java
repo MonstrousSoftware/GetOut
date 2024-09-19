@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.monstrous.getout.collision.Collider;
 import com.monstrous.getout.collision.Colliders;
+import com.monstrous.getout.input.Bullet;
 import com.monstrous.getout.input.PatrolBots;
 import net.mgsx.gltf.loaders.gltf.GLTFLoader;
 import net.mgsx.gltf.scene3d.scene.Scene;
@@ -20,9 +21,8 @@ public class World implements Disposable {
     private SceneAsset sceneAsset;
     private SceneAsset sceneAsset2;
     public Array<Scene> scenes;
-    public Array<Scene> bullets;
-    private Array<Scene> deleteList;
-    public Scene bullet;
+    public Array<Bullet> bullets;
+    private Array<Bullet> deleteList;
     public Colliders colliders;
     public int numElements;
     public boolean[] foundCard;
@@ -151,19 +151,19 @@ public class World implements Disposable {
     private Matrix4 bulletTransform = new Matrix4();
 
 
-    public Scene spawnBullet(Matrix4 botTransform){
-        bullet = new Scene(sceneAsset.scene, "Bullet");
+    public void spawnBullet(Matrix4 botTransform){
+        Scene bulletScene = new Scene(sceneAsset.scene, "Bullet");
         bulletTransform.set(botTransform);
         bulletTransform.translate(-0.32f, 0.69f, 0.595f);   // offset for barrel
-        bullet.modelInstance.transform.set(bulletTransform);
+        bulletScene.modelInstance.transform.set(bulletTransform);
+
+        Bullet bullet = new Bullet(bulletScene);
+
         //scenes.add(bullet);
         bullets.add(bullet);
-        return bullet;
     }
 
-    public static final float BULLET_SPEED = 10f;
-    public static final float MAX_BULLET_DIST = 50f;    // maximum distance from origin before bullet is deleted
-    private Vector3 vec = new Vector3();
+
 
     public boolean canReach( Vector3 position ) {
 
@@ -231,30 +231,15 @@ public class World implements Disposable {
 
     public void update(Camera camera, float deltaTime ){
 
-
-
         patrolBots.update(deltaTime, camera);
-
-//        String colliderId = colliders.collisionTest(cameraPosition);
-//        if (colliderId != null) {
-//            Gdx.app.log("collided!", colliderId);
-//        }
-
 
         // animate bullets
         deleteList.clear();
-        for(Scene bullet : bullets){
-            vec.set(0,0,1f);    // forward vector
-            vec.rot(bullet.modelInstance.transform);    // rotate with bullet orientation
-            vec.scl(deltaTime*BULLET_SPEED);        // scale with speed and delta time
-            bullet.modelInstance.transform.trn(vec);    // translate position
-
-            bullet.modelInstance.transform.getTranslation(vec);
-            if(vec.len() > MAX_BULLET_DIST)
+        for(Bullet bullet : bullets){
+            if(bullet.update(deltaTime, camera))
                 deleteList.add(bullet);
         }
         bullets.removeAll(deleteList, true);
-        //scenes.removeAll(deleteList, true);
     }
 
     @Override

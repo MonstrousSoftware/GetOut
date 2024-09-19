@@ -80,18 +80,18 @@ public class PatrolBot {
             scene.modelInstance.transform.setTranslation(pos);
         }
 
-        checkForPlayer(camera.position);
+        checkForPlayer(camera.position, deltaTime);
 
         if(motorSoundPlaying)
             adaptSoundVolumeAndPan(motorSoundId, Main.assets.MOTOR, scene.modelInstance.transform, camera);
     }
 
 
-    private void checkForPlayer(Vector3 playerPosition){
+    private void checkForPlayer(Vector3 playerPosition, float deltaTime){
         canSee = false;
 
         vec.set(playerPosition).sub(pos);
-        if(vec.len() < 10){
+        if(vec.len() < 35){
             //Gdx.app.log("bot", "close by");
             vec.nor();
             fwd.set(Vector3.Z).rot(scene.modelInstance.transform);  // direction vector
@@ -99,7 +99,7 @@ public class PatrolBot {
             if(dot > 0.7f) {        // you are more or less in front of the bot
                 // todo check for walls etc. between bot and player
                 canSee = true;
-                Gdx.app.log("bot", "spotted you, dot:"+dot);
+                //Gdx.app.log("bot", "spotted you, dot:"+dot);
             }
         }
         if(canSee) {
@@ -111,10 +111,9 @@ public class PatrolBot {
             // turn towards player
             side.set(Vector3.X).rot(scene.modelInstance.transform);  // sideways vector
             if(side.dot(vec) < 0){
-                scene.modelInstance.transform.rotate(Vector3.Y, -0.25f);
+                scene.modelInstance.transform.rotate(Vector3.Y, -0.25f*deltaTime*60f);
             } else if(side.dot(vec) > 0) {
-                scene.modelInstance.transform.rotate(Vector3.Y, 0.25f);
-                // TODO deltaTime
+                scene.modelInstance.transform.rotate(Vector3.Y, 0.25f*deltaTime*60f);
             }
 
             fireWeapon();
@@ -128,12 +127,8 @@ public class PatrolBot {
             fireTimer = 1f; // allow time for fire animation
 
             scene.animationController.setAnimation("Fire", 1);
-            Scene bullet = world.spawnBullet(scene.modelInstance.transform);
-//            bulletTransform = bullet.modelInstance.transform;
-           Main.assets.BUZZ.play();
-//            bulletSoundPlaying = true;
+            world.spawnBullet(scene.modelInstance.transform);
             Main.assets.SHOT.play();
-
         }
     }
 

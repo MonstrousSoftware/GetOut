@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
 import com.monstrous.getout.filters.PostProcessor;
 import com.monstrous.getout.filters.VCRFilter;
+import com.monstrous.getout.input.Bullet;
 import com.monstrous.getout.input.CameraController;
 import net.mgsx.gltf.scene3d.attributes.FogAttribute;
 import net.mgsx.gltf.scene3d.attributes.PBRCubemapAttribute;
@@ -146,8 +147,8 @@ public class GameView implements Disposable {
             Scene scene =  world.scenes.get(i);
             sceneManager.addScene(scene, false);
         }
-        for(Scene bullet : world.bullets)
-            sceneManager.addScene(bullet, false);
+        for(Bullet bullet : world.bullets)
+            sceneManager.addScene(bullet.scene, false);
     }
 
     public void render(World world, float deltaTime ){
