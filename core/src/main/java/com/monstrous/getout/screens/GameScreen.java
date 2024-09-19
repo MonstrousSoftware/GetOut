@@ -63,7 +63,7 @@ public class GameScreen extends ScreenAdapter {
 
 
         //botController.update(world, deltaTime, gameView.camera);
-        world.update(gameView.camera.position, deltaTime);
+        world.update(gameView.camera, deltaTime);
         gameView.render( world, deltaTime );
 
         if(Settings.showColliders)

@@ -1,6 +1,7 @@
 package com.monstrous.getout;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g3d.model.Node;
 import com.badlogic.gdx.graphics.g3d.model.NodePart;
 import com.badlogic.gdx.math.Matrix4;
@@ -95,7 +96,7 @@ public class World implements Disposable {
                 } else { // new group
                     Scene patrolBot = new Scene(sceneAsset.scene, "Armature");
                     scenes.add(patrolBot);
-                    patrolBots.setPatrolBot(patrolBot, wayPoints);
+                    patrolBots.setPatrolBot(this, patrolBot, wayPoints);
                     wayPoints.clear();
                     group = node.id.substring(0, 9);    // name of new group e.g. "Waypoint2"
                     addWaypoint(wayPoints, node);
@@ -126,7 +127,7 @@ public class World implements Disposable {
         if(wayPoints.size > 0) {
             Scene patrolBot = new Scene(sceneAsset.scene, "Armature");
             scenes.add(patrolBot);
-            patrolBots.setPatrolBot(patrolBot, wayPoints);
+            patrolBots.setPatrolBot(this, patrolBot, wayPoints);
             wayPoints.clear();
         }
 
@@ -168,7 +169,7 @@ public class World implements Disposable {
 
         Collider collider = colliders.collisionTest(position);
         if (collider != null) {
-            Gdx.app.log("collision", collider.id);
+            //Gdx.app.log("collision", collider.id);
             if(collider.type == Collider.Type.PICKUP) {
                 pickUp(collider);
                 return true;
@@ -228,11 +229,11 @@ public class World implements Disposable {
         // fanfare etc.
     }
 
-    public void update( Vector3 cameraPosition, float deltaTime ){
+    public void update(Camera camera, float deltaTime ){
 
 
 
-        patrolBots.update(deltaTime);
+        patrolBots.update(deltaTime, camera);
 
 //        String colliderId = colliders.collisionTest(cameraPosition);
 //        if (colliderId != null) {
