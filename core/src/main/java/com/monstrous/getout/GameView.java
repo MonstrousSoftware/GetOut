@@ -1,6 +1,7 @@
 package com.monstrous.getout;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.shaders.DepthShader;
@@ -22,6 +23,7 @@ import net.mgsx.gltf.scene3d.scene.SceneSkybox;
 import net.mgsx.gltf.scene3d.shaders.PBRDepthShaderProvider;
 import net.mgsx.gltf.scene3d.shaders.PBRShaderConfig;
 import net.mgsx.gltf.scene3d.shaders.PBRShaderProvider;
+import net.mgsx.gltf.scene3d.utils.EnvironmentUtil;
 import net.mgsx.gltf.scene3d.utils.IBLBuilder;
 
 import static com.badlogic.gdx.Gdx.gl;
@@ -65,7 +67,7 @@ public class GameView implements Disposable {
         //sceneManager = new SceneManager();
 
         // setup camera
-        camera = new PerspectiveCamera(40, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        camera = new PerspectiveCamera(60, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camDist = 5f;
         camera.near = 0.1f;
         camera.far = 150f;
@@ -97,7 +99,10 @@ public class GameView implements Disposable {
 
         // setup quick IBL (image based lighting)
         IBLBuilder iblBuilder = IBLBuilder.createOutdoor(light);
-        environmentCubemap = iblBuilder.buildEnvMap(1024);
+        environmentCubemap = EnvironmentUtil.createCubemap(new InternalFileHandleResolver(),
+            "skybox/side-", ".png", EnvironmentUtil.FACE_NAMES_NEG_POS);
+
+//        environmentCubemap = iblBuilder.buildEnvMap(1024);
         diffuseCubemap = iblBuilder.buildIrradianceMap(256);
         specularCubemap = iblBuilder.buildRadianceMap(10);
         iblBuilder.dispose();

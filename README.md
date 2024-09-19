@@ -10,21 +10,23 @@ A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://git
 
 
 to do:
-Done - collision detection
+- smaller text button style for key menu
+- free look to be done
+- bug: wall texture teavm
+
+
+Done:
+- collision detection
+- recognize specific colliders to interact (cards, exit).
 - pickup cards
 - show cards in HUD
 - activate exit
 - add col det for outer wall
-- recognize specific colliders to interact (cards, exit).
-- smaller text button style for key menu
-- free look to be done
-
-Done:
 - key bindings menu
 - main menu
 - fps indicator
 - settings menu
-
+- easter egg
 
 Notes:
 - textures need to be power of two for teavm version
