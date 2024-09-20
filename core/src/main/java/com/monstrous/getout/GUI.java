@@ -27,7 +27,7 @@ public class GUI implements Disposable {
     private World world;
     private Image[] cards;
     private Texture[] textures;
-
+    private Table messageTable;
 
     public GUI(Main game, World world) {
         Gdx.app.log("GUI constructor", "");
@@ -44,6 +44,7 @@ public class GUI implements Disposable {
         textures[3]  = new Texture(Gdx.files.internal("images/cardAir.png"));
         textures[4]  = new Texture(Gdx.files.internal("images/cardFire.png"));
 
+        messageTable = new Table();
         //rebuild();
     }
 
@@ -86,19 +87,19 @@ public class GUI implements Disposable {
     }
 
     public void showMessage( String text ){
-        Table screenTable = new Table();
-        screenTable.setFillParent(true);
+        messageTable.clear();       // any old message will be overwritten
+        messageTable.setFillParent(true);
 
         Label message = new Label(text, skin);
 
-        screenTable.align(Align.top);
-        screenTable.add(message).pad(50);
-        screenTable.pack();
+        messageTable.align(Align.top);
+        messageTable.add(message).pad(50);
+        messageTable.pack();
 
-        screenTable.setColor(1,1,1,0);                   // set alpha to zero
-        screenTable.addAction(sequence(fadeIn(2f), delay(1f), fadeOut(1f), removeActor()));           // fade in .. fade out, then remove this actor
+        messageTable.setColor(1,1,1,0);       // set alpha to zero
+        messageTable.addAction(sequence(fadeIn(2f), delay(1f), fadeOut(1f), removeActor()));           // fade in .. fade out, then remove this actor
 
-        stage.addActor(screenTable);
+        stage.addActor(messageTable);
     }
 
     private void updateLabels(){

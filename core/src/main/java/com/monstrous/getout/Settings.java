@@ -37,7 +37,7 @@ public class Settings {
     public static boolean       useGLprofiler = false;      // set to true to get GL errors reported (NB big impact on frame rate)
 
 
-    static public boolean       supportControllers = true;       // disable in case it causes issues
+    static public boolean       supportControllers = false;       // disable in case it causes issues
     static public float         verticalReadjustSpeed = 4f;
 
     static public float         eyeHeight = 1.2f;   // meters
@@ -59,9 +59,9 @@ public class Settings {
 
     static public boolean       noClip = false;
     static public boolean       showColliders = false;
-    static public boolean       showFPS = false;
+    static public boolean       showFPS = true;
 
-    static public boolean       postFilter = false;   // post-processing shader effects
+    static public boolean       postFilter = true;   // post-processing shader effects
     static public boolean       camStabilisation = !release;
 
     static public boolean       fullScreen = false;

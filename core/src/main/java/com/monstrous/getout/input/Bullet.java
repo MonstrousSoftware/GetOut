@@ -5,6 +5,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
+import com.monstrous.getout.World;
 import com.monstrous.getout.screens.Main;
 import net.mgsx.gltf.scene3d.scene.Scene;
 
@@ -25,7 +26,7 @@ public class Bullet {
     }
 
     // returns true if bullet disappears
-    public boolean update(float deltaTime, Camera camera) {
+    public boolean update(float deltaTime, World world, Camera camera) {
             lifeTime += deltaTime;
             vec.set(0,0,1f);    // forward vector
             vec.rot(scene.modelInstance.transform);    // rotate with bullet orientation
@@ -38,6 +39,7 @@ public class Bullet {
             if(distance < 1f){
                 Gdx.app.log("bullet", "hit you");
                 Main.assets.BUZZ.stop(soundId);
+                world.getHitByBullet();
                 return true;
             }
 

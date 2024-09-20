@@ -29,7 +29,7 @@ public class World implements Disposable {
     public Collider exitDoor;
     private PatrolBots patrolBots;
     public String message = null;   // to show in GUI via GameScreen
-
+    public float health;
 
     public World() {
         scenes = new Array();
@@ -63,6 +63,7 @@ public class World implements Disposable {
         for(int i = 0; i < 4; i++)
             foundCard[i] = false;
 
+        health = 100f;
         message = "Find your way out";
 
     }
@@ -229,6 +230,16 @@ public class World implements Disposable {
         // fanfare etc.
     }
 
+    public void getHitByBullet(){
+        if(health < 0)
+            return; // you only die once
+        health -= 35;
+        if(health < 0)
+            message = "You got hit! You died!";
+        else
+            message = "You got hit! Health at "+(int)health+" percent";
+    }
+
     public void update(Camera camera, float deltaTime ){
 
         patrolBots.update(deltaTime, camera);
@@ -236,7 +247,7 @@ public class World implements Disposable {
         // animate bullets
         deleteList.clear();
         for(Bullet bullet : bullets){
-            if(bullet.update(deltaTime, camera))
+            if(bullet.update(deltaTime, this, camera))
                 deleteList.add(bullet);
         }
         bullets.removeAll(deleteList, true);

@@ -56,7 +56,8 @@ public class GameScreen extends ScreenAdapter {
 
     @Override
     public void render(float deltaTime) {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)||
+            Gdx.input.isKeyJustPressed(Input.Keys.BACKSPACE)){
             game.setScreen(new PauseMenuScreen(game, this));
             return;
         }
