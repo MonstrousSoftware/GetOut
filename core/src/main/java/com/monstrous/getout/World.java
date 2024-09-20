@@ -19,6 +19,8 @@ import net.mgsx.gltf.scene3d.scene.Scene;
 import net.mgsx.gltf.scene3d.scene.SceneAsset;
 
 public class World implements Disposable {
+    static final float PLAYER_RADIUS = .5f;
+
     private SceneAsset sceneAsset;
     private SceneAsset sceneAsset2;
     public Array<Scene> scenes;
@@ -88,6 +90,8 @@ public class World implements Disposable {
             if(node.id.startsWith("Ceiling"))
                 continue;
             if(node.id.startsWith("Floor"))
+                continue;
+            if(node.id.startsWith("Terrain"))
                 continue;
             if(node.id.startsWith("Waypoint")) {    // we assume they are found in the right order
                 if(group == null){
@@ -169,9 +173,9 @@ public class World implements Disposable {
 
     public boolean canReach( Vector3 position ) {
 
-        Collider collider = colliders.collisionTest(position);
+        Collider collider = colliders.collisionTest(position, PLAYER_RADIUS);
         if (collider != null) {
-            //Gdx.app.log("collision", collider.id);
+            Gdx.app.log("collision", collider.id);
             if(collider.type == Collider.Type.PICKUP) {
                 pickUp(collider);
                 return true;
@@ -231,7 +235,7 @@ public class World implements Disposable {
         // fanfare etc.
     }
 
-    public void getHitByBullet(){
+    public void playerGotHitByBullet(){
         if(health < 0)
             return; // you only die once
         health -= 35;

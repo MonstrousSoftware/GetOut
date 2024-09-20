@@ -22,7 +22,6 @@ import com.badlogic.gdx.utils.Disposable;
 // collision response: bounce player of wall normal
 
 public class Colliders implements Disposable {
-    static final float RADIUS = .5f;
 
     public Array<Collider> colliders;
     private BoundingBox player;
@@ -55,25 +54,34 @@ public class Colliders implements Disposable {
     }
 
     // returns null if no collision, otherwise the node id
-    public Collider collisionTest(Vector3 position) {
-        // define a bounding box for the player
-        // collide at height .5m above ground (e.g. to collide into desks)
-        min.set(position);
-        min.x -= RADIUS;
-        min.z -= RADIUS;
-        min.y = .5f;
-        max.set(position);
-        max.x += RADIUS;
-        max.z += RADIUS;
-        max.y = .5f;
-        player.set(min, max);
+    public Collider collisionTest(Vector3 position, float radius) {
 
-        // test collision of player with a collider by bounding box intersection
+        // test collision of player with a colliders bounding box
         for (Collider collider : colliders) {
-            if (collider.bbox.intersects(player))
+            if(intersects(collider.bbox, position, radius))
                 return collider;
         }
         return null;
+    }
+
+    // 2d intersection of rectangle and circle in the horizontal plane (XZ)
+    private boolean intersects(BoundingBox bbox, Vector3 cylPos, float cylRadius){
+        float distX = Math.abs(cylPos.x - bbox.getCenterX());
+        float distZ = Math.abs(cylPos.z - bbox.getCenterZ());
+        float hw = bbox.getWidth()/2f;
+        float hd = bbox.getDepth()/2f;
+        // quick exit for trivial cases
+        if(distX > cylRadius + hw)
+            return false;
+        if(distZ > cylRadius + hd)
+            return false;
+        if(distX < hw)
+            return true;
+        if(distZ < hd)
+            return true;
+        // pythagoras for when cylinder is just (less than R) outside the box
+        float d2 = (float)Math.pow(distX - hw,2) + (float)Math.pow(distZ - hd,2);
+        return d2 <= cylRadius*cylRadius;
     }
 
     private void addDebugModel(Collider collider) {

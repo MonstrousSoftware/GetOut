@@ -7,17 +7,20 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
 import com.monstrous.getout.World;
+import com.monstrous.getout.collision.Collider;
 import com.monstrous.getout.screens.Main;
 import net.mgsx.gltf.scene3d.scene.Scene;
 
 public class Bullet implements Disposable {
     public static final float BULLET_SPEED = 10f;
+    static final float BULLET_RADIUS = .4f;
 
     public Scene scene;
     public long soundId;
     public boolean isDead;
     private float lifeTime;
     private Vector3 vec = new Vector3();
+    private Vector3 pos = new Vector3();
 
     public Bullet(Scene scene) {
         this.scene = scene;
@@ -35,15 +38,24 @@ public class Bullet implements Disposable {
             scene.modelInstance.transform.trn(vec);    // translate position
 
             // todo collision detection
-            scene.modelInstance.transform.getTranslation(vec);  // bullet position
-            float distance = vec.dst(camera.position);
+            scene.modelInstance.transform.getTranslation(pos);  // bullet position
+            float distance = pos.dst(camera.position);
             if(distance < 1f){
-                Gdx.app.log("bullet", "hit you");
-                world.getHitByBullet();
+                //Gdx.app.log("bullet", "hit you");
+                world.playerGotHitByBullet();
                 return true;
             }
 
-            if(lifeTime > 5f) {
+            // check for wall collisions
+            Collider collider = world.colliders.collisionTest(pos, BULLET_RADIUS);
+            if (collider != null) {
+                //Gdx.app.log("bullet collision", collider.id);
+                // todo thud sound
+                return true; // remove bullet
+            }
+
+
+            if(lifeTime > 5f) { // avoid bullets flying forever
                 return true;
             }
             adaptSoundVolumeAndPan(soundId, Main.assets.BUZZ, scene.modelInstance.transform, camera);

@@ -104,8 +104,10 @@ public class GameScreen extends ScreenAdapter {
         if(Gdx.app.getType() == Application.ApplicationType.WebGL)
             Gdx.graphics.setSystemCursor(Cursor.SystemCursor.Arrow);     // show cursorGUI
 
+        // pause sounds
         world.patrolBots.pauseSound();
         world.bullets.pauseSound();
+
         colliderView.dispose();
         gui.dispose();
     }

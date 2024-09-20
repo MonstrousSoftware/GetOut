@@ -57,11 +57,11 @@ public class Settings {
     static public float         degreesPerPixel = 0.05f; // mouse sensitivity
 
 
-    static public boolean       noClip = true;
-    static public boolean       showColliders = false;
+    static public boolean       noClip = false;
+    static public boolean       showColliders = true;
     static public boolean       showFPS = true;
 
-    static public boolean       postFilter = true;   // post-processing shader effects
+    static public boolean       postFilter = false;   // post-processing shader effects
     static public boolean       camStabilisation = !release;
 
     static public boolean       fullScreen = false;
