@@ -30,6 +30,7 @@ public class World implements Disposable {
     private PatrolBots patrolBots;
     public String message = null;   // to show in GUI via GameScreen
     public float health;
+    public float deathTimer;
 
     public World() {
         scenes = new Array();
@@ -65,7 +66,7 @@ public class World implements Disposable {
 
         health = 100f;
         message = "Find your way out";
-
+        deathTimer = -1;
     }
 
     private void parseLevel(Scene level){
@@ -234,13 +235,20 @@ public class World implements Disposable {
         if(health < 0)
             return; // you only die once
         health -= 35;
-        if(health < 0)
+        if(health < 0) {
             message = "You got hit! You died!";
+            deathTimer = 3f;    // timer for follow-up message
+        }
         else
             message = "You got hit! Health at "+(int)health+" percent";
     }
 
     public void update(Camera camera, float deltaTime ){
+        if(deathTimer > 0){
+            deathTimer -= deltaTime;
+            if(deathTimer < 0)
+                message = "Press R to restart";
+        }
 
         patrolBots.update(deltaTime, camera);
 

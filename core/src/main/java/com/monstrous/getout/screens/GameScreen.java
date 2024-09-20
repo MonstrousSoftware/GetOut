@@ -61,7 +61,11 @@ public class GameScreen extends ScreenAdapter {
             game.setScreen(new PauseMenuScreen(game, this));
             return;
         }
-
+        // restart game
+        if(Gdx.input.isKeyJustPressed(Input.Keys.R)){
+            game.setScreen(new GameScreen(game));
+            return;
+        }
 
         //botController.update(world, deltaTime, gameView.camera);
         world.update(gameView.camera, deltaTime);

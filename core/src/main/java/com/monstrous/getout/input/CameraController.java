@@ -13,7 +13,8 @@ import com.monstrous.getout.World;
 
 public class CameraController extends InputAdapter {
 
-    private final float WALK_SPEED = 5f;
+    private final float WALK_SPEED = 4f;
+    private final float RUN_FACTOR = 2f;
 
 
     private final PerspectiveCamera camera;
@@ -57,14 +58,14 @@ public class CameraController extends InputAdapter {
         if (keys.containsKey(KeyBinding.FORWARD.getKeyCode())) {
             speed = WALK_SPEED;
             if (keys.containsKey(KeyBinding.RUN.getKeyCode()) &&!isCrouching) {
-                speed  *= 5f;
+                speed  *= RUN_FACTOR;
             }
         }
 
         if (keys.containsKey(KeyBinding.BACK.getKeyCode())) {
             speed = -WALK_SPEED;
             if (keys.containsKey(KeyBinding.RUN.getKeyCode()) && !isCrouching) {
-                speed  *= 5f;
+                speed  *= RUN_FACTOR;
             }
         }
 
