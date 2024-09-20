@@ -147,7 +147,7 @@ public class GameView implements Disposable {
             Scene scene =  world.scenes.get(i);
             sceneManager.addScene(scene, false);
         }
-        for(Bullet bullet : world.bullets)
+        for(Bullet bullet : world.bullets.bullets)
             sceneManager.addScene(bullet.scene, false);
     }
 

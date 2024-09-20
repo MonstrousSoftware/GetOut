@@ -8,13 +8,14 @@ import com.badlogic.gdx.math.CatmullRomSpline;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Disposable;
 import com.monstrous.getout.World;
 import com.monstrous.getout.screens.Main;
 import net.mgsx.gltf.scene3d.scene.Scene;
 
 // manages robot patrol path using a spline
 
-public class PatrolBot {
+public class PatrolBot implements Disposable {
     private Scene scene;
     private World world;
     private CatmullRomSpline<Vector3> spline;
@@ -28,6 +29,7 @@ public class PatrolBot {
     private float fireTimer = -1;
     private boolean motorSoundPlaying = false;
     private long motorSoundId;
+    private long shotSoundId;
     private AnimationController.AnimationDesc walkAnimation;
 
     public PatrolBot(World world, Scene scene, Array<Vector3> wayPoints) {
@@ -50,6 +52,7 @@ public class PatrolBot {
         walkAnimation = scene.animationController.setAnimation("Forward", -1);
         motorSoundId = Main.assets.MOTOR.loop();
         motorSoundPlaying = true;
+        shotSoundId = -1;
     }
 
     public void update(float deltaTime, Camera camera ) {
@@ -128,8 +131,22 @@ public class PatrolBot {
 
             scene.animationController.setAnimation("Fire", 1);
             world.spawnBullet(scene.modelInstance.transform);
-            Main.assets.SHOT.play();
+            shotSoundId = Main.assets.SHOT.play();
         }
+    }
+    public void pauseSound(){
+        Main.assets.MOTOR.pause(motorSoundId);
+        Main.assets.SHOT.pause(shotSoundId);
+    }
+    public void resumeSound(){
+        if(motorSoundPlaying)
+            Main.assets.MOTOR.resume(motorSoundId);
+        Main.assets.SHOT.resume(shotSoundId);
+    }
+
+    @Override
+    public void dispose() {
+        Main.assets.MOTOR.stop(motorSoundId);
     }
 
 

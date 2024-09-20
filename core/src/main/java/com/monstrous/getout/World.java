@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.Disposable;
 import com.monstrous.getout.collision.Collider;
 import com.monstrous.getout.collision.Colliders;
 import com.monstrous.getout.input.Bullet;
+import com.monstrous.getout.input.Bullets;
 import com.monstrous.getout.input.PatrolBots;
 import net.mgsx.gltf.loaders.gltf.GLTFLoader;
 import net.mgsx.gltf.scene3d.scene.Scene;
@@ -21,21 +22,20 @@ public class World implements Disposable {
     private SceneAsset sceneAsset;
     private SceneAsset sceneAsset2;
     public Array<Scene> scenes;
-    public Array<Bullet> bullets;
-    private Array<Bullet> deleteList;
+    public Bullets bullets;
     public Colliders colliders;
     public int numElements;
     public boolean[] foundCard;
     public Collider exitDoor;
-    private PatrolBots patrolBots;
+    public PatrolBots patrolBots;
     public String message = null;   // to show in GUI via GameScreen
     public float health;
     public float deathTimer;
 
     public World() {
         scenes = new Array();
-        bullets = new Array<>();
-        deleteList = new Array<>();
+        bullets = new Bullets();
+
         colliders = new Colliders();
         patrolBots = new PatrolBots();
         reload();
@@ -251,14 +251,8 @@ public class World implements Disposable {
         }
 
         patrolBots.update(deltaTime, camera);
-
         // animate bullets
-        deleteList.clear();
-        for(Bullet bullet : bullets){
-            if(bullet.update(deltaTime, this, camera))
-                deleteList.add(bullet);
-        }
-        bullets.removeAll(deleteList, true);
+        bullets.update(this, camera, deltaTime);
     }
 
     @Override
@@ -266,6 +260,7 @@ public class World implements Disposable {
 
         sceneAsset.dispose();
         sceneAsset2.dispose();
+        patrolBots.dispose();
     }
 
 

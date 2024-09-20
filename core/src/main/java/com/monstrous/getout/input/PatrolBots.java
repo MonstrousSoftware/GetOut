@@ -3,12 +3,13 @@ package com.monstrous.getout.input;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Disposable;
 import com.monstrous.getout.World;
 import net.mgsx.gltf.scene3d.scene.Scene;
 
 // manages collection of robots
 
-public class PatrolBots {
+public class PatrolBots implements Disposable {
     private Array<PatrolBot> bots;
 
     public PatrolBots() {
@@ -23,6 +24,22 @@ public class PatrolBots {
     public void update(float deltaTime, Camera camera ) {
         for(PatrolBot bot : bots)
             bot.update(deltaTime, camera);
+    }
+
+    public void pauseSound(){
+        for(PatrolBot bot : bots)
+            bot.pauseSound();
+    }
+
+    public void resumeSound(){
+        for(PatrolBot bot : bots)
+            bot.resumeSound();
+    }
+
+    @Override
+    public void dispose(){
+        for(PatrolBot bot : bots)
+            bot.dispose();
     }
 
 }

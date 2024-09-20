@@ -5,11 +5,12 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Disposable;
 import com.monstrous.getout.World;
 import com.monstrous.getout.screens.Main;
 import net.mgsx.gltf.scene3d.scene.Scene;
 
-public class Bullet {
+public class Bullet implements Disposable {
     public static final float BULLET_SPEED = 10f;
 
     public Scene scene;
@@ -38,13 +39,11 @@ public class Bullet {
             float distance = vec.dst(camera.position);
             if(distance < 1f){
                 Gdx.app.log("bullet", "hit you");
-                Main.assets.BUZZ.stop(soundId);
                 world.getHitByBullet();
                 return true;
             }
 
             if(lifeTime > 5f) {
-                Main.assets.BUZZ.stop(soundId);
                 return true;
             }
             adaptSoundVolumeAndPan(soundId, Main.assets.BUZZ, scene.modelInstance.transform, camera);
@@ -68,4 +67,15 @@ public class Bullet {
         sound.setPan(soundId, pan, volume);
     }
 
+    public void pauseSound(){
+        Main.assets.BUZZ.pause(soundId);
+    }
+    public void resumeSound(){
+        Main.assets.BUZZ.resume(soundId);
+    }
+
+    @Override
+    public void dispose() {
+        Main.assets.BUZZ.stop(soundId);
+    }
 }

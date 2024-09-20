@@ -51,7 +51,8 @@ public class GameScreen extends ScreenAdapter {
         // (you can turn a bit with the mouse, until it reaches the side of the canvas).
         if (Gdx.app.getType() == Application.ApplicationType.WebGL)
             Gdx.graphics.setSystemCursor(Cursor.SystemCursor.None);     // hide cursor
-
+        world.patrolBots.resumeSound();
+        world.bullets.resumeSound();    // in case we come back from pause menu
     }
 
     @Override
@@ -103,7 +104,8 @@ public class GameScreen extends ScreenAdapter {
         if(Gdx.app.getType() == Application.ApplicationType.WebGL)
             Gdx.graphics.setSystemCursor(Cursor.SystemCursor.Arrow);     // show cursorGUI
 
-
+        world.patrolBots.pauseSound();
+        world.bullets.pauseSound();
         colliderView.dispose();
         gui.dispose();
     }
