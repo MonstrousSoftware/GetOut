@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.g3d.environment.PointLight;
+import com.badlogic.gdx.graphics.g3d.environment.SpotLight;
 import com.badlogic.gdx.graphics.g3d.shaders.DepthShader;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.Vector3;
@@ -45,6 +47,7 @@ public class GameView implements Disposable {
     public CameraController camController;     // public so that GameScreen can link it to input multiplexer
     private FrameBuffer fbo;
     private PostProcessor filter;
+    private SpotLight torch;
 
 
     public GameView( Assets assets ) {
@@ -53,8 +56,8 @@ public class GameView implements Disposable {
 
         // todo tweak
         colorConfig.numDirectionalLights = 1;
-        colorConfig.numPointLights = 0;
-        colorConfig.numSpotLights = 0;
+        colorConfig.numPointLights = 1;
+        colorConfig.numSpotLights = 1;
         colorConfig.numBones = 12;      // patrol bot has 12 bones
 
         DepthShader.Config depthConfig= new DepthShader.Config();
@@ -81,6 +84,16 @@ public class GameView implements Disposable {
 
         camController = new CameraController(assets, camera);
 
+        torch = new SpotLight();
+        torch.setColor(Color.WHITE);
+        torch.intensity = 150f;
+        torch.cutoffAngle = 50f;
+        torch.exponent = 5f;
+
+
+        sceneManager.environment.add(torch);
+
+
         // setup light
         light = new DirectionalShadowLight(Settings.shadowMapSize, Settings.shadowMapSize);
         light.setViewport(Settings.shadowViewportSize,Settings.shadowViewportSize,Settings.shadowNear, Settings.shadowFar);
@@ -88,7 +101,7 @@ public class GameView implements Disposable {
         light.direction.set(0.3f, -1f, -0.5f).nor();
         light.color.set(Color.WHITE);
         light.intensity = Settings.directionalLightLevel;
-//        sceneManager.environment.add(light);      // sunlight
+        //sceneManager.environment.add(light);      // sunlight
 
         if(Settings.cascadedShadows) {
             csm = new CascadeShadowMap(Settings.numCascades);
@@ -167,7 +180,15 @@ public class GameView implements Disposable {
             light.setCenter(Vector3.Zero); // keep shadow light on origin so that we have shadows
         }
 
-        // render
+
+        torch.position.set(camera.position);
+        torch.direction.set(camera.direction);
+        if(Settings.torchOn)
+            torch.intensity = world.batteryLevel;
+        else
+            torch.intensity = 0;
+
+                // render
         sceneManager.update(deltaTime);
         if(Settings.postFilter) {
             sceneManager.renderShadows();

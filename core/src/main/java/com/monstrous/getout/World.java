@@ -32,6 +32,7 @@ public class World implements Disposable {
     public PatrolBots patrolBots;
     public String message = null;   // to show in GUI via GameScreen
     public float health;
+    public float batteryLevel;  // 0..100
     public float deathTimer;
 
     public World() {
@@ -67,6 +68,7 @@ public class World implements Disposable {
             foundCard[i] = false;
 
         health = 100f;
+        batteryLevel = 100f;
         message = "Find your way out";
         deathTimer = -1;
     }
@@ -250,6 +252,18 @@ public class World implements Disposable {
     }
 
     public void update(Camera camera, float deltaTime ){
+
+        if(Settings.torchOn) {
+            batteryLevel -= deltaTime * 10f;
+            if (batteryLevel < 0)
+                batteryLevel = 0;
+        } else {
+            batteryLevel += deltaTime * 10f;
+            if (batteryLevel > 100)
+                batteryLevel = 100;
+
+        }
+
         if(deathTimer > 0){
             deathTimer -= deltaTime;
             if(deathTimer < 0)

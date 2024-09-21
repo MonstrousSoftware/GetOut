@@ -66,6 +66,10 @@ public class GameScreen extends StdScreenAdapter {
             game.setScreen(new GameScreen(game));
             return;
         }
+        if(Gdx.input.isKeyJustPressed(Input.Keys.T)){
+            Settings.torchOn = !Settings.torchOn;
+        }
+
 
         world.update(gameView.camera, deltaTime);
         gameView.render( world, deltaTime );
