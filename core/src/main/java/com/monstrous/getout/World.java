@@ -93,7 +93,7 @@ public class World implements Disposable {
                 continue;
             if(node.id.startsWith("Terrain"))
                 continue;
-            if(node.id.startsWith("Waypoint")) {    // we assume they are found in the right order
+            if(node.id.startsWith("Waypoint")) {    // we assume (!) they are found in the right order
                 if(group == null){
                     group = node.id.substring(0, 9);    // name of first group e.g. "Waypoint1"
                 }
@@ -177,7 +177,7 @@ public class World implements Disposable {
 
         Collider collider = colliders.collisionTest(position, PLAYER_RADIUS);
         if (collider != null) {
-            //Gdx.app.log("canReach: collision", collider.id);
+            Gdx.app.log("canReach: collision", collider.id);
             if(collider.type == Collider.Type.PICKUP) {
                 pickUp(collider);
                 return null;

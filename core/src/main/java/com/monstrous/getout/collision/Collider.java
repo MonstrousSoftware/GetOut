@@ -73,8 +73,10 @@ public class Collider {
         if(dist4 < radius && velocity.z > 0){
             velocity.z = 0;
         }
-        Gdx.app.log("collision", " d1:"+dist+" d2:"+dist2+" d3:"+dist3+" d4:"+dist4);
-//        float dist = Math.abs(newPos.x - (bbox.getCenterX() + hw));
+        //Gdx.app.log("collision", " d1:"+dist+" d2:"+dist2+" d3:"+dist3+" d4:"+dist4);
+
+
+        //        float dist = Math.abs(newPos.x - (bbox.getCenterX() + hw));
 //        if(dist < minDist){
 //            minDist = dist;
 //            side = 0;

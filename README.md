@@ -11,9 +11,8 @@ A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://git
 
 to do:
 - smaller text button style for key menu
-- free look to be done
 - collision with inside corner
-- robot paths go through walls? one bot is stuck
+- robot paths go through walls? one bot is stuck 
 - robot direction in path following
 
 
@@ -30,7 +29,8 @@ Done:
 - settings menu
 - easter egg
 - block robot from seeing you through walls
-
+- free look option
+- 
 Notes:
 - textures need to be power of two for teavm version
 - mouse capture doesn't work on web version, user wil have to use keyboard (A/D) to turn instead of mouse.
