@@ -15,10 +15,6 @@ import com.monstrous.getout.collision.Collider;
 
 public class CameraController extends InputAdapter {
 
-    private final float WALK_SPEED = 4f;
-    private final float RUN_FACTOR = 2f;
-
-
     private final PerspectiveCamera camera;
     private float speed = 0;
     protected final IntIntMap keys = new IntIntMap();
@@ -30,15 +26,11 @@ public class CameraController extends InputAdapter {
     private final Vector3 sideChange = new Vector3();
     protected final Vector3 velocity = new Vector3();
     private float bobAngle;
-    private float jumpVelocity;
-    private float jumpHeight;
     private Sound walkSound;
     private Sound runSound;
 
     public CameraController(Assets assets, PerspectiveCamera camera) {
         this.camera = camera;
-        jumpVelocity = 0;
-        jumpHeight = 0;
         walkSound = assets.FOOT_STEPS;
         runSound = assets.RUNNING;
     }
@@ -55,16 +47,16 @@ public class CameraController extends InputAdapter {
 
 
         if (keys.containsKey(KeyBinding.FORWARD.getKeyCode())) {
-            speed = WALK_SPEED;
+            speed = Settings.walkSpeed;
             if (keys.containsKey(KeyBinding.RUN.getKeyCode()) ) {
-                speed  *= RUN_FACTOR;
+                speed  *= Settings.runFactor;
             }
         }
 
         if (keys.containsKey(KeyBinding.BACK.getKeyCode())) {
-            speed = -WALK_SPEED;
+            speed = -Settings.walkSpeed;
             if (keys.containsKey(KeyBinding.RUN.getKeyCode()) ) {
-                speed  *= RUN_FACTOR;
+                speed  *= Settings.runFactor;
             }
         }
 
@@ -78,11 +70,11 @@ public class CameraController extends InputAdapter {
 
         sideChange.set(0,0,0);
         if (keys.containsKey(KeyBinding.STRAFE_LEFT.getKeyCode())) {
-            sideChange.set(fwdHorizontal).crs(camera.up).nor().scl(-WALK_SPEED);     // strafe velocity
+            sideChange.set(fwdHorizontal).crs(camera.up).nor().scl(-Settings.walkSpeed);     // strafe velocity
             bobSpeed = 1;
         }
         if (keys.containsKey(KeyBinding.STRAFE_RIGHT.getKeyCode())) {
-            sideChange.set(fwdHorizontal).crs(camera.up).nor().scl(WALK_SPEED);
+            sideChange.set(fwdHorizontal).crs(camera.up).nor().scl(Settings.walkSpeed);
             bobSpeed = 1;
         }
 
@@ -92,10 +84,10 @@ public class CameraController extends InputAdapter {
 
 
         if (keys.containsKey(KeyBinding.TURN_LEFT.getKeyCode())) {
-            camera.direction.rotate(camera.up, deltaTime * 120f);
+            camera.direction.rotate(camera.up, deltaTime * Settings.turnSpeed);
         }
         if (keys.containsKey(KeyBinding.TURN_RIGHT.getKeyCode())) {
-            camera.direction.rotate(camera.up, -deltaTime * 120f);
+            camera.direction.rotate(camera.up, -deltaTime * Settings.turnSpeed);
         }
 
         velocity.set(fwdHorizontal).scl(speed).add(sideChange);     // make velocity vector
@@ -116,7 +108,7 @@ public class CameraController extends InputAdapter {
         if(Settings.camStabilisation)
             camera.up.set(Vector3.Y);
 
-        camera.position.y = Settings.eyeHeight + jumpHeight + bobHeight( bobSpeed, deltaTime); // apply some head bob if we're moving
+        camera.position.y = Settings.eyeHeight + bobHeight( bobSpeed, deltaTime); // apply some head bob if we're moving
 
         camera.update(true);
     }
