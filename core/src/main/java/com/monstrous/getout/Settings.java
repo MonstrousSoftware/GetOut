@@ -8,7 +8,7 @@ public class Settings {
 
     public static String        title = "Get The Heck Out";
 
-    public static boolean       release = false;
+    public static boolean       release = true;
 
     public static float         ambientLightLevel = 0.01f; //0.03f;
     public static float         directionalLightLevel = 0.0f;
@@ -53,11 +53,11 @@ public class Settings {
     static public boolean       postFilter = false;   // post-processing shader effects
     static public boolean       camStabilisation = !release;
 
-    static public boolean       fullScreen = false;
+    static public boolean       fullScreen = true;
 
     static public boolean       playMusic = release;
 
-    static public boolean       noBots = true;
+    static public boolean       noBots = false;
     static public boolean       playerIsInvisible = false;
 
     static public boolean       torchOn = true;

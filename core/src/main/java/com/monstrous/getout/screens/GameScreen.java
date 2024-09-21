@@ -4,7 +4,6 @@ import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Cursor;
 import com.monstrous.getout.*;
 import com.monstrous.getout.collision.ColliderView;
-import com.monstrous.getout.input.PatrolBotController;
 
 
 public class GameScreen extends StdScreenAdapter {
