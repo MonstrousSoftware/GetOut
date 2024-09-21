@@ -105,8 +105,9 @@ public class CameraController extends InputAdapter {
         camera.position.set(newPos);
 
 
-        if(Settings.camStabilisation)
-            camera.up.set(Vector3.Y);
+        if(!Settings.camStabilisation) {
+            camera.up.set(0.005f*speed*(float)Math.sin(camera.position.x), 0.8f,0.01f*speed*(float)Math.sin(camera.position.z*1.4f)).nor();
+        }
 
         camera.position.y = Settings.eyeHeight + bobHeight( bobSpeed, deltaTime); // apply some head bob if we're moving
 
