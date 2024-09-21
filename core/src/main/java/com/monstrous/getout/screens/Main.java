@@ -20,9 +20,9 @@ public class Main extends Game {
         KeyBinding.load();
         assets.finishLoading();
         if(Settings.release)
-            setScreen(new MainMenuScreen(this));
-        else
             setScreen(new TitleScreen(this));
+        else
+            setScreen(new GameScreen(this));
     }
 
     @Override

@@ -38,8 +38,8 @@ float fnoise(vec2 v) {
 
 float staticV(vec2 uv) {
     float staticHeight = fnoise(vec2(9.0,u_time*1.2+3.0))*0.3+5.0;
-    float staticAmount = fnoise(vec2(1.0,u_time*1.2-6.0))*0.1+0.3;
-    float staticStrength = fnoise(vec2(-9.75,u_time*0.6-3.0))*2.0+2.0;
+    float staticAmount = fnoise(vec2(1.0,u_time*1.2-6.0))*0.1+0.1;
+    float staticStrength = fnoise(vec2(-9.75,u_time*0.6-3.0))*1.0+1.0;
     return (1.0-step(fnoise(vec2(5.0*pow(u_time,2.0)+pow(uv.x*7.0,1.2),pow((mod(u_time,100.0)+100.0)*uv.y*0.3+3.0,staticHeight))),staticAmount))*staticStrength;
 }
 
@@ -56,7 +56,7 @@ void main()
     float vertMovementOn = (1.0-step(fnoise(vec2(u_time*0.2,8.0)),0.4))*vertMovementOpt;
     float vertJerk = (1.0-step(fnoise(vec2(u_time*1.5,5.0)),0.6))*vertJerkOpt;
     float vertJerk2 = (1.0-step(fnoise(vec2(u_time*5.5,5.0)),0.2))*vertJerkOpt;
-    float yOffset = abs(sin(u_time)*0.02)+vertJerk*vertJerk2*0.03;
+    float yOffset = vertJerk*vertJerk2*0.03;
     float y = mod(uv.y+yOffset,1.0);
 
     float staticVal = 0.0;
@@ -64,11 +64,10 @@ void main()
     for (float y = -1.0; y <= 1.0; y += 1.0) {
         float maxDist = 2.0/200.0;
         float dist = y/200.0;
-        staticVal += staticV(vec2(uv.x,uv.y+dist))*(maxDist-abs(dist))*1.5;
+        staticVal += staticV(vec2(uv.x,uv.y+dist))*(maxDist-abs(dist))*0.5;
     }
 
-    staticVal *= bottomStaticOpt;
-
+    //staticVal *= bottomStaticOpt;
 
     // y = uv.y;
 

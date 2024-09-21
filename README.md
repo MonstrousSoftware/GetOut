@@ -12,7 +12,6 @@ A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://git
 to do:
 - smaller text button style for key menu
 - collision with inside corner
-- robot paths go through walls? one bot is stuck 
 - robot direction in path following
 
 

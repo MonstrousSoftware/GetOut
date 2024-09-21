@@ -7,7 +7,7 @@ import com.monstrous.getout.collision.ColliderView;
 import com.monstrous.getout.input.PatrolBotController;
 
 
-public class GameScreen extends ScreenAdapter {
+public class GameScreen extends StdScreenAdapter {
     private final Main game;
     public World world;
     public GameView gameView;
@@ -54,6 +54,8 @@ public class GameScreen extends ScreenAdapter {
 
     @Override
     public void render(float deltaTime) {
+        super.render(deltaTime);
+
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)||
             Gdx.input.isKeyJustPressed(Input.Keys.TAB)){
             game.setScreen(new PauseMenuScreen(game, this));
