@@ -14,6 +14,7 @@ public enum KeyBinding {
     STRAFE_RIGHT("Strafe right", Keys.E),
     RUN ("Run modifier", Keys.SHIFT_LEFT),
     TORCH ("Toggle torch", Keys.T),
+    RESTART ("Restart", Keys.R),
 //    CROUCH ("Crouch", Keys.C),
 //    JUMP ("Jump", Keys.SPACE),
 

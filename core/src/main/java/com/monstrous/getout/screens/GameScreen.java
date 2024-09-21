@@ -4,6 +4,7 @@ import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Cursor;
 import com.monstrous.getout.*;
 import com.monstrous.getout.collision.ColliderView;
+import com.monstrous.getout.input.KeyBinding;
 
 
 public class GameScreen extends StdScreenAdapter {
@@ -61,11 +62,11 @@ public class GameScreen extends StdScreenAdapter {
             return;
         }
         // restart game
-        if(Gdx.input.isKeyJustPressed(Input.Keys.R)){
+        if(Gdx.input.isKeyJustPressed(KeyBinding.RESTART.getKeyCode())){
             game.setScreen(new GameScreen(game));
             return;
         }
-        if(Gdx.input.isKeyJustPressed(Input.Keys.T)){
+        if(Gdx.input.isKeyJustPressed(KeyBinding.TORCH.getKeyCode())){
             Settings.torchOn = !Settings.torchOn;
         }
 
