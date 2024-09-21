@@ -127,22 +127,25 @@ public class CameraController extends InputAdapter {
     @Override
     public boolean keyDown(int keycode) {
         keys.put(keycode, keycode);
-        if(keycode == KeyBinding.FORWARD.getKeyCode() || keycode == KeyBinding.RUN.getKeyCode())
-            walkSounds();
+        walkSounds(keycode);
         return true;
     }
 
     @Override
     public boolean keyUp(int keycode) {
         keys.remove(keycode, 0);
-        if(keycode == KeyBinding.FORWARD.getKeyCode() || keycode == KeyBinding.RUN.getKeyCode())
-            walkSounds();
-
+        walkSounds(keycode);
         return true;
     }
 
-    private void walkSounds() {
-        if(keys.containsKey(KeyBinding.FORWARD.getKeyCode())) {
+    private void walkSounds(int keycode) {
+        // ignore irrelevant key events
+        if( (keycode != KeyBinding.FORWARD.getKeyCode()) &&
+            (keycode != KeyBinding.BACK.getKeyCode()) &&
+            (keycode != KeyBinding.RUN.getKeyCode()) )
+            return;
+
+        if(keys.containsKey(KeyBinding.FORWARD.getKeyCode()) || keys.containsKey(KeyBinding.BACK.getKeyCode())) {
             if (keys.containsKey(KeyBinding.RUN.getKeyCode())) {
                 runSound.loop();
                 walkSound.stop();
