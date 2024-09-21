@@ -5,11 +5,14 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g3d.utils.AnimationController;
 import com.badlogic.gdx.math.CatmullRomSpline;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.collision.Ray;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.monstrous.getout.World;
+import com.monstrous.getout.collision.Collider;
 import com.monstrous.getout.screens.Main;
 import net.mgsx.gltf.scene3d.scene.Scene;
 
@@ -100,9 +103,10 @@ public class PatrolBot implements Disposable {
             fwd.set(Vector3.Z).rot(scene.modelInstance.transform);  // direction vector
             float dot = fwd.dot(vec);
             if(dot > 0.7f) {        // you are more or less in front of the bot
-                // todo check for walls etc. between bot and player
-                canSee = true;
-                //Gdx.app.log("bot", "spotted you, dot:"+dot);
+                //  check for walls etc. between bot and player
+                canSee = haveLineOfSight(playerPosition);
+//                if(canSee)
+//                    Gdx.app.log("bot", "spotted you, dot:"+dot);
             }
         }
         if(canSee) {
@@ -124,9 +128,23 @@ public class PatrolBot implements Disposable {
 
     }
 
+    private Vector3 intersect = new Vector3();
+
+    private boolean haveLineOfSight(Vector3 playerPosition){
+        vec.set(playerPosition).sub(pos).nor();
+        Ray ray = new Ray(pos, vec);
+        for(Collider collider : world.colliders.colliders){
+            if(Intersector.intersectRayBounds(ray, collider.bbox, intersect)){
+                if(pos.dst2(intersect) <= pos.dst2(playerPosition))
+                    return false;       // intersection with bounding box closer than player position
+            }
+        }
+        return true;
+    }
+
     private void fireWeapon(){
         if (fireTimer < 0 ) {
-            Gdx.app.log("bot", "fire!");
+            //Gdx.app.log("bot", "fire!");
             fireTimer = 1f; // allow time for fire animation
 
             scene.animationController.setAnimation("Fire", 1);

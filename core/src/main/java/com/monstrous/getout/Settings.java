@@ -68,5 +68,7 @@ public class Settings {
 
     static public boolean       playMusic = release;
 
+    static public boolean       noBots = false;
+
 
 }

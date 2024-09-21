@@ -47,7 +47,7 @@ public class GameView implements Disposable {
     private PostProcessor filter;
 
 
-    public GameView() {
+    public GameView( Assets assets ) {
 
         PBRShaderConfig colorConfig = new PBRShaderConfig();
 
@@ -79,7 +79,7 @@ public class GameView implements Disposable {
         camera.update();
         sceneManager.setCamera(camera);
 
-        camController = new CameraController(camera);
+        camController = new CameraController(assets, camera);
 
         // setup light
         light = new DirectionalShadowLight(Settings.shadowMapSize, Settings.shadowMapSize);

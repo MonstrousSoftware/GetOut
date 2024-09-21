@@ -56,33 +56,15 @@ public class Colliders implements Disposable {
     // returns null if no collision, otherwise the node id
     public Collider collisionTest(Vector3 position, float radius) {
 
-        // test collision of player with a colliders bounding box
+        // test collision of player with a colliders
         for (Collider collider : colliders) {
-            if(intersects(collider.bbox, position, radius))
+            if(collider.intersects(position, radius))
                 return collider;
         }
         return null;
     }
 
-    // 2d intersection of rectangle and circle in the horizontal plane (XZ)
-    private boolean intersects(BoundingBox bbox, Vector3 cylPos, float cylRadius){
-        float distX = Math.abs(cylPos.x - bbox.getCenterX());
-        float distZ = Math.abs(cylPos.z - bbox.getCenterZ());
-        float hw = bbox.getWidth()/2f;
-        float hd = bbox.getDepth()/2f;
-        // quick exit for trivial cases
-        if(distX > cylRadius + hw)
-            return false;
-        if(distZ > cylRadius + hd)
-            return false;
-        if(distX < hw)
-            return true;
-        if(distZ < hd)
-            return true;
-        // pythagoras for when cylinder is just (less than R) outside the box
-        float d2 = (float)Math.pow(distX - hw,2) + (float)Math.pow(distZ - hd,2);
-        return d2 <= cylRadius*cylRadius;
-    }
+
 
     private void addDebugModel(Collider collider) {
         // create a debug model matching the collision geom shape

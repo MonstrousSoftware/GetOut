@@ -7,8 +7,10 @@ import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.IntIntMap;
+import com.monstrous.getout.Assets;
 import com.monstrous.getout.Settings;
 import com.monstrous.getout.World;
+import com.monstrous.getout.collision.Collider;
 
 
 public class CameraController extends InputAdapter {
@@ -26,6 +28,7 @@ public class CameraController extends InputAdapter {
     private final Vector3 newPos = new Vector3();
     private final Vector3 fwdHorizontal = new Vector3();
     private final Vector3 sideChange = new Vector3();
+    protected final Vector3 velocity = new Vector3();
     private float bobAngle;
     private boolean isJumping;
     private boolean isCrouching;
@@ -34,14 +37,14 @@ public class CameraController extends InputAdapter {
     private Sound walkSound;
     private Sound runSound;
 
-    public CameraController(PerspectiveCamera camera) {
+    public CameraController(Assets assets, PerspectiveCamera camera) {
         this.camera = camera;
         isJumping = false;
         isCrouching = false;
         jumpVelocity = 0;
         jumpHeight = 0;
-        walkSound = Gdx.audio.newSound(Gdx.files.internal("sounds/footsteps.ogg"));
-        runSound = Gdx.audio.newSound(Gdx.files.internal("sounds/metal-running.ogg"));
+        walkSound = assets.FOOT_STEPS;
+        runSound = assets.RUNNING;
     }
 
 
@@ -132,13 +135,22 @@ public class CameraController extends InputAdapter {
 
 
 
+        velocity.set(fwdHorizontal).scl(speed);
+        newPos.set(velocity).scl(deltaTime).add(camera.position);
+        //newPos.add(sideChange); TMP
 
-        newPos.set(fwdHorizontal).scl(deltaTime * speed);
-        newPos.add(sideChange);
-        newPos.add(camera.position);
 
-        if(Settings.noClip || world.canReach(newPos))
-            camera.position.set(newPos);
+        if(!Settings.noClip) {
+            Collider collider = world.canReach(newPos);
+            if (collider != null) {
+                //newPos.set(camera.position);// todo
+                Gdx.app.log("collision", "");
+                collider.collisionResponse(camera.position, 0.5f, velocity, deltaTime);
+                newPos.set(velocity).scl(deltaTime).add(camera.position);
+            }
+        }
+        camera.position.set(newPos);
+
 
         if(Settings.camStabilisation)
             camera.up.set(Vector3.Y);
@@ -153,27 +165,34 @@ public class CameraController extends InputAdapter {
     @Override
     public boolean keyDown(int keycode) {
         keys.put(keycode, keycode);
-        if(keycode == KeyBinding.FORWARD.getKeyCode()) {
-            if(keys.containsKey(KeyBinding.RUN.getKeyCode())) {
-                runSound.loop();
-                walkSound.stop();
-            }
-            else {
-                walkSound.loop();
-                runSound.stop();
-            }
-        }
+        if(keycode == KeyBinding.FORWARD.getKeyCode() || keycode == KeyBinding.RUN.getKeyCode())
+            walkSounds();
         return true;
     }
 
     @Override
     public boolean keyUp(int keycode) {
         keys.remove(keycode, 0);
-        if(keycode == KeyBinding.FORWARD.getKeyCode()) {
+        if(keycode == KeyBinding.FORWARD.getKeyCode() || keycode == KeyBinding.RUN.getKeyCode())
+            walkSounds();
+
+        return true;
+    }
+
+    private void walkSounds() {
+        if(keys.containsKey(KeyBinding.FORWARD.getKeyCode())) {
+            if (keys.containsKey(KeyBinding.RUN.getKeyCode())) {
+                runSound.loop();
+                walkSound.stop();
+            } else {
+                walkSound.loop();
+                runSound.stop();
+            }
+        }
+        else {
             walkSound.stop();
             runSound.stop();
         }
-        return true;
     }
 
 

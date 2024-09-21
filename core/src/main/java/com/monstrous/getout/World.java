@@ -100,9 +100,11 @@ public class World implements Disposable {
                 if(node.id.substring(0, 9).contentEquals(group)) {  // same group
                     addWaypoint(wayPoints, node);
                 } else { // new group
-                    Scene patrolBot = new Scene(sceneAsset.scene, "Armature");
-                    scenes.add(patrolBot);
-                    patrolBots.setPatrolBot(this, patrolBot, wayPoints);
+                    if(!Settings.noBots) {
+                        Scene patrolBot = new Scene(sceneAsset.scene, "Armature");
+                        scenes.add(patrolBot);
+                        patrolBots.setPatrolBot(this, patrolBot, wayPoints);
+                    }
                     wayPoints.clear();
                     group = node.id.substring(0, 9);    // name of new group e.g. "Waypoint2"
                     addWaypoint(wayPoints, node);
@@ -130,7 +132,7 @@ public class World implements Disposable {
         }
         Gdx.app.log("nodes:", ""+count);
 
-        if(wayPoints.size > 0) {
+        if(wayPoints.size > 0 && !Settings.noBots) {
             Scene patrolBot = new Scene(sceneAsset.scene, "Armature");
             scenes.add(patrolBot);
             patrolBots.setPatrolBot(this, patrolBot, wayPoints);
@@ -170,25 +172,25 @@ public class World implements Disposable {
     }
 
 
-
-    public boolean canReach( Vector3 position ) {
+    // returns null if you can go to the desired position
+    public Collider canReach( Vector3 position ) {
 
         Collider collider = colliders.collisionTest(position, PLAYER_RADIUS);
         if (collider != null) {
-            Gdx.app.log("collision", collider.id);
+            //Gdx.app.log("canReach: collision", collider.id);
             if(collider.type == Collider.Type.PICKUP) {
                 pickUp(collider);
-                return true;
+                return null;
             }
             if(collider.type == Collider.Type.OPEN_DOOR) {
                 exitLevel(collider);
-                return true;
+                return null;
             }
             if(collider.type == Collider.Type.CLOSED_DOOR)
                 message = "You lack the elements to open the door.";
-            return false;
+            return collider;
         }
-        return true;
+        return null;
     }
 
     private void pickUp(Collider collider){

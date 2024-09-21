@@ -20,7 +20,7 @@ public class GameScreen extends ScreenAdapter {
         this.game = game;
 
         world = new World();
-        gameView = new GameView();  // need to keep persistent because it holds camera (player) position
+        gameView = new GameView(game.assets);  // need to keep persistent because it holds camera (player) position
         //botController = new PatrolBotController();
 
 
