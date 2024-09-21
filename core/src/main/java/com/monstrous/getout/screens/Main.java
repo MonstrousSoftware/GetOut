@@ -22,7 +22,7 @@ public class Main extends Game {
         if(Settings.release)
             setScreen(new MainMenuScreen(this));
         else
-            setScreen(new GameScreen(this));
+            setScreen(new TitleScreen(this));
     }
 
     @Override
