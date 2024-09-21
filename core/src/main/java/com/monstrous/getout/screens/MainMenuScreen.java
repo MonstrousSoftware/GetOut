@@ -20,7 +20,6 @@ public class MainMenuScreen extends MenuScreen {
 
     public MainMenuScreen(Main game) {
         super(game);
-        //game.musicManager.startMusic("music/spooky-music-theme-121127.mp3", true);
     }
 
 
@@ -35,16 +34,18 @@ public class MainMenuScreen extends MenuScreen {
 //       Image title = new Image( (Texture)game.assets.get("images/title.png")); //new Texture( Gdx.files.internal("images/title.png")));
 
        TextButton play = new TextButton("Play Game", skin);
-       TextButton keys = new TextButton("Keys", skin);
        TextButton options = new TextButton("Options", skin);
+       TextButton keys = new TextButton("Keys", skin);
+
 //       TextButton credits = new TextButton("Credits", skin);
        TextButton quit = new TextButton("Quit", skin);
 
        float pad = 10f;
    //    screenTable.add(title).pad(50).row();
        screenTable.add(play).pad(pad).row();
+        screenTable.add(options).pad(pad).row();
        screenTable.add(keys).pad(pad).row();
-       screenTable.add(options).pad(pad).row();
+
 //       screenTable.add(credits).pad(pad).row();
        // hide quit on web unless we have an outro screen
        if(!(Gdx.app.getType() == Application.ApplicationType.WebGL) )
@@ -109,15 +110,15 @@ public class MainMenuScreen extends MenuScreen {
        });
 
        // set up for keyboard/controller navigation
-        if(Settings.supportControllers) {
-            ControllerMenuStage cStage = (ControllerMenuStage)stage;
-            cStage.clearFocusableActors();
-            cStage.addFocusableActor(play);
-            cStage.addFocusableActor(options);
+        stage.clearFocusableActors();
+        stage.addFocusableActor(play);
+        stage.addFocusableActor(options);
+        stage.addFocusableActor(keys);
 //            cStage.addFocusableActor(credits);
-            cStage.addFocusableActor(quit);
-            cStage.setFocusedActor(play);
-        }
+        stage.addFocusableActor(quit);
+        stage.setFocusedActor(play);
+        focusActor(play);
+
    }
 
 }

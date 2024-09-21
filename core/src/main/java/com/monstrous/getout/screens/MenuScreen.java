@@ -2,6 +2,8 @@ package com.monstrous.getout.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -28,7 +30,7 @@ public class MenuScreen extends StdScreenAdapter {
         viewport = new ScreenViewport();
 
         skin = game.assets.SKIN;
-        stage = new ControllerMenuStage(new ScreenViewport());          // we can use this even without controllers, although it doesn't seem to work with teavm + Chrome browser
+        stage = new ControllerMenuStage(viewport);          // we can use this even without controllers
         input.setInputProcessor(stage);
     }
 
@@ -51,6 +53,21 @@ public class MenuScreen extends StdScreenAdapter {
     // override this!
     protected void rebuild() {
 
+    }
+
+    // This is like stage.setFocusedActor(actor) but works when actor is not hittable.
+    // (perhaps not yet while we rebuild the stage?)
+    // This solves the issue that the focused menu item is not highlighted when the menu is first shown.
+    //
+    public void focusActor(Actor actor) {
+        InputEvent event = new InputEvent();
+        event.setType(InputEvent.Type.enter);
+        event.setStage(stage);
+        event.setPointer(-1);
+        event.setButton(-1);
+        event.setStageX(0);
+        event.setStageY(0);
+        actor.fire(event);
     }
 
     @Override

@@ -12,7 +12,6 @@ public class GameScreen extends ScreenAdapter {
     public World world;
     public GameView gameView;
     private ColliderView colliderView;
-    //private PatrolBotController botController;
     private GUI gui;
     private int numElements = 0;
 
@@ -21,8 +20,6 @@ public class GameScreen extends ScreenAdapter {
 
         world = new World();
         gameView = new GameView(game.assets);  // need to keep persistent because it holds camera (player) position
-        //botController = new PatrolBotController();
-
 
         if(Settings.playMusic){
             game.assets.MUSIC.play();
@@ -58,7 +55,7 @@ public class GameScreen extends ScreenAdapter {
     @Override
     public void render(float deltaTime) {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)||
-            Gdx.input.isKeyJustPressed(Input.Keys.BACKSPACE)){
+            Gdx.input.isKeyJustPressed(Input.Keys.TAB)){
             game.setScreen(new PauseMenuScreen(game, this));
             return;
         }
@@ -68,7 +65,6 @@ public class GameScreen extends ScreenAdapter {
             return;
         }
 
-        //botController.update(world, deltaTime, gameView.camera);
         world.update(gameView.camera, deltaTime);
         gameView.render( world, deltaTime );
 

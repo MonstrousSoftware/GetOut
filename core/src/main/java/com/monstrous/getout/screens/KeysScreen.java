@@ -132,7 +132,7 @@ public class KeysScreen extends MenuScreen implements InputProcessor {
     public boolean keyDown(int keycode) {
         if(selectedBinding == null)
             return false;
-        debugLabel.setText("keycode : "+keycode);
+        //debugLabel.setText("keycode : "+keycode);
         if(keycode != Input.Keys.ESCAPE) {
             selectedBinding.setKeyBinding(keycode);
             removeDupes(selectedBinding, keycode);

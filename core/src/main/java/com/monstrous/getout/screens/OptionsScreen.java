@@ -18,7 +18,8 @@ import com.monstrous.getout.Settings;
 import de.golfgl.gdx.controllers.ControllerMenuStage;
 
 
-
+// todo there is a bug in ControllerMenuStage that up/down breaks if elements lengths differ.
+// that is why Cam Stab is skipped
 
 public class OptionsScreen extends MenuScreen {
     private GameScreen gameScreen;    // to keep track where we were called from
@@ -145,22 +146,23 @@ public class OptionsScreen extends MenuScreen {
        stage.addActor(screenTable);
 
        // set up for keyboard/controller navigation
-       if(Settings.supportControllers) {
-           ControllerMenuStage cStage = (ControllerMenuStage) stage;
-           cStage.clearFocusableActors();
-           cStage.addFocusableActor(music);
-           cStage.addFocusableActor(fullScreen);
-           cStage.addFocusableActor(invertLook);
-           cStage.addFocusableActor(freeLook);
-           cStage.addFocusableActor(vcr);
-           cStage.addFocusableActor(camStab);
-           cStage.addFocusableActor(showColliders);
-           cStage.addFocusableActor(showFPS);
+       //if(Settings.supportControllers) {
+       //    ControllerMenuStage cStage = (ControllerMenuStage) stage;
+       stage.clearFocusableActors();
+       stage.addFocusableActor(music);
+       stage.addFocusableActor(fullScreen);
+       stage.addFocusableActor(invertLook);
+       stage.addFocusableActor(freeLook);
+       stage.addFocusableActor(vcr);
+       stage.addFocusableActor(camStab);
+       stage.addFocusableActor(showColliders);
+       stage.addFocusableActor(showFPS);
            //stage.addFocusableActor(controllerLabel);
-           cStage.addFocusableActor(done);
-           cStage.setFocusedActor(fullScreen);
-           cStage.setEscapeActor(done);
-       }
+       stage.addFocusableActor(done);
+       stage.setFocusedActor(music);
+       stage.setEscapeActor(done);
+       focusActor(music);
+       //}
 
 
        music.addListener(new ChangeListener() {

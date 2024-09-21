@@ -11,6 +11,7 @@ import com.monstrous.getout.screens.Main;
 import com.monstrous.getout.World;
 import net.mgsx.gltf.scene3d.scene.Scene;
 
+// OBSOLETE
 
 // control patrol bot with keyboard
 

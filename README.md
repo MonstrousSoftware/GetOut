@@ -14,7 +14,7 @@ to do:
 - free look to be done
 - collision with inside corner
 - robot paths go through walls?
-- strafe
+
 
 Done:
 - collision detection

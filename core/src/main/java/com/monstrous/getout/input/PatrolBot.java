@@ -19,6 +19,9 @@ import net.mgsx.gltf.scene3d.scene.Scene;
 // manages robot patrol path using a spline
 
 public class PatrolBot implements Disposable {
+    private static float SOUND_MAX_DISTANCE = 30f;
+    private static float VIEW_MAX_DISTANCE = 30f;
+
     private Scene scene;
     private World world;
     private CatmullRomSpline<Vector3> spline;
@@ -54,7 +57,8 @@ public class PatrolBot implements Disposable {
 
         walkAnimation = scene.animationController.setAnimation("Forward", -1);
         motorSoundId = Main.assets.MOTOR.loop();
-        motorSoundPlaying = true;
+        Main.assets.MOTOR.pause(motorSoundId);
+        motorSoundPlaying = false;
         shotSoundId = -1;
     }
 
@@ -97,7 +101,7 @@ public class PatrolBot implements Disposable {
         canSee = false;
 
         vec.set(playerPosition).sub(pos);
-        if(vec.len() < 35){
+        if(vec.len() < VIEW_MAX_DISTANCE){
             //Gdx.app.log("bot", "close by");
             vec.nor();
             fwd.set(Vector3.Z).rot(scene.modelInstance.transform);  // direction vector
@@ -168,7 +172,7 @@ public class PatrolBot implements Disposable {
     }
 
 
-    private static float SOUND_MAX_DISTANCE = 32f;
+
     private Vector3 dir = new Vector3();
 
     // sound is affected by first person camera position and orientation
@@ -181,8 +185,6 @@ public class PatrolBot implements Disposable {
         vec.nor();
         dir.set(camera.direction).rotate(Vector3.Y, -90);   // vector to the right of the camera
         float dotR = dir.dot(vec);      // "how much is the vector towards the right?"
-//            Gdx.app.log("distance", ""+distance+" volume:"+volume);
-//            Gdx.app.log("pan", " dotR="+dotR);
         float pan = dotR;
         sound.setPan(soundId, pan, volume);
     }
