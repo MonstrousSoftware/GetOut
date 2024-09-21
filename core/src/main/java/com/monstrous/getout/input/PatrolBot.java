@@ -102,7 +102,7 @@ public class PatrolBot implements Disposable {
             vec.nor();
             fwd.set(Vector3.Z).rot(scene.modelInstance.transform);  // direction vector
             float dot = fwd.dot(vec);
-            if(dot > 0.7f) {        // you are more or less in front of the bot
+            if(dot > 0.55f) {        // you are more or less in front of the bot
                 //  check for walls etc. between bot and player
                 canSee = haveLineOfSight(playerPosition);
 //                if(canSee)

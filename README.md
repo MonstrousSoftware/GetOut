@@ -12,9 +12,9 @@ A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://git
 to do:
 - smaller text button style for key menu
 - free look to be done
-- robot see you through walls
 - collision with inside corner
-
+- robot paths go through walls?
+- strafe
 
 Done:
 - collision detection
@@ -28,6 +28,7 @@ Done:
 - fps indicator
 - settings menu
 - easter egg
+- block robot from seeing you through walls
 
 Notes:
 - textures need to be power of two for teavm version

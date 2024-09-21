@@ -13,7 +13,7 @@ import net.mgsx.gltf.scene3d.scene.Scene;
 
 public class Bullet implements Disposable {
     public static final float BULLET_SPEED = 10f;
-    static final float BULLET_RADIUS = .4f;
+    static final float BULLET_RADIUS = .2f;
 
     public Scene scene;
     public long soundId;

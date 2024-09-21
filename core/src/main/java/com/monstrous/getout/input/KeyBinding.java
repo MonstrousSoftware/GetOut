@@ -12,9 +12,9 @@ public enum KeyBinding {
     TURN_RIGHT ("Turn right", Keys.D),
     STRAFE_LEFT("Strafe left", Keys.Q),
     STRAFE_RIGHT("Strafe right", Keys.E),
-    JUMP ("Jump", Keys.SPACE),
     RUN ("Run modifier", Keys.SHIFT_LEFT),
-    CROUCH ("Crouch", Keys.C),
+//    CROUCH ("Crouch", Keys.C),
+//    JUMP ("Jump", Keys.SPACE),
 
     BOT_FORWARD ("Move bot forward", Keys.UP),
     BOT_BACK ("Move bot back", Keys.DOWN),

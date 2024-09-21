@@ -30,8 +30,6 @@ public class CameraController extends InputAdapter {
     private final Vector3 sideChange = new Vector3();
     protected final Vector3 velocity = new Vector3();
     private float bobAngle;
-    private boolean isJumping;
-    private boolean isCrouching;
     private float jumpVelocity;
     private float jumpHeight;
     private Sound walkSound;
@@ -39,8 +37,6 @@ public class CameraController extends InputAdapter {
 
     public CameraController(Assets assets, PerspectiveCamera camera) {
         this.camera = camera;
-        isJumping = false;
-        isCrouching = false;
         jumpVelocity = 0;
         jumpHeight = 0;
         walkSound = assets.FOOT_STEPS;
@@ -60,21 +56,21 @@ public class CameraController extends InputAdapter {
 
         if (keys.containsKey(KeyBinding.FORWARD.getKeyCode())) {
             speed = WALK_SPEED;
-            if (keys.containsKey(KeyBinding.RUN.getKeyCode()) &&!isCrouching) {
+            if (keys.containsKey(KeyBinding.RUN.getKeyCode()) ) {
                 speed  *= RUN_FACTOR;
             }
         }
 
         if (keys.containsKey(KeyBinding.BACK.getKeyCode())) {
             speed = -WALK_SPEED;
-            if (keys.containsKey(KeyBinding.RUN.getKeyCode()) && !isCrouching) {
+            if (keys.containsKey(KeyBinding.RUN.getKeyCode()) ) {
                 speed  *= RUN_FACTOR;
             }
         }
 
 
         // slow down and stop when forward key or backward key is released
-        if ( !keys.containsKey(KeyBinding.FORWARD.getKeyCode()) && !keys.containsKey(KeyBinding.BACK.getKeyCode()) && Math.abs(speed) > 0 && !isJumping) {
+        if ( !keys.containsKey(KeyBinding.FORWARD.getKeyCode()) && !keys.containsKey(KeyBinding.BACK.getKeyCode()) && Math.abs(speed) > 0 ) {
             speed -= speed * 10f * deltaTime;
             if (Math.abs(speed) < 1f)
                 speed = 0;
@@ -100,40 +96,6 @@ public class CameraController extends InputAdapter {
         if (keys.containsKey(KeyBinding.TURN_RIGHT.getKeyCode())) {
             camera.direction.rotate(camera.up, -deltaTime * 120f);
         }
-
-        if (keys.containsKey(KeyBinding.JUMP.getKeyCode()) && !isJumping) {
-            isJumping = true;
-
-            jumpVelocity = 3;
-        }
-        if(isJumping){
-            bobSpeed = 0;
-            jumpVelocity -= deltaTime*5;
-            jumpHeight += jumpVelocity*deltaTime;
-            if(jumpVelocity < 0 && jumpHeight < 0){
-                isJumping = false;
-                jumpHeight = 0;
-            }
-        }
-
-        // crouching
-        if (keys.containsKey(KeyBinding.CROUCH.getKeyCode()) && !isJumping ) {
-            isCrouching = true;
-            if(jumpHeight > -0.5f)
-                jumpHeight -= 5*deltaTime;
-        }
-        else {
-            isCrouching = false;
-            if(jumpHeight < 0) {
-                jumpHeight += 5*deltaTime;
-                if(jumpHeight >= 0) {
-                    jumpVelocity = 0;
-                    jumpHeight = 0;
-                }
-            }
-        }
-
-
 
         velocity.set(fwdHorizontal).scl(speed);
         newPos.set(velocity).scl(deltaTime).add(camera.position);
