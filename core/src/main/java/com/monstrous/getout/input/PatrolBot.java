@@ -104,7 +104,10 @@ public class PatrolBot implements Disposable {
 
         boolean canSee = false;
         vec.set(playerPosition).sub(pos);
-        if(vec.len() < VIEW_MAX_DISTANCE){
+        float maxDistance = VIEW_MAX_DISTANCE;
+        if(Settings.torchOn)                        // robots can see you further away with the torch on
+            maxDistance *= 2f;
+        if(vec.len() < maxDistance){
             //Gdx.app.log("bot", "close by");
             vec.nor();
             fwd.set(Vector3.Z).rot(scene.modelInstance.transform);  // direction vector
@@ -124,10 +127,13 @@ public class PatrolBot implements Disposable {
 
             // turn towards player
             side.set(Vector3.X).rot(scene.modelInstance.transform);  // sideways vector
+            float turnSpeed = 0.25f*60f;
+            if(Settings.difficult)
+                turnSpeed *= 1.5f;
             if(side.dot(vec) < 0){
-                scene.modelInstance.transform.rotate(Vector3.Y, -0.25f*deltaTime*60f);
+                scene.modelInstance.transform.rotate(Vector3.Y, -turnSpeed*deltaTime);
             } else if(side.dot(vec) > 0) {
-                scene.modelInstance.transform.rotate(Vector3.Y, 0.25f*deltaTime*60f);
+                scene.modelInstance.transform.rotate(Vector3.Y, turnSpeed*deltaTime);
             }
 
             fireWeapon();
@@ -153,6 +159,8 @@ public class PatrolBot implements Disposable {
         if (fireTimer < 0 ) {
             //Gdx.app.log("bot", "fire!");
             fireTimer = 1f; // allow time for fire animation
+            if(Settings.difficult)
+                fireTimer /= 2f;
 
             scene.animationController.setAnimation("Fire", 1);
             world.spawnBullet(scene.modelInstance.transform);

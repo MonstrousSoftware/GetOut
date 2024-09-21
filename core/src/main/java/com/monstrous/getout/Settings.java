@@ -8,9 +8,9 @@ public class Settings {
 
     public static String        title = "Get The Heck Out";
 
-    public static boolean       release = true;
+    public static boolean       release = false;
 
-    public static float         ambientLightLevel = 0.01f; //0.03f;
+    public static float         ambientLightLevel = 0.02f; //0.03f;
     public static float         directionalLightLevel = 0.0f;
 
     static public Color         fogColour = new Color(.0f, 0.0f, 0.0f, 1f);
@@ -61,6 +61,8 @@ public class Settings {
     static public boolean       playerIsInvisible = false;
 
     static public boolean       torchOn = true;
+
+    static public boolean       difficult = true;
 
 
 }

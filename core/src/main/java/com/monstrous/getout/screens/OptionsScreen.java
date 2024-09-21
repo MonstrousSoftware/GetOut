@@ -97,6 +97,9 @@ public class OptionsScreen extends MenuScreen {
        CheckBox music = new CheckBox("Music", skin);
        music.setChecked(Settings.playMusic);
 
+       CheckBox hard = new CheckBox("Hurt me plenty!", skin);
+       hard.setChecked(Settings.difficult);
+
        CheckBox fullScreen = new CheckBox("Full Screen", skin);
        fullScreen.setChecked(Settings.fullScreen);
 
@@ -127,6 +130,7 @@ public class OptionsScreen extends MenuScreen {
        int pad = 10;
 
        screenTable.add(music).pad(pad).left().row();
+       screenTable.add(hard).pad(pad).left().row();
        screenTable.add(fullScreen).pad(pad).left().row();
        screenTable.add(invertLook).pad(pad).left().row();
        screenTable.add(freeLook).pad(pad).left().row();
@@ -150,6 +154,7 @@ public class OptionsScreen extends MenuScreen {
        //    ControllerMenuStage cStage = (ControllerMenuStage) stage;
        stage.clearFocusableActors();
        stage.addFocusableActor(music);
+       stage.addFocusableActor(hard);
        stage.addFocusableActor(fullScreen);
        stage.addFocusableActor(invertLook);
        stage.addFocusableActor(freeLook);
@@ -177,6 +182,13 @@ public class OptionsScreen extends MenuScreen {
                    game.assets.MUSIC.setLooping(true);
                    game.assets.MUSIC.setVolume(0.5f);
                }
+           }
+       });
+       hard.addListener(new ChangeListener() {
+           @Override
+           public void changed(ChangeEvent event, Actor actor) {
+               playSelectNoise();
+               Settings.difficult = hard.isChecked();
            }
        });
        fullScreen.addListener(new ChangeListener() {

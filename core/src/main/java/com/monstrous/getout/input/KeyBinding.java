@@ -8,10 +8,11 @@ import com.monstrous.getout.Settings;
 public enum KeyBinding {
     FORWARD ("Move forward", Keys.W),
     BACK ("Move back", Keys.S),
-    TURN_LEFT ("Turn left", Keys.A),
-    TURN_RIGHT ("Turn right", Keys.D),
-    STRAFE_LEFT("Strafe left", Keys.Q),
-    STRAFE_RIGHT("Strafe right", Keys.E),
+    STRAFE_LEFT("Strafe left", Keys.A),
+    STRAFE_RIGHT("Strafe right", Keys.D),
+    TURN_LEFT ("Turn left", Keys.Q),
+    TURN_RIGHT ("Turn right", Keys.E),
+
     RUN ("Run modifier", Keys.SHIFT_LEFT),
     TORCH ("Toggle torch", Keys.T),
     RESTART ("Restart", Keys.R),

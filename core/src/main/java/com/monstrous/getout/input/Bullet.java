@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
+import com.monstrous.getout.Settings;
 import com.monstrous.getout.World;
 import com.monstrous.getout.collision.Collider;
 import com.monstrous.getout.screens.Main;
@@ -35,6 +36,8 @@ public class Bullet implements Disposable {
             vec.set(0,0,1f);    // forward vector
             vec.rot(scene.modelInstance.transform);    // rotate with bullet orientation
             vec.scl(deltaTime*BULLET_SPEED);        // scale with speed and delta time
+            if(Settings.difficult)
+                vec.scl(2f);
             scene.modelInstance.transform.trn(vec);    // translate position
 
             // todo collision detection

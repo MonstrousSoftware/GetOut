@@ -69,6 +69,7 @@ public class World implements Disposable {
 
         health = 100f;
         batteryLevel = 100f;
+        Settings.torchOn = true;
         message = "Find your way out";
         deathTimer = -1;
     }
@@ -254,11 +255,13 @@ public class World implements Disposable {
     public void update(Camera camera, float deltaTime ){
 
         if(Settings.torchOn) {
-            batteryLevel -= deltaTime * 10f;
-            if (batteryLevel < 0)
+            batteryLevel -= deltaTime;
+            if (batteryLevel < 0) {
                 batteryLevel = 0;
-        } else {
-            batteryLevel += deltaTime * 10f;
+                Settings.torchOn = false;
+            }
+        } else {    // recharge magically when torch is off
+            batteryLevel += deltaTime * 8f;
             if (batteryLevel > 100)
                 batteryLevel = 100;
 

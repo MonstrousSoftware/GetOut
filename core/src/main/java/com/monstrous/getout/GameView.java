@@ -87,8 +87,8 @@ public class GameView implements Disposable {
         torch = new SpotLight();
         torch.setColor(Color.WHITE);
         torch.intensity = 150f;
-        torch.cutoffAngle = 50f;
-        torch.exponent = 5f;
+        torch.cutoffAngle = 0.3f * (float)Math.PI;
+        torch.exponent = 1f;
 
 
         sceneManager.environment.add(torch);
@@ -184,9 +184,10 @@ public class GameView implements Disposable {
         torch.position.set(camera.position);
         torch.direction.set(camera.direction);
         if(Settings.torchOn)
-            torch.intensity = world.batteryLevel;
+            torch.intensity = 0.25f * world.batteryLevel;
         else
             torch.intensity = 0;
+        //Gdx.app.log("intensity", ""+torch.intensity);
 
                 // render
         sceneManager.update(deltaTime);
