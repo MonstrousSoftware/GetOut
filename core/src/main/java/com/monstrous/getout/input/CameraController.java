@@ -52,7 +52,7 @@ public class CameraController extends InputAdapter {
 
         fwdHorizontal.set(camera.direction).y = 0;
         fwdHorizontal.nor();
-        sideChange.set(0,0,0);
+
 
         if (keys.containsKey(KeyBinding.FORWARD.getKeyCode())) {
             speed = WALK_SPEED;
@@ -76,12 +76,13 @@ public class CameraController extends InputAdapter {
                 speed = 0;
         }
 
+        sideChange.set(0,0,0);
         if (keys.containsKey(KeyBinding.STRAFE_LEFT.getKeyCode())) {
-            sideChange.set(fwdHorizontal).crs(camera.up).nor().scl(-deltaTime * WALK_SPEED);
+            sideChange.set(fwdHorizontal).crs(camera.up).nor().scl(-WALK_SPEED);     // strafe velocity
             bobSpeed = 1;
         }
         if (keys.containsKey(KeyBinding.STRAFE_RIGHT.getKeyCode())) {
-            sideChange.set(fwdHorizontal).crs(camera.up).nor().scl(deltaTime * WALK_SPEED);
+            sideChange.set(fwdHorizontal).crs(camera.up).nor().scl(WALK_SPEED);
             bobSpeed = 1;
         }
 
@@ -97,17 +98,15 @@ public class CameraController extends InputAdapter {
             camera.direction.rotate(camera.up, -deltaTime * 120f);
         }
 
-        velocity.set(fwdHorizontal).scl(speed);
+        velocity.set(fwdHorizontal).scl(speed).add(sideChange);     // make velocity vector
         newPos.set(velocity).scl(deltaTime).add(camera.position);
-        //newPos.add(sideChange); TMP
-
 
         if(!Settings.noClip) {
             Collider collider = world.canReach(newPos);
             if (collider != null) {
                 //newPos.set(camera.position);// todo
                 Gdx.app.log("collision", "");
-                collider.collisionResponse(camera.position, 0.5f, velocity, deltaTime);
+                collider.collisionResponse(camera.position, 0.5f, velocity, deltaTime); // modifies velocity
                 newPos.set(velocity).scl(deltaTime).add(camera.position);
             }
         }
@@ -118,8 +117,6 @@ public class CameraController extends InputAdapter {
             camera.up.set(Vector3.Y);
 
         camera.position.y = Settings.eyeHeight + jumpHeight + bobHeight( bobSpeed, deltaTime); // apply some head bob if we're moving
-
-
 
         camera.update(true);
     }
