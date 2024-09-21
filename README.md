@@ -13,7 +13,8 @@ to do:
 - smaller text button style for key menu
 - free look to be done
 - collision with inside corner
-- robot paths go through walls?
+- robot paths go through walls? one bot is stuck
+- robot direction in path following
 
 
 Done:

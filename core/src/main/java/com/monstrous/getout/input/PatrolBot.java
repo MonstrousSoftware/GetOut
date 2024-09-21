@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
+import com.monstrous.getout.Settings;
 import com.monstrous.getout.World;
 import com.monstrous.getout.collision.Collider;
 import com.monstrous.getout.screens.Main;
@@ -31,7 +32,6 @@ public class PatrolBot implements Disposable {
     private Vector3 fwd;
     private Vector3 vec;
     private Vector3 side;
-    private boolean canSee;
     private float fireTimer = -1;
     private boolean motorSoundPlaying = false;
     private long motorSoundId;
@@ -57,7 +57,7 @@ public class PatrolBot implements Disposable {
 
         walkAnimation = scene.animationController.setAnimation("Forward", -1);
         motorSoundId = Main.assets.MOTOR.loop();
-        Main.assets.MOTOR.pause(motorSoundId);
+        Main.assets.MOTOR.pause(motorSoundId);      // start with sound paused, let update() resume as needed
         motorSoundPlaying = false;
         shotSoundId = -1;
     }
@@ -65,14 +65,15 @@ public class PatrolBot implements Disposable {
     public void update(float deltaTime, Camera camera ) {
 
         fireTimer -= deltaTime;
-        if (fireTimer < 0) {
-            scene.animationController.setAnimation("Idle", -1);
-        }
+
         if (fireTimer < -5f) {
             speed = 1;  // restart the patrol
             walkAnimation = scene.animationController.setAnimation("Forward", -1);
             Main.assets.MOTOR.resume(motorSoundId);
             motorSoundPlaying = true;
+        }
+        else if (fireTimer < 0) {
+            scene.animationController.setAnimation("Idle", -1);
         }
 
         if(speed > 0) {
@@ -98,8 +99,10 @@ public class PatrolBot implements Disposable {
 
 
     private void checkForPlayer(Vector3 playerPosition, float deltaTime){
-        canSee = false;
+        if(Settings.playerIsInvisible)
+            return;
 
+        boolean canSee = false;
         vec.set(playerPosition).sub(pos);
         if(vec.len() < VIEW_MAX_DISTANCE){
             //Gdx.app.log("bot", "close by");
