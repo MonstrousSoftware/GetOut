@@ -162,8 +162,16 @@ public class CameraController extends InputAdapter {
     public boolean mouseMoved(int screenX, int screenY) {
         float deltaX = -Gdx.input.getDeltaX() * Settings.degreesPerPixel;
         float deltaY = -Gdx.input.getDeltaY() * Settings.degreesPerPixel;
-        if(Math.abs(deltaX) > 20 )
+        if(Math.abs(deltaX) > 20 )  // ignore startup/resize glitches
             return true;
+
+
+        if(!Settings.freeLook) {
+            // force camera to remain in horizontal plane
+            deltaY = 0;
+            camera.up.set(Vector3.Y);
+            camera.direction.y = 0;
+        }
 
         if(Settings.invertLook)
             deltaY = -deltaY;
