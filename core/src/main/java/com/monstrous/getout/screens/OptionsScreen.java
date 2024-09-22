@@ -115,8 +115,6 @@ public class OptionsScreen extends MenuScreen {
        CheckBox camStab = new CheckBox("Camera stabilisation ", skin);
        camStab.setChecked(Settings.camStabilisation);
 
-       CheckBox showColliders = new CheckBox("Show colliders", skin);
-       showColliders.setChecked(Settings.showColliders);
 
        CheckBox showFPS = new CheckBox("Show frames per second", skin);
        showFPS.setChecked(Settings.showFPS);
@@ -125,7 +123,7 @@ public class OptionsScreen extends MenuScreen {
        if(controller != null)
            controllerLabel.setText(controller.getName());
 
-       TextButton done = new TextButton("Done", skin);
+       TextButton done = new TextButton("Done", skin, "framed");
 
        int pad = 10;
 
@@ -136,7 +134,6 @@ public class OptionsScreen extends MenuScreen {
        screenTable.add(freeLook).pad(pad).left().row();
        screenTable.add(vcr).pad(pad).left().row();
        screenTable.add(camStab).pad(pad).left().row();
-       screenTable.add(showColliders).pad(pad).left().row();
        screenTable.add(showFPS).pad(pad).left().row();
        screenTable.add(new Label("Controller: ", skin)).pad(pad).left();
        screenTable.add(controllerLabel).left().row();
@@ -160,7 +157,6 @@ public class OptionsScreen extends MenuScreen {
        stage.addFocusableActor(freeLook);
        stage.addFocusableActor(vcr);
        stage.addFocusableActor(camStab);
-       stage.addFocusableActor(showColliders);
        stage.addFocusableActor(showFPS);
            //stage.addFocusableActor(controllerLabel);
        stage.addFocusableActor(done);
@@ -232,13 +228,7 @@ public class OptionsScreen extends MenuScreen {
                Settings.camStabilisation = camStab.isChecked();
            }
        });
-       showColliders.addListener(new ChangeListener() {
-           @Override
-           public void changed(ChangeEvent event, Actor actor) {
-               playSelectNoise();
-               Settings.showColliders = showColliders.isChecked();
-           }
-       });
+
        showFPS.addListener(new ChangeListener() {
            @Override
            public void changed(ChangeEvent event, Actor actor) {

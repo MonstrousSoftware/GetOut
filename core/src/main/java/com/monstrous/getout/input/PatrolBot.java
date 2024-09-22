@@ -116,7 +116,10 @@ public class PatrolBot implements Disposable {
             vec.nor();
             direction.set(Vector3.Z).rot(scene.modelInstance.transform);  // direction vector
             float dot = direction.dot(vec);
-            if(dot > 0.55f) {        // you are more or less in front of the bot
+            float threshold = 0.55f;
+            if(Settings.difficult)
+                threshold = -0.8f;
+            if(dot > threshold) {        // you are more or less in front of the bot
                 //  check for walls etc. between bot and player
                 canSee = haveLineOfSight(playerPosition);
 //                if(canSee)
@@ -133,7 +136,7 @@ public class PatrolBot implements Disposable {
             side.set(Vector3.X).rot(scene.modelInstance.transform);  // sideways vector
             float turnSpeed = 0.25f*60f;
             if(Settings.difficult)
-                turnSpeed *= 1.5f;
+                turnSpeed *= 3.5f;
             if(side.dot(vec) < 0){
                 scene.modelInstance.transform.rotate(Vector3.Y, -turnSpeed*deltaTime);
             } else if(side.dot(vec) > 0) {

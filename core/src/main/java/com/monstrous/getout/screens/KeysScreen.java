@@ -81,8 +81,8 @@ public class KeysScreen extends MenuScreen implements InputProcessor {
         // It should really present the name following the regional keyboard setting.
         // Waiting for libGDX issue #6962 to be resolved.
 
-        TextButton reset = new TextButton(" RESET ", skin);
-        TextButton okay = new TextButton(" OK ", skin);
+        TextButton reset = new TextButton(" RESET ", skin, "framed");
+        TextButton okay = new TextButton(" OK ", skin, "framed");
 
         debugLabel = new Label("To modify a key binding, click a button", skin, "small");
 

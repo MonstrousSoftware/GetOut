@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -43,7 +44,7 @@ public class MainMenuScreen extends MenuScreen {
        float pad = 10f;
    //    screenTable.add(title).pad(50).row();
        screenTable.add(play).pad(pad).row();
-        screenTable.add(options).pad(pad).row();
+       screenTable.add(options).pad(pad).row();
        screenTable.add(keys).pad(pad).row();
 
 //       screenTable.add(credits).pad(pad).row();
@@ -51,13 +52,17 @@ public class MainMenuScreen extends MenuScreen {
        if(!(Gdx.app.getType() == Application.ApplicationType.WebGL) )
             screenTable.add(quit).pad(pad).row();
 
+
        screenTable.pack();
 
        screenTable.setColor(1,1,1,0);                   // set alpha to zero
        screenTable.addAction(Actions.fadeIn(3f));           // fade in
        stage.addActor(screenTable);
 
-
+        Table screenTable2 = new Table();
+        screenTable2.setFillParent(true);
+        screenTable2.add(new Label(Settings.version, skin, "small")).pad(20).right().bottom().expand();
+        stage.addActor(screenTable2);
 
        play.addListener(new ClickListener() {
            @Override

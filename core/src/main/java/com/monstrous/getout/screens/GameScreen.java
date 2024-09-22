@@ -14,9 +14,11 @@ public class GameScreen extends StdScreenAdapter {
     private ColliderView colliderView;
     private GUI gui;
     private int numElements = 0;
+    private boolean completed;
 
     public GameScreen(Main game) {
         this.game = game;
+        completed = false;
 
         world = new World();
         gameView = new GameView(game.assets);  // need to keep persistent because it holds camera (player) position
@@ -34,6 +36,10 @@ public class GameScreen extends StdScreenAdapter {
         gui = new GUI(game, world);
         colliderView = new ColliderView( world );
 
+        if(Settings.fullScreen)
+            toFullScreen();
+        else
+            toWindowedScreen();
 
         InputMultiplexer im = new InputMultiplexer();
         //im.addProcessor(botController);
@@ -89,6 +95,16 @@ public class GameScreen extends StdScreenAdapter {
                 gui.showMessage(world.message);
             world.message = null;
         }
+
+        // play end music on game completion
+        if(!completed && world.completed && Settings.playMusic){
+            game.assets.MUSIC.stop();
+            game.assets.END_MUSIC.play();
+            game.assets.END_MUSIC.setLooping(false);    // only play once
+            game.assets.END_MUSIC.setVolume(0.7f);
+            completed = true;
+        }
+
         gui.render(deltaTime);
       }
 
@@ -122,9 +138,9 @@ public class GameScreen extends StdScreenAdapter {
         // dispose what is created in constructor
         // called from PauseMenuScreen when the game is quit
         game.assets.MUSIC.stop();
+        game.assets.END_MUSIC.stop();
 
         gameView.dispose();
         world.dispose();
-
     }
 }

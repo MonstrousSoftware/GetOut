@@ -44,7 +44,7 @@ public class TitleScreen extends StdScreenAdapter {
     @Override
     public void render(float delta) {
         timer += delta;
-        if(timer > 4f || Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) ||Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY)){
+        if(timer > 5f || Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) ||Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY)){
             game.setScreen(new MainMenuScreen(game));
             return;
         }

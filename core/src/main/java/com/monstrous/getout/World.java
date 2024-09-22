@@ -36,6 +36,7 @@ public class World implements Disposable {
     public float health;
     public float batteryLevel;  // 0..100
     public float deathTimer;
+    public boolean completed;
     private Array<Collider>collisions;
 
     public World() {
@@ -76,6 +77,7 @@ public class World implements Disposable {
         Settings.torchOn = true;
         message = "Find your way out";
         deathTimer = -1;
+        completed = false;
     }
 
     private void parseLevel(Scene level){
@@ -245,6 +247,7 @@ public class World implements Disposable {
     private void exitLevel(Collider collider){
         Gdx.app.log("all done",  collider.id);
         message = "You have escaped!";
+        completed = true;
         colliders.remove(collider);
         // play sound
         // fanfare etc.
