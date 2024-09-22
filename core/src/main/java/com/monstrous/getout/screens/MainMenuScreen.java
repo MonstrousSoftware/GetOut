@@ -32,23 +32,17 @@ public class MainMenuScreen extends MenuScreen {
        Table screenTable = new Table();
        screenTable.setFillParent(true);
 
-//       Image title = new Image( (Texture)game.assets.get("images/title.png")); //new Texture( Gdx.files.internal("images/title.png")));
-
        TextButton play = new TextButton("Play Game", skin);
        TextButton options = new TextButton("Options", skin);
        TextButton keys = new TextButton("Keys", skin);
 
-//       TextButton credits = new TextButton("Credits", skin);
        TextButton quit = new TextButton("Quit", skin);
 
        float pad = 10f;
-   //    screenTable.add(title).pad(50).row();
        screenTable.add(play).pad(pad).row();
        screenTable.add(options).pad(pad).row();
        screenTable.add(keys).pad(pad).row();
 
-//       screenTable.add(credits).pad(pad).row();
-       // hide quit on web unless we have an outro screen
        if(!(Gdx.app.getType() == Application.ApplicationType.WebGL) )
             screenTable.add(quit).pad(pad).row();
 
@@ -69,8 +63,7 @@ public class MainMenuScreen extends MenuScreen {
            public void clicked(InputEvent event, float x, float y) {
                super.clicked(event, x, y);
                playSelectNoise();
-               //game.musicManager.stopMusic();
-               game.setScreen(new GameScreen( game ));
+               game.setScreen(new PreGameScreen( game ));
            }
        });
 
@@ -92,25 +85,13 @@ public class MainMenuScreen extends MenuScreen {
             }
         });
 
-//        credits.addListener(new ClickListener() {
-//            @Override
-//            public void clicked(InputEvent event, float x, float y) {
-//                super.clicked(event, x, y);
-//                playSelectNoise();
-//                //game.setScreen(new CreditsScreen( game ));
-//            }
-//        });
 
        quit.addListener(new ClickListener() {
            @Override
            public void clicked(InputEvent event, float x, float y) {
                super.clicked(event, x, y);
                playSelectNoise();
-//               game.musicManager.stopMusic();
-//               if(!Settings.skipExitScreen)
-//                    game.setScreen(new ExitScreen( game ));
-//               else
-                    Gdx.app.exit();
+               Gdx.app.exit();
            }
        });
 
@@ -119,7 +100,6 @@ public class MainMenuScreen extends MenuScreen {
         stage.addFocusableActor(play);
         stage.addFocusableActor(options);
         stage.addFocusableActor(keys);
-//            cStage.addFocusableActor(credits);
         stage.addFocusableActor(quit);
         stage.setFocusedActor(play);
         focusActor(play);

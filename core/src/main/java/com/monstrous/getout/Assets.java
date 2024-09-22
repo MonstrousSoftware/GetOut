@@ -13,6 +13,7 @@ public class Assets implements Disposable {
 
     public Sound    MOTOR;
     public Sound    SHOT;
+    public Sound    PICKUP;
     public Sound    BUZZ;
     public Sound    MENU_CLICK;
     public Sound    FOOT_STEPS;
@@ -36,6 +37,7 @@ public class Assets implements Disposable {
         assets.load("sounds/click_002.ogg", Sound.class);
         assets.load("sounds/footsteps.ogg", Sound.class);
         assets.load("sounds/running.mp3", Sound.class);
+        assets.load("sounds/pick-up-sfx.ogg", Sound.class);
 
         assets.load("music/bossa-nova-echo.ogg", Music.class);
         assets.load("music/elevator-music-bossa-nova.ogg", Music.class);
@@ -57,6 +59,7 @@ public class Assets implements Disposable {
         MENU_CLICK = assets.get("sounds/click_002.ogg");
         FOOT_STEPS = assets.get("sounds/footsteps.ogg");
         RUNNING = assets.get("sounds/running.mp3");
+        PICKUP = assets.get("sounds/pick-up-sfx.ogg");
 
         MUSIC = assets.get("music/bossa-nova-echo.ogg");
         END_MUSIC = assets.get("music/elevator-music-bossa-nova.ogg");

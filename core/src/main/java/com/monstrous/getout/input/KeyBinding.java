@@ -16,16 +16,7 @@ public enum KeyBinding {
     RUN ("Run modifier", Keys.SHIFT_LEFT),
     TORCH ("Toggle torch", Keys.T),
     RESTART ("Restart", Keys.R),
-//    CROUCH ("Crouch", Keys.C),
-//    JUMP ("Jump", Keys.SPACE),
-
-//    BOT_FORWARD ("Move bot forward", Keys.UP),
-//    BOT_BACK ("Move bot back", Keys.DOWN),
-//    BOT_TURN_LEFT ("Turn bot left", Keys.LEFT),
-//    BOT_TURN_RIGHT ("Turn bot right", Keys.RIGHT),
-//    BOT_FIRE ("Fire bot weapon", Keys.FORWARD_DEL),
-//    BOT_COLLAPSE ("Bot Collapse", Keys.END),
-//    BOT_REVIVE ("Bot Revive", Keys.HOME),
+    MENU ("Menu", Keys.TAB),
 
     TOGGLE_FULLSCREEN ("Toggle Full-Screen", Keys.F11);
 

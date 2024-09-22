@@ -1,6 +1,7 @@
 package com.monstrous.getout;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g3d.model.Node;
 import com.badlogic.gdx.graphics.g3d.model.NodePart;
@@ -12,10 +13,8 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.monstrous.getout.collision.Collider;
 import com.monstrous.getout.collision.Colliders;
-import com.monstrous.getout.input.Bullet;
-import com.monstrous.getout.input.Bullets;
-import com.monstrous.getout.input.PatrolBot;
-import com.monstrous.getout.input.PatrolBots;
+import com.monstrous.getout.input.*;
+import com.monstrous.getout.screens.Main;
 import net.mgsx.gltf.loaders.gltf.GLTFLoader;
 import net.mgsx.gltf.scene3d.scene.Scene;
 import net.mgsx.gltf.scene3d.scene.SceneAsset;
@@ -23,6 +22,7 @@ import net.mgsx.gltf.scene3d.scene.SceneAsset;
 public class World implements Disposable {
     static final float PLAYER_RADIUS = .5f;
 
+    private Main game;
     private SceneAsset sceneAsset;
     private SceneAsset sceneAsset2;
     public Array<Scene> scenes;
@@ -38,8 +38,10 @@ public class World implements Disposable {
     public float deathTimer;
     public boolean completed;
     private Array<Collider>collisions;
+    private boolean batteryWarningGiven;
 
-    public World() {
+    public World(Main game) {
+        this.game = game;
         scenes = new Array();
         bullets = new Bullets();
 
@@ -78,6 +80,7 @@ public class World implements Disposable {
         message = "Find your way out";
         deathTimer = -1;
         completed = false;
+        batteryWarningGiven = false;
     }
 
     private void parseLevel(Scene level){
@@ -214,6 +217,8 @@ public class World implements Disposable {
         hideNode( collider.node );
 
         // play sound
+        game.assets.PICKUP.play();
+
         numElements++;
         if(collider.id.contentEquals("Card")) {
             foundCard[0] = true;
@@ -246,7 +251,7 @@ public class World implements Disposable {
 
     private void exitLevel(Collider collider){
         Gdx.app.log("all done",  collider.id);
-        message = "You have escaped!";
+        message = "You have escaped! Thank you for playing.";
         completed = true;
         colliders.remove(collider);
         // play sound
@@ -254,10 +259,12 @@ public class World implements Disposable {
     }
 
     public void playerGotHitByBullet(){
-        if(health < 0)
+        if(health <= 0)
             return; // you only die once
-        health -= 35;
-        if(health < 0) {
+        health -= 20;
+        if(Settings.difficult)
+            health -= 30;
+        if(health <= 0) {
             message = "You got hit! You died!";
             deathTimer = 3f;    // timer for follow-up message
         }
@@ -269,6 +276,11 @@ public class World implements Disposable {
 
         if(Settings.torchOn) {
             batteryLevel -= deltaTime;
+            if(batteryLevel < 50 && !batteryWarningGiven){
+                message = "Battery low. Press "+ Input.Keys.toString(KeyBinding.TORCH.getKeyCode()) + " to conserve energy.";
+                batteryWarningGiven = true;
+
+            }
             if (batteryLevel < 0) {
                 batteryLevel = 0;
                 Settings.torchOn = false;

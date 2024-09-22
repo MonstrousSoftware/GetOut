@@ -56,7 +56,7 @@ public class Settings {
 
     static public boolean       fullScreen = true;
 
-    static public boolean       playMusic = release;
+    static public boolean       playMusic = false;
 
     static public boolean       noBots = false;
     static public boolean       playerIsInvisible = false;

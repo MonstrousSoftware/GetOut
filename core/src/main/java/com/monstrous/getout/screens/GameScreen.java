@@ -20,7 +20,7 @@ public class GameScreen extends StdScreenAdapter {
         this.game = game;
         completed = false;
 
-        world = new World();
+        world = new World(game);
         gameView = new GameView(game.assets);  // need to keep persistent because it holds camera (player) position
 
         if(Settings.playMusic){
@@ -63,7 +63,7 @@ public class GameScreen extends StdScreenAdapter {
         super.render(deltaTime);
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)||
-            Gdx.input.isKeyJustPressed(Input.Keys.TAB)){
+            Gdx.input.isKeyJustPressed(KeyBinding.MENU.getKeyCode())){
             game.setScreen(new PauseMenuScreen(game, this));
             return;
         }
