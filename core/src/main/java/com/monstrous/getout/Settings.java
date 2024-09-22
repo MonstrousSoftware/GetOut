@@ -1,5 +1,7 @@
 package com.monstrous.getout;
 
+import com.badlogic.gdx.Application;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
 
@@ -9,7 +11,7 @@ public class Settings {
     public static String title = "Get The Heck Out";
     public static String version = "v1.0 Sep 22, 2024";
 
-    public static boolean release = false;
+    public static boolean release = true;
 
     public static float ambientLightLevel = 0.02f; //0.03f;
     public static float directionalLightLevel = 0.0f;
@@ -54,14 +56,14 @@ public class Settings {
     static public boolean postFilter = release;   // post-processing shader effects
     static public boolean camStabilisation = !release;
 
-    static public boolean fullScreen = false;
+    static public boolean fullScreen = true;
 
-    static public boolean playMusic = false;
+    static public boolean playMusic =  (Gdx.app.getType() != Application.ApplicationType.WebGL);
 
     static public boolean noBots = false;
-    static public boolean playerIsInvisible = true;
+    static public boolean playerIsInvisible = false;
 
     static public boolean torchOn = true;
 
-    static public boolean difficult = !release;
+    static public boolean difficult = false;
 }

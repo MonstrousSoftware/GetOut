@@ -135,8 +135,8 @@ public class OptionsScreen extends MenuScreen {
        screenTable.add(vcr).pad(pad).left().row();
        screenTable.add(camStab).pad(pad).left().row();
        screenTable.add(showFPS).pad(pad).left().row();
-       screenTable.add(new Label("Controller: ", skin)).pad(pad).left();
-       screenTable.add(controllerLabel).left().row();
+       //screenTable.add(new Label("Controller: ", skin)).pad(pad).left();
+       //screenTable.add(controllerLabel).left().row();
        screenTable.add(done).pad(20).row();
 
        screenTable.pack();

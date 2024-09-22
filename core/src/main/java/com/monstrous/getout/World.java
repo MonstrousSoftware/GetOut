@@ -96,7 +96,7 @@ public class World implements Disposable {
         for(Node node : level.modelInstance.nodes ){
             node.calculateBoundingBox(bbox);
             bbox.getCenter(ctr);
-            Gdx.app.log("node:", node.id + " " +bbox.toString());
+            //Gdx.app.log("node:", node.id + " " +bbox.toString());
             Collider.Type type = Collider.Type.DEFAULT;
 
 
@@ -148,7 +148,7 @@ public class World implements Disposable {
                 exitDoor = collider;
 
         }
-        Gdx.app.log("nodes:", ""+count);
+        //Gdx.app.log("nodes:", ""+count);
 
         int[] choice = new int[4];
         for(int i = 0; i < 4; i++){
@@ -210,7 +210,6 @@ public class World implements Disposable {
 
         Bullet bullet = new Bullet(bulletScene);
 
-        //scenes.add(bullet);
         bullets.add(bullet);
     }
 
@@ -221,7 +220,7 @@ public class World implements Disposable {
         colliders.collisionTest(position, PLAYER_RADIUS, collisions);
         if (collisions.size > 0) {
             for(Collider collider : collisions) {
-                Gdx.app.log("canReach: collision", collider.id);
+                //Gdx.app.log("canReach: collision", collider.id);
                 if (collider.type == Collider.Type.PICKUP) {
                     pickUp(collider);
                     collisions.removeValue(collider, true);
@@ -238,7 +237,7 @@ public class World implements Disposable {
     }
 
     private void pickUp(Collider collider){
-        Gdx.app.log("pickup",  collider.id);
+        //Gdx.app.log("pickup",  collider.id);
         colliders.remove(collider);
         hideNode( collider.node );
 
@@ -273,7 +272,7 @@ public class World implements Disposable {
     }
 
     private void exitLevel(Collider collider){
-        Gdx.app.log("all done",  collider.id);
+        //Gdx.app.log("all done",  collider.id);
         message = "You have escaped! Thank you for playing.";
         completed = true;
         colliders.remove(collider);

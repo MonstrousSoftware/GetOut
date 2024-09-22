@@ -16,7 +16,6 @@ public class PreGameScreen extends StdScreenAdapter {
     private Main game;
 
     private SpriteBatch batch;
-    private BitmapFont font;
     private OrthographicCamera cam;
     private int width, height;
     private float timer = 1.0f;
@@ -37,13 +36,10 @@ public class PreGameScreen extends StdScreenAdapter {
         Gdx.app.log("PreGameScreen show()", "");
 
         batch = new SpriteBatch();
-        font = new BitmapFont();
         cam = new OrthographicCamera();
 
         if(Settings.fullScreen)
             toFullScreen();
-        else
-            toWindowedScreen();
     }
 
 
@@ -79,8 +75,10 @@ public class PreGameScreen extends StdScreenAdapter {
         cam.setToOrtho(false, width, height);
         if(fbo != null)
             fbo.dispose();
-        fbo = new FrameBuffer(Pixmap.Format.RGBA8888, width, height, true);
-        filter.resize(width, height);
+        if(width*height > 0) {
+            fbo = new FrameBuffer(Pixmap.Format.RGBA8888, width, height, true);
+            filter.resize(width, height);
+        }
     }
 
     @Override
@@ -93,7 +91,6 @@ public class PreGameScreen extends StdScreenAdapter {
     public void dispose() {
         Gdx.app.log("PreGameScreen dispose()", "");
         batch.dispose();
-        font.dispose();
         fbo.dispose();
         filter.dispose();
     }

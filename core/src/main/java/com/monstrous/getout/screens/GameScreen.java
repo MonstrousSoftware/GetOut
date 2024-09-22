@@ -1,6 +1,7 @@
 package com.monstrous.getout.screens;
 
 import com.badlogic.gdx.*;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Cursor;
 import com.monstrous.getout.*;
 import com.monstrous.getout.collision.ColliderView;
@@ -24,9 +25,10 @@ public class GameScreen extends StdScreenAdapter {
         gameView = new GameView(game.assets);  // need to keep persistent because it holds camera (player) position
 
         if(Settings.playMusic){
-            game.assets.MUSIC.play();
-            game.assets.MUSIC.setLooping(true);
-            game.assets.MUSIC.setVolume(0.5f);
+            Music music = game.assets.MUSIC;
+            music.play();
+            music.setLooping(true);
+            music.setVolume(0.5f);
         }
     }
 
@@ -35,6 +37,8 @@ public class GameScreen extends StdScreenAdapter {
     public void show() {
         gui = new GUI(game, world);
         colliderView = new ColliderView( world );
+
+
 
         if(Settings.fullScreen)
             toFullScreen();
@@ -131,14 +135,19 @@ public class GameScreen extends StdScreenAdapter {
 
         colliderView.dispose();
         gui.dispose();
+
+
     }
 
     @Override
     public void dispose() {
         // dispose what is created in constructor
         // called from PauseMenuScreen when the game is quit
-        game.assets.MUSIC.stop();
-        game.assets.END_MUSIC.stop();
+        if(completed)
+            game.assets.END_MUSIC.stop();
+        else
+            game.assets.MUSIC.stop();
+
 
         gameView.dispose();
         world.dispose();
