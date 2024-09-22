@@ -58,7 +58,7 @@ public class Settings {
     static public boolean       playMusic = release;
 
     static public boolean       noBots = false;
-    static public boolean       playerIsInvisible = false;
+    static public boolean       playerIsInvisible = true;
 
     static public boolean       torchOn = true;
 

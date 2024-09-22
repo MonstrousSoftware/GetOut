@@ -63,7 +63,7 @@ public class KeysScreen extends MenuScreen implements InputProcessor {
             //String text = Input.Keys.toString(keycode);
             if(keycode == 0)    // unbound action
                 text = "- -";
-            TextButton button = new TextButton(text, skin);
+            TextButton button = new TextButton(text, skin, "framed");
             keyTable.add(button);
             keyTable.row();
 

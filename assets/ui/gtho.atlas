@@ -55,7 +55,7 @@ checkbox_on
   index: -1
 progressbar_square
   rotate: false
-  xy: 173, 264
+  xy: 1, 1
   size: 9, 9
   split: 4, 4, 4, 4
   orig: 9, 9
@@ -101,5 +101,13 @@ health-knob
   size: 64, 2
   split: 8, 8, 0, 0
   orig: 64, 2
+  offset: 0, 0
+  index: -1
+whiteFrame
+  rotate: false
+  xy: 173, 241
+  size: 32, 32
+  split: 7, 7, 7, 7
+  orig: 32, 32
   offset: 0, 0
   index: -1

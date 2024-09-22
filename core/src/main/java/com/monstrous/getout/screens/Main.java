@@ -1,6 +1,7 @@
 package com.monstrous.getout.screens;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.monstrous.getout.Assets;
 import com.monstrous.getout.Settings;
 import com.monstrous.getout.input.KeyBinding;
@@ -27,6 +28,8 @@ public class Main extends Game {
 
     @Override
     public void dispose() {
+        Gdx.app.log("Main.dispose", "");
+        KeyBinding.save();
         assets.dispose();
         super.dispose();
     }
