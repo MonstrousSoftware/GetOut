@@ -99,7 +99,7 @@ public class PatrolBot implements Disposable {
 
 
     private void checkForPlayer(Vector3 playerPosition, float deltaTime){
-        if(Settings.playerIsInvisible)
+        if(Settings.playerIsInvisible || world.health < 0)
             return;
 
         boolean canSee = false;

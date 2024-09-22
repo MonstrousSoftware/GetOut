@@ -26,6 +26,7 @@ public class GUI implements Disposable {
     private Texture[] textures;
     private Table messageTable;
     private ProgressBar battery;
+    private ProgressBar health;
 
     public GUI(Main game, World world) {
         Gdx.app.log("GUI constructor", "");
@@ -59,16 +60,12 @@ public class GUI implements Disposable {
 
         fpsLabel = new Label("", skin, labelType);
         screenTable.add(fpsLabel).left();
-
-        screenTable.bottom().left();
-
+        screenTable.top().left();
         stage.addActor(screenTable);
 
+        // element cards
         Table screenTable2 = new Table();
         screenTable2.setFillParent(true);
-
-
-
         for(int i = 0; i < 4; i++){
             Image card;
             if(world.foundCard[i])
@@ -77,7 +74,7 @@ public class GUI implements Disposable {
                 card = new Image(textures[0]);
             screenTable2.add(card);
         }
-        screenTable2.bottom().right();
+        screenTable2.bottom();
         screenTable2.pack();
 
         stage.addActor(screenTable2);
@@ -86,14 +83,25 @@ public class GUI implements Disposable {
         Table screenTable3 = new Table();
         screenTable3.setFillParent(true);
         battery = new ProgressBar(0,100, 10, false, skin, "power");
-        screenTable3.add(battery).bottom().expand();
+        screenTable3.add(battery).bottom().right().expand();
         screenTable3.pack();
-
         stage.addActor(screenTable3);
+
+        // health indicator
+        Table screenTable4 = new Table();
+        screenTable4.setFillParent(true);
+        health = new ProgressBar(0,100, 10, true, skin, "health");
+        screenTable4.add(health).bottom().left().expand();
+        screenTable4.pack();
+        stage.addActor(screenTable4);
 
     }
 
     public void showMessage( String text ){
+        showMessage(text, 1f);
+    }
+
+    public void showMessage( String text, float duration ){
         messageTable.clear();       // any old message will be overwritten
         messageTable.setFillParent(true);
 
@@ -104,7 +112,7 @@ public class GUI implements Disposable {
         messageTable.pack();
 
         messageTable.setColor(1,1,1,0);       // set alpha to zero
-        messageTable.addAction(sequence(fadeIn(2f), delay(1f), fadeOut(1f), removeActor()));           // fade in .. fade out, then remove this actor
+        messageTable.addAction(sequence(fadeIn(2f), delay(duration), fadeOut(1f), removeActor()));           // fade in .. fade out, then remove this actor
 
         stage.addActor(messageTable);
     }
@@ -117,6 +125,7 @@ public class GUI implements Disposable {
         else
             fpsLabel.setText("");
         battery.setValue(world.batteryLevel);
+        health.setValue(world.health);
     }
 
     public void render(float deltaTime) {

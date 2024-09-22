@@ -27,35 +27,35 @@ OpenSans_Regular16
   index: -1
 checkbox_off
   rotate: false
-  xy: 1, 188
+  xy: 1, 12
   size: 50, 26
   orig: 50, 26
   offset: 0, 0
   index: -1
 checkbox_off
   rotate: false
-  xy: 1, 188
+  xy: 1, 12
   size: 50, 26
   orig: 50, 26
   offset: 0, 0
   index: -1
 checkbox_on
   rotate: false
-  xy: 173, 251
+  xy: 67, 188
   size: 50, 26
   orig: 50, 26
   offset: 0, 0
   index: -1
 checkbox_on
   rotate: false
-  xy: 173, 251
+  xy: 67, 188
   size: 50, 26
   orig: 50, 26
   offset: 0, 0
   index: -1
 progressbar_square
   rotate: false
-  xy: 1, 177
+  xy: 173, 264
   size: 9, 9
   split: 4, 4, 4, 4
   orig: 9, 9
@@ -79,10 +79,27 @@ battery
   index: -1
 battery-knob
   rotate: false
-  xy: 1, 114
+  xy: 67, 125
   size: 6, 61
   split: 0, 0, 12, 12
   pad: 0, 0, 11, 12
   orig: 6, 61
+  offset: 0, 0
+  index: -1
+health
+  rotate: false
+  xy: 1, 40
+  size: 64, 174
+  split: 7, 7, 10, 33
+  pad: 8, 7, 8, 32
+  orig: 64, 174
+  offset: 0, 0
+  index: -1
+health-knob
+  rotate: false
+  xy: 173, 275
+  size: 64, 2
+  split: 8, 8, 0, 0
+  orig: 64, 2
   offset: 0, 0
   index: -1

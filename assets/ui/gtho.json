@@ -72,6 +72,10 @@ com.badlogic.gdx.scenes.scene2d.ui.ProgressBar$ProgressBarStyle: {
 		background: battery
 		knobBefore: battery-knob
 	}
+	health: {
+		background: health
+		knobBefore: health-knob
+	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
 	default: {

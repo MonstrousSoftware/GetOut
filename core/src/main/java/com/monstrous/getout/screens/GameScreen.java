@@ -66,7 +66,7 @@ public class GameScreen extends StdScreenAdapter {
             game.setScreen(new GameScreen(game));
             return;
         }
-        if(Gdx.input.isKeyJustPressed(KeyBinding.TORCH.getKeyCode())){
+        if(world.health > 0 && Gdx.input.isKeyJustPressed(KeyBinding.TORCH.getKeyCode())){
             Settings.torchOn = !Settings.torchOn;
         }
 
@@ -83,7 +83,10 @@ public class GameScreen extends StdScreenAdapter {
         }
 
         if(world.message != null){
-            gui.showMessage(world.message);
+            if(world.health <= 0)
+                gui.showMessage(world.message,9999f);
+            else
+                gui.showMessage(world.message);
             world.message = null;
         }
         gui.render(deltaTime);

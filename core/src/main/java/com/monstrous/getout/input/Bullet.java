@@ -5,6 +5,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.monstrous.getout.Settings;
 import com.monstrous.getout.World;
@@ -22,12 +23,14 @@ public class Bullet implements Disposable {
     private float lifeTime;
     private Vector3 vec = new Vector3();
     private Vector3 pos = new Vector3();
+    private Array<Collider> collisions;
 
     public Bullet(Scene scene) {
         this.scene = scene;
         soundId = Main.assets.BUZZ.loop();
         isDead = false;
         lifeTime = 0;
+        collisions = new Array<>();
     }
 
     // returns true if bullet disappears
@@ -50,8 +53,8 @@ public class Bullet implements Disposable {
             }
 
             // check for wall collisions
-            Collider collider = world.colliders.collisionTest(pos, BULLET_RADIUS);
-            if (collider != null) {
+            world.colliders.collisionTest(pos, BULLET_RADIUS, collisions);
+            if (collisions.size > 0) {
                 //Gdx.app.log("bullet collision", collider.id);
                 // todo thud sound
                 return true; // remove bullet

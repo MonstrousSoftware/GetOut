@@ -34,6 +34,7 @@ public class World implements Disposable {
     public float health;
     public float batteryLevel;  // 0..100
     public float deathTimer;
+    private Array<Collider>collisions;
 
     public World() {
         scenes = new Array();
@@ -41,6 +42,7 @@ public class World implements Disposable {
 
         colliders = new Colliders();
         patrolBots = new PatrolBots();
+        collisions = new Array<>();
         reload();
     }
 
@@ -176,24 +178,25 @@ public class World implements Disposable {
 
 
     // returns null if you can go to the desired position
-    public Collider canReach( Vector3 position ) {
+    public Array<Collider> canReach( Vector3 position ) {
 
-        Collider collider = colliders.collisionTest(position, PLAYER_RADIUS);
-        if (collider != null) {
-            Gdx.app.log("canReach: collision", collider.id);
-            if(collider.type == Collider.Type.PICKUP) {
-                pickUp(collider);
-                return null;
+        colliders.collisionTest(position, PLAYER_RADIUS, collisions);
+        if (collisions.size > 0) {
+            for(Collider collider : collisions) {
+                Gdx.app.log("canReach: collision", collider.id);
+                if (collider.type == Collider.Type.PICKUP) {
+                    pickUp(collider);
+                    collisions.removeValue(collider, true);
+                }
+                if (collider.type == Collider.Type.OPEN_DOOR) {
+                    exitLevel(collider);
+                    collisions.removeValue(collider, true);
+                }
+                if (collider.type == Collider.Type.CLOSED_DOOR)
+                    message = "You lack the elements to open the door.";
             }
-            if(collider.type == Collider.Type.OPEN_DOOR) {
-                exitLevel(collider);
-                return null;
-            }
-            if(collider.type == Collider.Type.CLOSED_DOOR)
-                message = "You lack the elements to open the door.";
-            return collider;
         }
-        return null;
+        return collisions;
     }
 
     private void pickUp(Collider collider){

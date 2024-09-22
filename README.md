@@ -10,9 +10,10 @@ A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://git
 
 
 to do:
-- smaller text button style for key menu
-- collision with inside corner
-- robot direction in path following
+- !bug: collision with inside corner
+- bug: robot direction in path following
+- - randomized spawn points
+- - start screen
 
 
 Done:

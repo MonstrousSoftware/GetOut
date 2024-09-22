@@ -54,14 +54,14 @@ public class Colliders implements Disposable {
     }
 
     // returns null if no collision, otherwise the node id
-    public Collider collisionTest(Vector3 position, float radius) {
+    public void collisionTest(Vector3 position, float radius, Array<Collider> collisions) {
 
+        collisions.clear();
         // test collision of player with a colliders
         for (Collider collider : colliders) {
             if(collider.intersects(position, radius))
-                return collider;
+                collisions.add(collider);
         }
-        return null;
     }
 
 

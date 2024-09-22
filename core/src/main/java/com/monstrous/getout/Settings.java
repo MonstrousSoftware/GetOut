@@ -8,7 +8,7 @@ public class Settings {
 
     public static String        title = "Get The Heck Out";
 
-    public static boolean       release = false;
+    public static boolean       release = true;
 
     public static float         ambientLightLevel = 0.02f; //0.03f;
     public static float         directionalLightLevel = 0.0f;
@@ -58,7 +58,7 @@ public class Settings {
     static public boolean       playMusic = release;
 
     static public boolean       noBots = false;
-    static public boolean       playerIsInvisible = false;
+    static public boolean       playerIsInvisible = true;
 
     static public boolean       torchOn = true;
 

@@ -6,6 +6,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntIntMap;
 import com.monstrous.getout.Assets;
 import com.monstrous.getout.Settings;
@@ -28,6 +29,8 @@ public class CameraController extends InputAdapter {
     private float bobAngle;
     private Sound walkSound;
     private Sound runSound;
+    private World world;
+    private Array<Collider> collisions;
 
     public CameraController(Assets assets, PerspectiveCamera camera) {
         this.camera = camera;
@@ -37,6 +40,7 @@ public class CameraController extends InputAdapter {
 
 
     public void update(World world, float deltaTime) {
+        this.world = world;
         if(world.health < 0)
             return;         // player is dead, controls are blocked
 
@@ -94,11 +98,13 @@ public class CameraController extends InputAdapter {
         newPos.set(velocity).scl(deltaTime).add(camera.position);
 
         if(!Settings.noClip) {
-            Collider collider = world.canReach(newPos);
-            if (collider != null) {
-                //newPos.set(camera.position);// todo
-                Gdx.app.log("collision", "");
-                collider.collisionResponse(camera.position, 0.5f, velocity, deltaTime); // modifies velocity
+            collisions = world.canReach(newPos);
+            if (collisions.size > 0) {
+                for(Collider collider : collisions) {
+                    //newPos.set(camera.position);// todo
+                    Gdx.app.log("collision", "");
+                    collider.collisionResponse(camera.position, 0.5f, velocity, deltaTime); // modifies velocity
+                }
                 newPos.set(velocity).scl(deltaTime).add(camera.position);
             }
         }
@@ -153,6 +159,8 @@ public class CameraController extends InputAdapter {
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
+        if(world.health <= 0)
+            return true;
         float deltaX = -Gdx.input.getDeltaX() * Settings.degreesPerPixel;
         float deltaY = -Gdx.input.getDeltaY() * Settings.degreesPerPixel;
         if(Math.abs(deltaX) > 20 )  // ignore startup/resize glitches
