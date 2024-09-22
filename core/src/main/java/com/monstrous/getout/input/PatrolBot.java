@@ -4,10 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g3d.utils.AnimationController;
-import com.badlogic.gdx.math.CatmullRomSpline;
-import com.badlogic.gdx.math.Intersector;
-import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.math.collision.Ray;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
@@ -18,6 +15,7 @@ import com.monstrous.getout.screens.Main;
 import net.mgsx.gltf.scene3d.scene.Scene;
 
 // manages robot patrol path using a spline
+// Spline is in 2d because all movement is on an even floor
 
 public class PatrolBot implements Disposable {
     private static float SOUND_MAX_DISTANCE = 30f;
@@ -25,11 +23,13 @@ public class PatrolBot implements Disposable {
 
     private Scene scene;
     private World world;
-    private CatmullRomSpline<Vector3> spline;
+    private CatmullRomSpline<Vector2> spline;
     private float time;
     private float speed;
-    private Vector3 pos;
-    private Vector3 fwd;
+    private Vector2 pos2;
+    private Vector2 fwd2;
+    private Vector3 position;
+    private Vector3 direction;
     private Vector3 vec;
     private Vector3 side;
     private float fireTimer = -1;
@@ -38,20 +38,22 @@ public class PatrolBot implements Disposable {
     private long shotSoundId;
     private AnimationController.AnimationDesc walkAnimation;
 
-    public PatrolBot(World world, Scene scene, Array<Vector3> wayPoints) {
+    public PatrolBot(World world, Scene scene, Array<Vector2> wayPoints) {
         this.world = world;
         this.scene = scene;
         time = 0;
         speed = 1;
 
         // calculate spline
-        Vector3[] dataSet = new Vector3[wayPoints.size];
+        Vector2[] dataSet = new Vector2[wayPoints.size];
         for(int i = 0; i < wayPoints.size; i++)
             dataSet[i] = wayPoints.get(i);
         spline = new CatmullRomSpline<>(dataSet, true);
 
-        pos = new Vector3();
-        fwd = new Vector3();
+        pos2 = new Vector2();
+        fwd2 = new Vector2();
+        position = new Vector3();
+        direction = new Vector3();
         vec = new Vector3();
         side = new Vector3();
 
@@ -82,13 +84,15 @@ public class PatrolBot implements Disposable {
             t /= 20f;
             t = t % 1f;     // keep in range [0-1]
 
-            spline.valueAt(pos, t);
+            spline.valueAt(pos2, t);
             // todo: direction is not okay yet
-            spline.derivativeAt(fwd, t);
+            spline.derivativeAt(fwd2, t);
 
+            position.set(pos2.x, 0, pos2.y);
 
-            scene.modelInstance.transform.setToRotation(Vector3.Z, fwd);
-            scene.modelInstance.transform.setTranslation(pos);
+            float degrees = fwd2.angleDeg();
+            scene.modelInstance.transform.setToRotation(Vector3.Y, -degrees+90);
+            scene.modelInstance.transform.setTranslation(position);
         }
 
         checkForPlayer(camera.position, deltaTime);
@@ -103,15 +107,15 @@ public class PatrolBot implements Disposable {
             return;
 
         boolean canSee = false;
-        vec.set(playerPosition).sub(pos);
+        vec.set(playerPosition).sub(position);
         float maxDistance = VIEW_MAX_DISTANCE;
         if(Settings.torchOn)                        // robots can see you further away with the torch on
             maxDistance *= 2f;
         if(vec.len() < maxDistance){
             //Gdx.app.log("bot", "close by");
             vec.nor();
-            fwd.set(Vector3.Z).rot(scene.modelInstance.transform);  // direction vector
-            float dot = fwd.dot(vec);
+            direction.set(Vector3.Z).rot(scene.modelInstance.transform);  // direction vector
+            float dot = direction.dot(vec);
             if(dot > 0.55f) {        // you are more or less in front of the bot
                 //  check for walls etc. between bot and player
                 canSee = haveLineOfSight(playerPosition);
@@ -144,11 +148,11 @@ public class PatrolBot implements Disposable {
     private Vector3 intersect = new Vector3();
 
     private boolean haveLineOfSight(Vector3 playerPosition){
-        vec.set(playerPosition).sub(pos).nor();
-        Ray ray = new Ray(pos, vec);
+        vec.set(playerPosition).sub(position).nor();
+        Ray ray = new Ray(position, vec);
         for(Collider collider : world.colliders.colliders){
             if(Intersector.intersectRayBounds(ray, collider.bbox, intersect)){
-                if(pos.dst2(intersect) <= pos.dst2(playerPosition))
+                if(position.dst2(intersect) <= position.dst2(playerPosition))
                     return false;       // intersection with bounding box closer than player position
             }
         }

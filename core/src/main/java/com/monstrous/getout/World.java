@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g3d.model.Node;
 import com.badlogic.gdx.graphics.g3d.model.NodePart;
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.utils.Array;
@@ -13,6 +14,7 @@ import com.monstrous.getout.collision.Collider;
 import com.monstrous.getout.collision.Colliders;
 import com.monstrous.getout.input.Bullet;
 import com.monstrous.getout.input.Bullets;
+import com.monstrous.getout.input.PatrolBot;
 import com.monstrous.getout.input.PatrolBots;
 import net.mgsx.gltf.loaders.gltf.GLTFLoader;
 import net.mgsx.gltf.scene3d.scene.Scene;
@@ -79,7 +81,7 @@ public class World implements Disposable {
     private void parseLevel(Scene level){
         BoundingBox bbox = new BoundingBox();
         Vector3 ctr = new Vector3();
-        Array<Vector3> wayPoints = new Array<>();
+        Array<Vector2> wayPoints = new Array<>();
         String group = null;
 
 
@@ -108,7 +110,8 @@ public class World implements Disposable {
                     if(!Settings.noBots) {
                         Scene patrolBot = new Scene(sceneAsset.scene, "Armature");
                         scenes.add(patrolBot);
-                        patrolBots.setPatrolBot(this, patrolBot, wayPoints);
+                        PatrolBot bot = new PatrolBot(this, patrolBot, wayPoints);
+                        patrolBots.add(bot);
                     }
                     wayPoints.clear();
                     group = node.id.substring(0, 9);    // name of new group e.g. "Waypoint2"
@@ -140,17 +143,21 @@ public class World implements Disposable {
         if(wayPoints.size > 0 && !Settings.noBots) {
             Scene patrolBot = new Scene(sceneAsset.scene, "Armature");
             scenes.add(patrolBot);
-            patrolBots.setPatrolBot(this, patrolBot, wayPoints);
+            PatrolBot bot = new PatrolBot(this, patrolBot, wayPoints);
+            patrolBots.add(bot);
             wayPoints.clear();
         }
 
     }
 
-    private void addWaypoint( Array<Vector3> wayPoints, Node node ){
-        Vector3 pos = new Vector3();
+    private Vector3 pos = new Vector3();
+
+    private void addWaypoint(Array<Vector2> wayPoints, Node node ){
+
         node.calculateWorldTransform();
         node.globalTransform.getTranslation(pos);
-        wayPoints.add(pos);
+        Vector2 pos2 = new Vector2(pos.x, pos.z);
+        wayPoints.add(pos2);
     }
 
 

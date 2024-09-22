@@ -159,7 +159,7 @@ public class CameraController extends InputAdapter {
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
-        if(world.health <= 0)
+        if(world != null && world.health <= 0)
             return true;
         float deltaX = -Gdx.input.getDeltaX() * Settings.degreesPerPixel;
         float deltaY = -Gdx.input.getDeltaY() * Settings.degreesPerPixel;

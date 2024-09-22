@@ -10,7 +10,7 @@ A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://git
 
 
 to do:
-- !bug: collision with inside corner
+
 - bug: robot direction in path following
 - - randomized spawn points
 - - start screen

@@ -1,6 +1,7 @@
 package com.monstrous.getout.input;
 
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
@@ -16,10 +17,14 @@ public class PatrolBots implements Disposable {
         bots = new Array<>();
     }
 
-    public void setPatrolBot(World world, Scene scene, Array<Vector3> wayPoints){
-        PatrolBot bot = new PatrolBot(world, scene, wayPoints);
+    public void add( PatrolBot bot ){
         bots.add(bot);
     }
+
+//    public void setPatrolBot(World world, Scene scene, Array<Vector2> wayPoints){
+//        PatrolBot bot = new PatrolBot(world, scene, wayPoints);
+//        bots.add(bot);
+//    }
 
     public void update(float deltaTime, Camera camera ) {
         for(PatrolBot bot : bots)
