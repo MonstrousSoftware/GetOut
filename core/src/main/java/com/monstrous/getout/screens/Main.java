@@ -2,6 +2,8 @@ package com.monstrous.getout.screens;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Version;
+import com.badlogic.gdx.utils.Array;
 import com.monstrous.getout.Assets;
 import com.monstrous.getout.Settings;
 import com.monstrous.getout.input.KeyBinding;
@@ -19,6 +21,12 @@ public class Main extends Game {
     public void create() {
         assets = new Assets();
         KeyBinding.load();
+        Gdx.app.log("Gdx version", Version.VERSION);
+        Gdx.app.log("OpenGL version", Gdx.gl.glGetString(Gdx.gl.GL_VERSION));
+        setScreen( new LoadAssetsScreen(this) );
+    }
+
+    public void onLoadingComplete(){
         assets.finishLoading();
         if(Settings.release)
             setScreen(new TitleScreen(this));

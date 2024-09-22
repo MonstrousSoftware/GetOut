@@ -33,7 +33,7 @@ public class TitleScreen extends StdScreenAdapter {
     @Override
     public void show() {
         batch = new SpriteBatch();
-        titleTexture = new Texture("images/title.png");
+        titleTexture = new Texture("images/still.png");
         titleWidth = titleTexture.getWidth();
         titleHeight = titleTexture.getHeight();
         viewport = new ScreenViewport();
@@ -44,7 +44,7 @@ public class TitleScreen extends StdScreenAdapter {
     @Override
     public void render(float delta) {
         timer += delta;
-        if(timer > 5f || Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) ||Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY)){
+        if(timer > 3f || Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) ||Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY)){
             game.setScreen(new MainMenuScreen(game));
             return;
         }
