@@ -38,8 +38,8 @@ public class GameScreen extends StdScreenAdapter {
 
         if(Settings.fullScreen)
             toFullScreen();
-        else
-            toWindowedScreen();
+//        else
+//            toWindowedScreen();
 
         InputMultiplexer im = new InputMultiplexer();
         //im.addProcessor(botController);
@@ -111,7 +111,7 @@ public class GameScreen extends StdScreenAdapter {
     @Override
     public void resize(int width, int height) {
         // Resize your screen here. The parameters represent the new window size.
-        Gdx.app.log("GameScreen.resize", "");
+        Gdx.app.log("GameScreen.resize", ""+width+" x "+height);
         gameView.resize(width, height);
         gui.resize(width, height);
     }

@@ -12,6 +12,7 @@ public class Collider {
     public BoundingBox bbox;
     public Type type;
     public ModelInstance debugInstance;
+    public int instanceNumber;
 
     public  enum Type {
         DEFAULT, PICKUP, OPEN_DOOR, CLOSED_DOOR;

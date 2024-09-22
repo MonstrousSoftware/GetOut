@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g3d.model.Node;
 import com.badlogic.gdx.graphics.g3d.model.NodePart;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -88,6 +89,7 @@ public class World implements Disposable {
         Vector3 ctr = new Vector3();
         Array<Vector2> wayPoints = new Array<>();
         String group = null;
+        Array<Node> cards = new Array<>();
 
 
         int count = 0;
@@ -126,8 +128,11 @@ public class World implements Disposable {
                 continue;   // not a collider
             }
 
-            if(node.id.startsWith("Card"))
-                type = Collider.Type.PICKUP;
+            if(node.id.startsWith("Card")) {
+                cards.add(node);
+                hideNode(node);
+                continue;
+            }
 
             if(node.id.startsWith("ExitDoor"))
                 type = Collider.Type.CLOSED_DOOR;
@@ -144,6 +149,27 @@ public class World implements Disposable {
 
         }
         Gdx.app.log("nodes:", ""+count);
+
+        int[] choice = new int[4];
+        for(int i = 0; i < 4; i++){
+            int r;
+            boolean dupe;
+            do {
+                dupe = false;
+                r = MathUtils.random(0, cards.size - 1);
+                for(int j = 0; j < i; j++){
+                    if(r == choice[j])
+                        dupe = true;
+                }
+            } while(dupe);
+            choice[i] = r;
+            Node node = cards.get(r);
+            unHideNode(node);
+            node.calculateBoundingBox(bbox);
+            Collider collider = new Collider(node.id, node, bbox, Collider.Type.PICKUP);
+            collider.instanceNumber = i;
+            colliders.add( collider );
+        }
 
         if(wayPoints.size > 0 && !Settings.noBots) {
             Scene patrolBot = new Scene(sceneAsset.scene, "Armature");
@@ -200,11 +226,11 @@ public class World implements Disposable {
                     pickUp(collider);
                     collisions.removeValue(collider, true);
                 }
-                if (collider.type == Collider.Type.OPEN_DOOR) {
+                else if (collider.type == Collider.Type.OPEN_DOOR) {
                     exitLevel(collider);
                     collisions.removeValue(collider, true);
                 }
-                if (collider.type == Collider.Type.CLOSED_DOOR)
+                else if (collider.type == Collider.Type.CLOSED_DOOR)
                     message = "You lack the elements to open the door.";
             }
         }
@@ -219,24 +245,16 @@ public class World implements Disposable {
         // play sound
         game.assets.PICKUP.play();
 
-        numElements++;
-        if(collider.id.contentEquals("Card")) {
-            foundCard[0] = true;
-            message = "You have found an element: EARTH";
-        }
-        if(collider.id.contentEquals("Card.001")) {
-            foundCard[1] = true;
-            message = "You have found an element: WATER";
-        }
-        if(collider.id.contentEquals("Card.002")) {
-            foundCard[2] = true;
-            message = "You have found an element: AIR";
-        }
-        if(collider.id.contentEquals("Card.003")) {
-            foundCard[3] = true;
-            message = "You have found an element: FIRE";
+
+        foundCard[collider.instanceNumber] = true;
+        switch(collider.instanceNumber) {
+            case 0: message = "You have found an element: EARTH"; break;
+            case 1: message = "You have found an element: WATER"; break;
+            case 2: message = "You have found an element: AIR";break;
+            case 3: message = "You have found an element: FIRE";break;
         }
 
+        numElements++;
         if(numElements == 4){
             message = "You have all the elements. Now you can escape!";
             colliders.remove(exitDoor); // remove exit door collider
@@ -247,6 +265,11 @@ public class World implements Disposable {
     private void hideNode( Node node ){
         for(NodePart part : node.parts)        // hide node parts
             part.enabled = false;
+    }
+
+    private void unHideNode( Node node ){
+        for(NodePart part : node.parts)        // unhide node parts
+            part.enabled = true;
     }
 
     private void exitLevel(Collider collider){
