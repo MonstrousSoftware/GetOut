@@ -27,7 +27,7 @@ public class Assets implements Disposable {
         Gdx.app.log("Assets constructor", "");
         assets = new AssetManager();
 
-        assets.load("ui/fright/fright.json", Skin.class);
+        assets.load("ui/gtho.json", Skin.class);
 
         assets.load("sounds/bullet.mp3", Sound.class);
         assets.load("sounds/buzz.mp3", Sound.class);
@@ -47,7 +47,7 @@ public class Assets implements Disposable {
 
     public void finishLoading() {
         assets.finishLoading();
-        SKIN = assets.get("ui/fright/fright.json");
+        SKIN = assets.get("ui/gtho.json");
 
         SHOT = assets.get("sounds/bullet.mp3");
         BUZZ = assets.get("sounds/buzz.mp3");

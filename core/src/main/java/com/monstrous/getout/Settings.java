@@ -50,8 +50,8 @@ public class Settings {
     static public boolean       showColliders = false;
     static public boolean       showFPS = true;
 
-    static public boolean       postFilter = false;   // post-processing shader effects
-    static public boolean       camStabilisation = false;
+    static public boolean       postFilter = release;   // post-processing shader effects
+    static public boolean       camStabilisation = !release;
 
     static public boolean       fullScreen = true;
 

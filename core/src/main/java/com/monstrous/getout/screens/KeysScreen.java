@@ -46,7 +46,7 @@ public class KeysScreen extends MenuScreen implements InputProcessor {
     @Override
     public void rebuild() {
         stage.clear();
-        String style = "small";
+        String style = "default";
 
         Table screenTable = new Table();
         screenTable.setFillParent(true);
@@ -84,7 +84,7 @@ public class KeysScreen extends MenuScreen implements InputProcessor {
         TextButton reset = new TextButton(" RESET ", skin);
         TextButton okay = new TextButton(" OK ", skin);
 
-        debugLabel = new Label("To modify a key binding, click a button", skin);
+        debugLabel = new Label("To modify a key binding, click a button", skin, "small");
 
         screenTable.top();
         screenTable.add(keyTable).pad(50).row();

@@ -5,10 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
@@ -28,6 +25,7 @@ public class GUI implements Disposable {
     private Image[] cards;
     private Texture[] textures;
     private Table messageTable;
+    private ProgressBar battery;
 
     public GUI(Main game, World world) {
         Gdx.app.log("GUI constructor", "");
@@ -63,7 +61,6 @@ public class GUI implements Disposable {
         screenTable.add(fpsLabel).left();
 
         screenTable.bottom().left();
-        screenTable.pack();
 
         stage.addActor(screenTable);
 
@@ -84,6 +81,16 @@ public class GUI implements Disposable {
         screenTable2.pack();
 
         stage.addActor(screenTable2);
+
+        // power indicator
+        Table screenTable3 = new Table();
+        screenTable3.setFillParent(true);
+        battery = new ProgressBar(0,100, 10, false, skin, "power");
+        screenTable3.add(battery).bottom().expand();
+        screenTable3.pack();
+
+        stage.addActor(screenTable3);
+
     }
 
     public void showMessage( String text ){
@@ -109,6 +116,7 @@ public class GUI implements Disposable {
         }
         else
             fpsLabel.setText("");
+        battery.setValue(world.batteryLevel);
     }
 
     public void render(float deltaTime) {
