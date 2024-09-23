@@ -3,6 +3,7 @@ package com.monstrous.getout.screens;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Version;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.utils.Array;
 import com.monstrous.getout.Assets;
 import com.monstrous.getout.Settings;
@@ -14,7 +15,6 @@ import javax.xml.crypto.dsig.keyinfo.KeyName;
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends Game {
     public static Assets assets;
-    static public KeyName keyName;
 
 
     @Override
@@ -28,6 +28,8 @@ public class Main extends Game {
 
     public void onLoadingComplete(){
         assets.finishLoading();
+
+        //assets.MUSIC.play();
         if(Settings.release)
             setScreen(new TitleScreen(this));
         else

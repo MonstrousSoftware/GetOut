@@ -9,7 +9,7 @@ public class Settings {
 
 
     public static String title = "Get The Heck Out";
-    public static String version = "v1.0 Sep 22, 2024";
+    public static String version = "v1.0.2 September 2024";
 
     public static boolean release = true;
 
@@ -58,7 +58,7 @@ public class Settings {
 
     static public boolean fullScreen = true;
 
-    static public boolean playMusic =  (Gdx.app.getType() != Application.ApplicationType.WebGL);
+    static public boolean playMusic =  release;
 
     static public boolean noBots = false;
     static public boolean playerIsInvisible = false;

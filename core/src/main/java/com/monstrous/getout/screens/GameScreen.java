@@ -7,6 +7,8 @@ import com.monstrous.getout.*;
 import com.monstrous.getout.collision.ColliderView;
 import com.monstrous.getout.input.KeyBinding;
 
+import javax.swing.*;
+
 
 public class GameScreen extends StdScreenAdapter {
     private final Main game;
@@ -16,6 +18,7 @@ public class GameScreen extends StdScreenAdapter {
     private GUI gui;
     private int numElements = 0;
     private boolean completed;
+    public Music music;
 
     public GameScreen(Main game) {
         this.game = game;
@@ -24,8 +27,9 @@ public class GameScreen extends StdScreenAdapter {
         world = new World(game);
         gameView = new GameView(game.assets);  // need to keep persistent because it holds camera (player) position
 
+        music = Gdx.audio.newMusic(Gdx.files.internal("music/bossa-nova-echo.ogg"));
         if(Settings.playMusic){
-            Music music = game.assets.MUSIC;
+            // don't use from Assets, broken on web?
             music.play();
             music.setLooping(true);
             music.setVolume(0.5f);
@@ -38,7 +42,11 @@ public class GameScreen extends StdScreenAdapter {
         gui = new GUI(game, world);
         colliderView = new ColliderView( world );
 
-
+        // setting may have changed via pause menu
+        if(Settings.playMusic)
+            music.play();
+        else
+            music.stop();
 
         if(Settings.fullScreen)
             toFullScreen();
@@ -102,10 +110,15 @@ public class GameScreen extends StdScreenAdapter {
 
         // play end music on game completion
         if(!completed && world.completed && Settings.playMusic){
-            game.assets.MUSIC.stop();
-            game.assets.END_MUSIC.play();
-            game.assets.END_MUSIC.setLooping(false);    // only play once
-            game.assets.END_MUSIC.setVolume(0.7f);
+            music.stop();
+            music.dispose();
+            music = Gdx.audio.newMusic(Gdx.files.internal("music/elevator-music-bossa-nova.ogg"));
+            music.setLooping(false);
+            music.setVolume(0.7f);
+//            game.assets.MUSIC.stop();
+//            game.assets.END_MUSIC.play();
+//            game.assets.END_MUSIC.setLooping(false);    // only play once
+//            game.assets.END_MUSIC.setVolume(0.7f);
             completed = true;
         }
 
@@ -143,10 +156,9 @@ public class GameScreen extends StdScreenAdapter {
     public void dispose() {
         // dispose what is created in constructor
         // called from PauseMenuScreen when the game is quit
-        if(completed)
-            game.assets.END_MUSIC.stop();
-        else
-            game.assets.MUSIC.stop();
+
+        music.stop();
+        music.dispose();
 
 
         gameView.dispose();

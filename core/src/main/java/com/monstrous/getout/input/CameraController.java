@@ -41,7 +41,7 @@ public class CameraController extends InputAdapter {
 
     public void update(World world, float deltaTime) {
         this.world = world;
-        if(world.health < 0)
+        if(world.health <= 0)
             return;         // player is dead, controls are blocked
 
         float bobSpeed = 0;

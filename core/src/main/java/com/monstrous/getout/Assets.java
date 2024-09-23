@@ -19,9 +19,6 @@ public class Assets implements Disposable {
     public Sound    FOOT_STEPS;
     public Sound    RUNNING;
 
-    public Music    MUSIC;
-    public Music    END_MUSIC;
-
     private AssetManager assets;
 
 
@@ -38,9 +35,6 @@ public class Assets implements Disposable {
         assets.load("sounds/footsteps.ogg", Sound.class);
         assets.load("sounds/running.mp3", Sound.class);
         assets.load("sounds/pick-up-sfx.ogg", Sound.class);
-
-        assets.load("music/bossa-nova-echo.mp3", Music.class);
-        assets.load("music/elevator-music-bossa-nova.mp3", Music.class);
     }
 
 
@@ -61,8 +55,6 @@ public class Assets implements Disposable {
         RUNNING = assets.get("sounds/running.mp3");
         PICKUP = assets.get("sounds/pick-up-sfx.ogg");
 
-        MUSIC = assets.get("music/bossa-nova-echo.mp3");
-        END_MUSIC = assets.get("music/elevator-music-bossa-nova.mp3");
     }
 
     public float getProgress() {

@@ -171,12 +171,11 @@ public class OptionsScreen extends MenuScreen {
            public void changed(ChangeEvent event, Actor actor) {
                playSelectNoise();
                Settings.playMusic = music.isChecked();
-               if(!Settings.playMusic && game.assets.MUSIC.isPlaying())
-                   game.assets.MUSIC.stop();
-               else if(Settings.playMusic && !game.assets.MUSIC.isPlaying() && gameScreen != null) {
-                   game.assets.MUSIC.play();
-                   game.assets.MUSIC.setLooping(true);
-                   game.assets.MUSIC.setVolume(0.5f);
+               if(gameScreen != null){
+                   if(!Settings.playMusic)
+                       gameScreen.music.stop();
+                   else
+                       gameScreen.music.play();
                }
            }
        });
