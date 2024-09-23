@@ -81,6 +81,7 @@ public class GameScreen extends StdScreenAdapter {
         }
         // restart game
         if(Gdx.input.isKeyJustPressed(KeyBinding.RESTART.getKeyCode())){
+            this.dispose();
             game.setScreen(new GameScreen(game));
             return;
         }
@@ -148,7 +149,6 @@ public class GameScreen extends StdScreenAdapter {
 
         colliderView.dispose();
         gui.dispose();
-
 
     }
 

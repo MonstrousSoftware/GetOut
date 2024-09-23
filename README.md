@@ -1,18 +1,11 @@
 # GetOut
 
-Entry for LibGDX Game Jam #29
+Entry for LibGDX Game Jam #30
 Theme: The Four Elements
 September 2024
 
 A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff).
 
-
-
-
-to do:
-
-- - randomized spawn points
-- - start screen
 
 
 Done:
@@ -29,6 +22,8 @@ Done:
 - easter egg
 - block robot from seeing you through walls
 - free look option
+- randomized spawn points
+- start screen
 - 
 Notes:
 - textures need to be power of two for teavm version
