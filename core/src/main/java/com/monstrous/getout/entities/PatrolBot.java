@@ -1,4 +1,4 @@
-package com.monstrous.getout.input;
+package com.monstrous.getout.entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;

@@ -9,7 +9,7 @@ public class Settings {
 
 
     public static String title = "Get The Heck Out";
-    public static String version = "v1.0.2 September 2024";
+    public static String version = "v1.0.3 September 2024";
 
     public static boolean release = true;
 
@@ -34,7 +34,7 @@ public class Settings {
     public static boolean useGLprofiler = false;      // set to true to get GL errors reported (NB big impact on frame rate)
 
 
-    static public boolean supportControllers = false;       // disable in case it causes issues
+    static public boolean supportControllers = true;       // disable in case it causes issues
     static public float verticalReadjustSpeed = 4f;
 
     static public float eyeHeight = 1.2f;   // meters

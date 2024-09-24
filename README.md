@@ -24,6 +24,7 @@ Done:
 - free look option
 - randomized spawn points
 - start screen
+- increased ceiling height to 3m
 - 
 Notes:
 - textures need to be power of two for teavm version

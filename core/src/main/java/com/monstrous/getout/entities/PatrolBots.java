@@ -1,12 +1,8 @@
-package com.monstrous.getout.input;
+package com.monstrous.getout.entities;
 
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
-import com.monstrous.getout.World;
-import net.mgsx.gltf.scene3d.scene.Scene;
 
 // manages collection of robots
 

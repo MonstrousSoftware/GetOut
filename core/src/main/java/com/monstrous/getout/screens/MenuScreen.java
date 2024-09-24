@@ -7,6 +7,8 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.monstrous.getout.Settings;
+import com.monstrous.getout.input.MyControllerMenuStage;
 import de.golfgl.gdx.controllers.ControllerMenuStage;
 
 import static com.badlogic.gdx.Gdx.input;
@@ -20,7 +22,7 @@ public class MenuScreen extends StdScreenAdapter {
 
     protected Main game;
     protected Viewport viewport;
-    protected ControllerMenuStage stage;      // from gdx-controllers-utils
+    protected MyControllerMenuStage stage;      // from gdx-controllers-utils
     protected Skin skin;
     private MenuBackground background;
 
@@ -30,7 +32,7 @@ public class MenuScreen extends StdScreenAdapter {
         viewport = new ScreenViewport();
 
         skin = game.assets.SKIN;
-        stage = new ControllerMenuStage(viewport);          // we can use this even without controllers
+        stage = new MyControllerMenuStage(viewport);          // we can use this even without controllers
         input.setInputProcessor(stage);
     }
 
@@ -40,8 +42,8 @@ public class MenuScreen extends StdScreenAdapter {
 
         input.setCatchKey(Input.Keys.UP, true);
         input.setCatchKey(Input.Keys.DOWN, true);
-//        if(Settings.supportControllers)
-//            game.controllerToInputAdapter.setInputProcessor(stage); // forward controller input to stage
+        if(Settings.supportControllers)
+            game.controllerToInputAdapter.setInputProcessor(stage); // forward controller input to stage
 
         background = new MenuBackground();
     }

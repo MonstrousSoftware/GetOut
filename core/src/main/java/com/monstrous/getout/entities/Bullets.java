@@ -1,4 +1,4 @@
-package com.monstrous.getout.input;
+package com.monstrous.getout.entities;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.utils.Array;

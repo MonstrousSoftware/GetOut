@@ -1,4 +1,4 @@
-package com.monstrous.getout.input;
+package com.monstrous.getout.entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
@@ -61,7 +61,7 @@ public class Bullet implements Disposable {
             }
 
 
-            if(lifeTime > 5f) { // avoid bullets flying forever
+            if(lifeTime > 8f) { // avoid bullets flying forever
                 return true;
             }
             adaptSoundVolumeAndPan(soundId, Main.assets.BUZZ, scene.modelInstance.transform, camera);

@@ -51,6 +51,9 @@ public class KeysScreen extends MenuScreen implements InputProcessor {
         Table screenTable = new Table();
         screenTable.setFillParent(true);
 
+        // set up for keyboard/controller navigation
+        stage.clearFocusableActors();
+
         Table keyTable = new Table();
         for(KeyBinding binding : KeyBinding.values()) {
             keyTable.add(new Label(binding.getDescription(), skin, style)).left();
@@ -66,6 +69,8 @@ public class KeysScreen extends MenuScreen implements InputProcessor {
             TextButton button = new TextButton(text, skin, "framed");
             keyTable.add(button);
             keyTable.row();
+
+            stage.addFocusableActor(button);
 
             button.addListener(new ClickListener() {
                 @Override
@@ -94,6 +99,12 @@ public class KeysScreen extends MenuScreen implements InputProcessor {
         screenTable.pack();
 
         stage.addActor(screenTable);
+
+        // set up for keyboard/controller navigation
+        stage.addFocusableActor(reset);
+        stage.addFocusableActor(okay);
+        stage.setFocusedActor(okay);
+        focusActor(okay);
 
         okay.addListener(new ClickListener() {
             @Override
