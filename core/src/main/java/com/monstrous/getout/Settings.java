@@ -30,11 +30,7 @@ public class Settings {
     public static int numCascades = 2;
     public static float cascadeSplitDivisor = 4f;
 
-
-    public static boolean useGLprofiler = false;      // set to true to get GL errors reported (NB big impact on frame rate)
-
-
-    static public boolean supportControllers = true;       // disable in case it causes issues
+    static public boolean supportControllers = (Gdx.app.getType() != Application.ApplicationType.WebGL);       // disable in case it causes issues
     static public float verticalReadjustSpeed = 4f;
 
     static public float eyeHeight = 1.2f;   // meters
@@ -46,7 +42,7 @@ public class Settings {
 
     static public boolean invertLook = false;
     static public boolean freeLook = true;
-    static public float degreesPerPixel = 0.15f; // mouse sensitivity
+    static public float   degreesPerPixel = 0.15f; // mouse sensitivity
 
 
     static public boolean noClip = false;

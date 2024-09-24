@@ -185,9 +185,8 @@ public class GameView implements Disposable {
             torch.intensity = 0.25f * world.batteryLevel;
         else
             torch.intensity = 0;
-        //Gdx.app.log("intensity", ""+torch.intensity);
 
-                // render
+        // render
         sceneManager.update(deltaTime);
         if(Settings.postFilter) {
             sceneManager.renderShadows();
