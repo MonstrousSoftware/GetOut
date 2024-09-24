@@ -20,6 +20,12 @@ com.badlogic.gdx.graphics.Color: {
 		b: 0.05882353
 		a: 1
 	}
+	grey: {
+		r: 0.6627451
+		g: 0.654902
+		b: 0.654902
+		a: 1
+	}
 	white: {
 		r: 1
 		g: 1
@@ -40,6 +46,22 @@ com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable: {
 	checkbox_off_over: {
 		name: checkbox_off
 		color: gold
+	}
+	battery2: {
+		name: battery
+		color: grey
+	}
+	battery-knob2: {
+		name: battery-knob
+		color: grey
+	}
+	health2: {
+		name: health
+		color: grey
+	}
+	health-knob2: {
+		name: health-knob
+		color: grey
 	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.CheckBox$CheckBoxStyle: {
@@ -69,12 +91,12 @@ com.badlogic.gdx.scenes.scene2d.ui.ProgressBar$ProgressBarStyle: {
 		knobBefore: progressbar_square_knob
 	}
 	power: {
-		background: battery
-		knobBefore: battery-knob
+		background: battery2
+		knobBefore: battery-knob2
 	}
 	health: {
-		background: health
-		knobBefore: health-knob
+		background: health2
+		knobBefore: health-knob2
 	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
