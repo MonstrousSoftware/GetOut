@@ -180,7 +180,7 @@ public class World implements Disposable {
             Vector3 location = cards.get(choice[i]).translation;
             Node node = cards.get(i);
             node.translation.set(location); // move to spawn point
-            node.calculateTransforms(false);
+            node.calculateTransforms(true);
             unHideNode(node);
             node.calculateBoundingBox(bbox);
             Collider collider = new Collider(node.id, node, bbox, Collider.Type.PICKUP);

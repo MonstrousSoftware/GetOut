@@ -118,8 +118,8 @@ public class GameScreen extends StdScreenAdapter {
         }
 
         if(world.message != null){
-            if(world.health <= 0)
-                gui.showMessage(world.message,9999f);
+            if(world.health <= 0 || completed )
+                gui.showMessage(world.message,9999f);       // leave the message forever
             else
                 gui.showMessage(world.message);
             world.message = null;
@@ -129,7 +129,8 @@ public class GameScreen extends StdScreenAdapter {
         if(!completed && world.completed && Settings.playMusic){
             music.stop();
             music.dispose();
-            music = Gdx.audio.newMusic(Gdx.files.internal("music/elevator-music-bossa-nova.ogg"));
+            music = Gdx.audio.newMusic(Gdx.files.internal("music/elevator-music-bossa-nova.ogg"));  // bright undistorted music
+            music.play();
             music.setLooping(false);
             music.setVolume(0.7f);
             completed = true;

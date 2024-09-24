@@ -24,13 +24,12 @@ public class LoadAssetsScreen extends StdScreenAdapter {
     private Skin skin;
     private ProgressBar progressBar;
     private Texture texture;
-    private Texture titleTexture;
     private boolean loaded;
     private Label prompt;
+    private float timer;
 
 
     public LoadAssetsScreen(Main game) {
-        Gdx.app.log("LoadScreen constructor", "");
         this.game = game;
 
     }
@@ -38,8 +37,6 @@ public class LoadAssetsScreen extends StdScreenAdapter {
 
     @Override
     public void show() {
-        Gdx.app.log("LoadScreen show()", "");
-
         skin = new Skin(Gdx.files.internal("ui/gtho.json"));
         stage = new Stage(new ScreenViewport());
 
@@ -53,18 +50,13 @@ public class LoadAssetsScreen extends StdScreenAdapter {
         texture =  new Texture(Gdx.files.internal("images/monstrous.png"));
         Image logo = new Image( new TextureRegion(texture));
 
-        titleTexture =  new Texture(Gdx.files.internal("images/start.png"));
-        Image gameLogo = new Image( new TextureRegion(titleTexture));
-
         prompt = new Label("Continue",skin, "default");
         prompt.setColor(Color.DARK_GRAY);
         prompt.setVisible(false);
 
         Table screenTable = new Table();
         screenTable.setFillParent(true);
-        screenTable.add(gameLogo).pad(10).row();
         screenTable.add(logo).pad(10).row();
-//        screenTable.add(textLabel).pad(10).row();
         screenTable.add(progressBar).row();
         screenTable.add(prompt).pad(60);
         screenTable.pack();
@@ -78,6 +70,7 @@ public class LoadAssetsScreen extends StdScreenAdapter {
 
 
         loaded = false;
+        timer = 0;
 
     }
 
@@ -86,6 +79,7 @@ public class LoadAssetsScreen extends StdScreenAdapter {
     public void render(float deltaTime) {
         super.render(deltaTime);
 
+
         // load assets asynchronously
         if(!loaded) {
             loaded = game.assets.update();
@@ -93,12 +87,11 @@ public class LoadAssetsScreen extends StdScreenAdapter {
             progressBar.setValue(fraction);
         }
         else {
-//            if(Gdx.app.getType() != Application.ApplicationType.WebGL){
-//                game.onLoadingComplete();
-//                return;
-//            }
             prompt.setVisible(true);
-            if( Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY) || Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+            timer += deltaTime;
+            if((timer > 2f && Gdx.app.getType() != Application.ApplicationType.WebGL)       // force an input for web client before proceeding
+                ||  Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY) || Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
+
                 game.onLoadingComplete();
                 return;
             }
@@ -130,7 +123,6 @@ public class LoadAssetsScreen extends StdScreenAdapter {
         stage.dispose();
         skin.dispose();
         texture.dispose();
-        titleTexture.dispose();
     }
 
 }
