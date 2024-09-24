@@ -158,20 +158,28 @@ public class World implements Disposable {
         }
         //Gdx.app.log("nodes:", ""+count);
 
+        // choose 4 card locations out of the spawn points (no duplicates)
         int[] choice = new int[4];
-        for(int i = 0; i < 4; i++){
+        for(int i = 0; i < 4; i++) {
             int r;
             boolean dupe;
             do {
                 dupe = false;
                 r = MathUtils.random(0, cards.size - 1);
-                for(int j = 0; j < i; j++){
-                    if(r == choice[j])
+                for (int j = 0; j < i; j++) {
+                    if (r == choice[j])
                         dupe = true;
                 }
-            } while(dupe);
+            } while (dupe);
             choice[i] = r;
-            Node node = cards.get(r);
+        }
+
+        // now move the first 4 cards at the location of the 4 chosen spawn points
+        for(int i = 0; i < 4; i++) {
+            Vector3 location = cards.get(choice[i]).translation;
+            Node node = cards.get(i);
+            node.translation.set(location); // move to spawn point
+            node.calculateTransforms(false);
             unHideNode(node);
             node.calculateBoundingBox(bbox);
             Collider collider = new Collider(node.id, node, bbox, Collider.Type.PICKUP);
