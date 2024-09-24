@@ -1,6 +1,7 @@
 package com.monstrous.getout.input;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
@@ -11,6 +12,7 @@ import com.monstrous.getout.Assets;
 import com.monstrous.getout.Settings;
 import com.monstrous.getout.World;
 import com.monstrous.getout.collision.Collider;
+import com.monstrous.getout.screens.PauseMenuScreen;
 
 
 public class CameraController extends InputAdapter {
@@ -141,6 +143,12 @@ public class CameraController extends InputAdapter {
         keys.put(keycode, keycode);
         if(world.health > 0 && keycode == KeyBinding.TORCH.getKeyCode()){
             Settings.torchOn = !Settings.torchOn;
+        }
+        if (keycode == Input.Keys.ESCAPE || keycode == KeyBinding.MENU.getKeyCode()){
+            world.menuRequested = true;
+        }
+        if (keycode == KeyBinding.RESTART.getKeyCode()){
+            world.restartRequested = true;
         }
         walkSounds(keycode);
         return true;

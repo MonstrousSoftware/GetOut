@@ -44,6 +44,8 @@ public class World implements Disposable {
     public boolean completed;
     private Array<Collider>collisions;
     private boolean batteryWarningGiven;
+    public boolean menuRequested;   // hacky boolean
+    public boolean restartRequested;
 
     public World(Main game) {
         this.game = game;
@@ -86,6 +88,8 @@ public class World implements Disposable {
         deathTimer = -1;
         completed = false;
         batteryWarningGiven = false;
+        menuRequested = false;
+        restartRequested = false;
     }
 
     private void parseLevel(Scene level){

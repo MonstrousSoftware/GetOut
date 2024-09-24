@@ -93,13 +93,14 @@ public class GameScreen extends StdScreenAdapter {
     public void render(float deltaTime) {
         super.render(deltaTime);
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)||
-            Gdx.input.isKeyJustPressed(KeyBinding.MENU.getKeyCode())){
+        if (world.menuRequested){
+            world.menuRequested = false;
             game.setScreen(new PauseMenuScreen(game, this));
             return;
         }
         // restart game
-        if(Gdx.input.isKeyJustPressed(KeyBinding.RESTART.getKeyCode())){
+        if(world.restartRequested){
+            world.restartRequested = false;
             this.dispose();
             game.setScreen(new GameScreen(game));
             return;

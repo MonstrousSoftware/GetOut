@@ -55,6 +55,12 @@ public class MyControllerAdapter extends ControllerAdapter {
 
         if(buttonIndex == controller.getMapping().buttonA) // torch
             return KeyBinding.TORCH.getKeyCode();
+
+        if(buttonIndex == controller.getMapping().buttonX) // menu
+            return KeyBinding.MENU.getKeyCode();
+
+        if(buttonIndex == controller.getMapping().buttonStart) // restart
+            return KeyBinding.RESTART.getKeyCode();
         Gdx.app.log("controller", "unsupported button: "+buttonIndex);
         return Input.Keys.ANY_KEY; // not mapped
     }
