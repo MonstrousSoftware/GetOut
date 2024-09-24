@@ -304,6 +304,7 @@ public class World implements Disposable {
         if(Settings.difficult)
             health -= 30;
         painTimer = Settings.painDuration;
+        Main.assets.HIT.play();
         if(health <= 0) {
             message = "You got hit! You died!";
             deathTimer = 3f;    // timer for follow-up message

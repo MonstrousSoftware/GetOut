@@ -15,6 +15,7 @@ public class Assets implements Disposable {
     public Sound    SHOT;
     public Sound    PICKUP;
     public Sound    BUZZ;
+    public Sound    HIT;
     public Sound    MENU_CLICK;
     public Sound    FOOT_STEPS;
     public Sound    RUNNING;
@@ -30,6 +31,7 @@ public class Assets implements Disposable {
 
         assets.load("sounds/bullet.mp3", Sound.class);
         assets.load("sounds/buzz.mp3", Sound.class);
+        assets.load("sounds/hit1.ogg", Sound.class);
         assets.load("sounds/motor.mp3", Sound.class);
         assets.load("sounds/click_002.ogg", Sound.class);
         assets.load("sounds/footsteps.ogg", Sound.class);
@@ -49,6 +51,7 @@ public class Assets implements Disposable {
 
         SHOT = assets.get("sounds/bullet.mp3");
         BUZZ = assets.get("sounds/buzz.mp3");
+        HIT = assets.get("sounds/hit1.ogg");
         MOTOR = assets.get("sounds/motor.mp3");
         MENU_CLICK = assets.get("sounds/click_002.ogg");
         FOOT_STEPS = assets.get("sounds/footsteps.ogg");
