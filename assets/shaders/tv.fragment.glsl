@@ -27,6 +27,7 @@ float bottomStaticOpt = 1.0;
 uniform sampler2D u_texture;
 uniform vec2 u_resolution;
 uniform float u_time;
+uniform vec3 u_tint;
 
 varying vec4 v_color;
 varying vec2 v_texCoord0;
@@ -90,6 +91,9 @@ void main()
     float vigPower = 0.55;
     vig = pow(vig, vigPower); // change pow for modifying the extent of the  vignette
     color.rgb = mix(color.rgb, color.rgb*vig, 0.9);
+
+
+    color.rgb += u_tint;      // e.g. red color when taking damage
 
     gl_FragColor = vec4(color, 1.0);
 }

@@ -49,7 +49,7 @@ public class Settings {
     static public boolean showColliders = false;
     static public boolean showFPS = !release;
 
-    static public boolean postFilter = release;   // post-processing shader effects
+    static public boolean postFilter = true;   // post-processing shader effects
     static public boolean camStabilisation = !release;
 
     static public boolean fullScreen = release;
@@ -62,4 +62,6 @@ public class Settings {
     static public boolean torchOn = true;
 
     static public boolean difficult = false;
+
+    static public float   painDuration = 0.5f;  // time for red screen effect
 }

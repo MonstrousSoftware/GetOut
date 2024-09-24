@@ -1,6 +1,7 @@
 package com.monstrous.getout.filters;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
@@ -21,6 +22,8 @@ public class VCRFilter implements Disposable {
     private float[] resolution = { 640, 480 };  // modified by resize()
     private int u_time; // shader uniform id
     private int u_resolution; // shader uniform id
+    private int u_tint;// shader uniform id
+    private float[] tint = new float[3];    // rgb
 
     public VCRFilter() {
         // full screen post processing shader
@@ -33,6 +36,9 @@ public class VCRFilter implements Disposable {
 
         u_time = program.getUniformLocation("u_time");
         u_resolution = program.getUniformLocation("u_resolution");
+        u_tint = program.getUniformLocation("u_tint");
+
+        tint[0] = tint[1] = tint[2] = 0;
 
         batch = new SpriteBatch();
     }
@@ -48,6 +54,12 @@ public class VCRFilter implements Disposable {
         render(fbo, 0, 0, resolution[0], resolution[1]);    // draw frame buffer as screen filling texture
     }
 
+    public void setTint(Color color){
+        tint[0] = color.r;
+        tint[1] = color.g;
+        tint[2] = color.b;
+    }
+
     public void render( FrameBuffer fbo, float x, float y, float w, float h ) {
         time += Gdx.graphics.getDeltaTime();
 
@@ -58,6 +70,8 @@ public class VCRFilter implements Disposable {
         batch.setShader(program);                        // post-processing shader
         program.setUniformf(u_time, time);
         program.setUniform2fv(u_resolution, resolution, 0, 2);
+        //setTint(Color.RED);
+        program.setUniform3fv(u_tint, tint, 0, 3);
         batch.draw(s, x, y, w, h);    // draw frame buffer as screen filling texture
         batch.end();
         batch.setShader(null);

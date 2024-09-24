@@ -1,6 +1,7 @@
 package com.monstrous.getout.filters;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.utils.Disposable;
@@ -60,6 +61,10 @@ public class PostProcessor implements Disposable {
         combineFilter.renderToBuffer(fbo3, fbo);
 
         vcrFilter.render(fbo3);
+    }
+
+    public void setTint(Color color){
+        vcrFilter.setTint(color);
     }
 
     @Override

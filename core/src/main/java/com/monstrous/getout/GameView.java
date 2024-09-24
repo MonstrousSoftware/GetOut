@@ -46,6 +46,7 @@ public class GameView implements Disposable {
     private FrameBuffer fbo;
     private PostProcessor filter;
     private SpotLight torch;
+    private Color tint;
 
 
     public GameView( Assets assets ) {
@@ -87,6 +88,8 @@ public class GameView implements Disposable {
         torch.intensity = 150f;
         torch.cutoffAngle = 0.3f * (float)Math.PI;
         torch.exponent = 1f;
+
+        tint = new Color(Color.BLACK);
 
 
         sceneManager.environment.add(torch);
@@ -189,6 +192,13 @@ public class GameView implements Disposable {
         // render
         sceneManager.update(deltaTime);
         if(Settings.postFilter) {
+
+            if(world.painTimer > 0)
+                tint.set(world.painTimer/Settings.painDuration,0f, 0f, 1f);
+            else
+                tint.set(Color.BLACK);
+            filter.setTint(tint);
+
             sceneManager.renderShadows();
             fbo.begin();
             gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);

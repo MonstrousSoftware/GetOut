@@ -39,6 +39,7 @@ public class World implements Disposable {
     public PatrolBots patrolBots;
     public String message = null;   // to show in GUI via GameScreen
     public float health;
+    public float painTimer = 0; // after getting shot
     public float batteryLevel;  // 0..100
     public float deathTimer;
     public boolean completed;
@@ -302,6 +303,7 @@ public class World implements Disposable {
         health -= 20;
         if(Settings.difficult)
             health -= 30;
+        painTimer = Settings.painDuration;
         if(health <= 0) {
             message = "You got hit! You died!";
             deathTimer = 3f;    // timer for follow-up message
@@ -335,6 +337,8 @@ public class World implements Disposable {
             if(deathTimer < 0)
                 message = "Press R to restart";
         }
+        if(painTimer > 0)
+            painTimer -= deltaTime;
 
         patrolBots.update(deltaTime, camera);
         // animate bullets
