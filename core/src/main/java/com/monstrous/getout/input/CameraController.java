@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntIntMap;
@@ -31,11 +30,17 @@ public class CameraController extends InputAdapter {
     private Sound runSound;
     private World world;
     private Array<Collider> collisions;
+    private float stickTurn;
+    private boolean stickTurnUsed;
+    private float stickMove;
+    private float stickStrafe;
+    private float stickBoost;
 
     public CameraController(Assets assets, PerspectiveCamera camera) {
         this.camera = camera;
         walkSound = assets.FOOT_STEPS;
         runSound = assets.RUNNING;
+        stickTurnUsed = false;
     }
 
 
@@ -44,29 +49,31 @@ public class CameraController extends InputAdapter {
         if(world.health <= 0)
             return;         // player is dead, controls are blocked
 
+
+
+
         float bobSpeed = 0;
 
         fwdHorizontal.set(camera.direction).y = 0;
         fwdHorizontal.nor();
 
-
-        if (keys.containsKey(KeyBinding.FORWARD.getKeyCode())) {
-            speed = Settings.walkSpeed;
-            if (keys.containsKey(KeyBinding.RUN.getKeyCode()) ) {
-                speed  *= Settings.runFactor;
-            }
+        float boostFactor = 1f;
+        if (keys.containsKey(KeyBinding.RUN.getKeyCode()) || stickBoost > 0.5f ) {
+            boostFactor = Settings.runFactor;
         }
 
-        if (keys.containsKey(KeyBinding.BACK.getKeyCode())) {
-            speed = -Settings.walkSpeed;
-            if (keys.containsKey(KeyBinding.RUN.getKeyCode()) ) {
-                speed  *= Settings.runFactor;
-            }
+
+        if (keys.containsKey(KeyBinding.FORWARD.getKeyCode())) {
+            speed = Settings.walkSpeed * boostFactor;
+        } else if (keys.containsKey(KeyBinding.BACK.getKeyCode())) {
+            speed = -Settings.walkSpeed * boostFactor;
+        } else if(Math.abs(stickMove) > 0.2f){  // outside deadzone?
+            speed = stickMove * Settings.walkSpeed * boostFactor;
         }
 
 
         // slow down and stop when forward key or backward key is released
-        if ( !keys.containsKey(KeyBinding.FORWARD.getKeyCode()) && !keys.containsKey(KeyBinding.BACK.getKeyCode()) && Math.abs(speed) > 0 ) {
+        if ( !keys.containsKey(KeyBinding.FORWARD.getKeyCode()) && !keys.containsKey(KeyBinding.BACK.getKeyCode()) && Math.abs(stickMove) <= 0.2f && Math.abs(speed) > 0 ) {
             speed -= speed * 10f * deltaTime;
             if (Math.abs(speed) < 1f)
                 speed = 0;
@@ -77,11 +84,14 @@ public class CameraController extends InputAdapter {
             sideChange.set(fwdHorizontal).crs(camera.up).nor().scl(-Settings.walkSpeed);     // strafe velocity
             bobSpeed = 1;
         }
-        if (keys.containsKey(KeyBinding.STRAFE_RIGHT.getKeyCode())) {
+        else if (keys.containsKey(KeyBinding.STRAFE_RIGHT.getKeyCode())) {
             sideChange.set(fwdHorizontal).crs(camera.up).nor().scl(Settings.walkSpeed);
             bobSpeed = 1;
+        } else if(Math.abs(stickStrafe) > 0.2f){  // outside deadzone?
+            float strafeSpeed = stickStrafe * Settings.walkSpeed;
+            sideChange.set(fwdHorizontal).crs(camera.up).nor().scl(strafeSpeed);
+            bobSpeed = 1;
         }
-
 
 
         bobSpeed += Math.abs(speed);
@@ -90,9 +100,14 @@ public class CameraController extends InputAdapter {
         if (keys.containsKey(KeyBinding.TURN_LEFT.getKeyCode())) {
             camera.direction.rotate(camera.up, deltaTime * Settings.turnSpeed);
         }
-        if (keys.containsKey(KeyBinding.TURN_RIGHT.getKeyCode())) {
+        else if (keys.containsKey(KeyBinding.TURN_RIGHT.getKeyCode())) {
             camera.direction.rotate(camera.up, -deltaTime * Settings.turnSpeed);
         }
+        else if (stickTurnUsed) { // do we have controller stick input?
+            float targetAngle = stickTurn * Settings.turnSpeed;
+            camera.direction.rotate(camera.up, deltaTime * targetAngle);
+        }
+
 
         velocity.set(fwdHorizontal).scl(speed).add(sideChange);     // make velocity vector
         newPos.set(velocity).scl(deltaTime).add(camera.position);
@@ -124,6 +139,9 @@ public class CameraController extends InputAdapter {
     @Override
     public boolean keyDown(int keycode) {
         keys.put(keycode, keycode);
+        if(world.health > 0 && keycode == KeyBinding.TORCH.getKeyCode()){
+            Settings.torchOn = !Settings.torchOn;
+        }
         walkSounds(keycode);
         return true;
     }
@@ -204,4 +222,29 @@ public class CameraController extends InputAdapter {
         }
         return bobHeight;
     }
+
+    // Game controller interface
+    //
+    //
+
+    // rotate view left/right
+    // we only get events when the stick angle changes so once it is fully left or fully right we don't get events anymore until the stick is released.
+    public void turnAxisMoved(float value) {       // -1 to 1
+
+        stickTurn = value;    // store latest value
+        stickTurnUsed = true;       // indicate we have stick input
+    }
+
+    public void verticalAxisMoved(float value) {       // -1 to 1
+        stickMove = value;
+    }
+
+    public void strafeAxisMoved(float value) {       // -1 to 1
+        stickStrafe = value;    // store latest value
+    }
+
+    public void boostAxisMoved(float value) {       // -1 to 1
+        stickBoost = value;
+    }
+
 }

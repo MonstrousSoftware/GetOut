@@ -32,7 +32,7 @@ public class Main extends Game {
         if (Settings.supportControllers) {
             controllerToInputAdapter = new ControllerToInputAdapter(new MyControllerMappings());
             // bind controller events to keyboard keys
-            controllerToInputAdapter.addButtonMapping(MyControllerMappings.BUTTON_FIRE, Input.Keys.ENTER);
+            controllerToInputAdapter.addButtonMapping(MyControllerMappings.BUTTON_A, Input.Keys.ENTER);
             controllerToInputAdapter.addAxisMapping(MyControllerMappings.AXIS_VERTICAL, Input.Keys.UP, Input.Keys.DOWN);
             Controllers.addListener(controllerToInputAdapter);
         }

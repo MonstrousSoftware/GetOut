@@ -2,10 +2,13 @@ package com.monstrous.getout.screens;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.controllers.Controller;
+import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.graphics.Cursor;
 import com.monstrous.getout.*;
 import com.monstrous.getout.collision.ColliderView;
 import com.monstrous.getout.input.KeyBinding;
+import com.monstrous.getout.input.MyControllerAdapter;
 
 import javax.swing.*;
 
@@ -19,6 +22,8 @@ public class GameScreen extends StdScreenAdapter {
     private int numElements = 0;
     private boolean completed;
     public Music music;
+    private MyControllerAdapter controllerAdapter;
+    private Controller currentController;
 
     public GameScreen(Main game) {
         this.game = game;
@@ -41,6 +46,20 @@ public class GameScreen extends StdScreenAdapter {
     public void show() {
         gui = new GUI(game, world);
         colliderView = new ColliderView( world );
+
+        // controller
+        if (Settings.supportControllers) {
+            currentController = Controllers.getCurrent();
+            if (currentController != null) {
+                Gdx.app.log("current controller", currentController.getName());
+                controllerAdapter = new MyControllerAdapter(gameView.camController);
+                // we define a listener that listens to all controllers, in case the current controller gets disconnected and reconnected
+                Controllers.removeListener(game.controllerToInputAdapter);          // remove adapter for menu navigation with controller
+                Controllers.addListener(controllerAdapter);                         // add adapter for game play with controller
+            } else
+                Gdx.app.log("current controller", "none");
+        }
+
 
         // setting may have changed via pause menu
         if(Settings.playMusic)
@@ -85,10 +104,6 @@ public class GameScreen extends StdScreenAdapter {
             game.setScreen(new GameScreen(game));
             return;
         }
-        if(world.health > 0 && Gdx.input.isKeyJustPressed(KeyBinding.TORCH.getKeyCode())){
-            Settings.torchOn = !Settings.torchOn;
-        }
-
 
         world.update(gameView.camera, deltaTime);
         gameView.render( world, deltaTime );
@@ -116,10 +131,6 @@ public class GameScreen extends StdScreenAdapter {
             music = Gdx.audio.newMusic(Gdx.files.internal("music/elevator-music-bossa-nova.ogg"));
             music.setLooping(false);
             music.setVolume(0.7f);
-//            game.assets.MUSIC.stop();
-//            game.assets.END_MUSIC.play();
-//            game.assets.END_MUSIC.setLooping(false);    // only play once
-//            game.assets.END_MUSIC.setVolume(0.7f);
             completed = true;
         }
 
@@ -149,6 +160,12 @@ public class GameScreen extends StdScreenAdapter {
 
         colliderView.dispose();
         gui.dispose();
+
+        // toggle between controller adapters: from the game one to the menu one
+        if(currentController != null) {
+            Controllers.removeListener(controllerAdapter);          // remove adapter for game play with controller
+            Controllers.addListener(game.controllerToInputAdapter); // adapter for menu navigation with controller
+        }
 
     }
 
