@@ -65,10 +65,9 @@ public class PatrolBot implements Disposable {
     }
 
     public void update(float deltaTime, Camera camera ) {
-
         fireTimer -= deltaTime;
 
-        if (fireTimer < -5f) {
+        if (fireTimer < -5f) {      // idle for a few seconds
             speed = 1;  // restart the patrol
             walkAnimation = scene.animationController.setAnimation("Forward", -1);
             Main.assets.MOTOR.resume(motorSoundId);
@@ -80,12 +79,9 @@ public class PatrolBot implements Disposable {
 
         if(speed > 0) {
             time += speed * deltaTime;
-            float t = time;
-            t /= 20f;
-            t = t % 1f;     // keep in range [0-1]
+            float t = (time/20f) % 1f;     // keep in range [0-1]
 
             spline.valueAt(pos2, t);
-            // todo: direction is not okay yet
             spline.derivativeAt(fwd2, t);
 
             position.set(pos2.x, 0, pos2.y);
@@ -108,6 +104,10 @@ public class PatrolBot implements Disposable {
 
         boolean canSee = false;
         vec.set(playerPosition).sub(position);
+        if(vec.len() < 2) {   // collision with player, this damages the player
+            world.playerGotHitByRobot(); // take some damage and show a message
+            return;
+        }
         float maxDistance = VIEW_MAX_DISTANCE;
         if(Settings.torchOn)                        // robots can see you further away with the torch on
             maxDistance *= 2f;
@@ -122,8 +122,6 @@ public class PatrolBot implements Disposable {
             if(dot > threshold) {        // you are more or less in front of the bot
                 //  check for walls etc. between bot and player
                 canSee = haveLineOfSight(playerPosition);
-//                if(canSee)
-//                    Gdx.app.log("bot", "spotted you, dot:"+dot);
             }
         }
         if(canSee) {

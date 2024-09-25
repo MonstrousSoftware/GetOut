@@ -313,6 +313,20 @@ public class World implements Disposable {
             message = "You got hit! Health at "+(int)health+" percent";
     }
 
+    public void playerGotHitByRobot(){
+        if(health <= 0)
+            return; // you only die once
+        health -= 10;
+        painTimer = Settings.painDuration;
+        Main.assets.HIT.play();
+        if(health <= 0) {
+            message = "You got zapped by a robot! You died!";
+            deathTimer = 3f;    // timer for follow-up message
+        }
+        else
+            message = "You got zapped by a robot! Health at "+(int)health+" percent";
+    }
+
     public void update(Camera camera, float deltaTime ){
 
         if(Settings.torchOn) {
