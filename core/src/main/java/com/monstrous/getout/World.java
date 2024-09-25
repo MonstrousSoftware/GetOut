@@ -33,20 +33,20 @@ public class World implements Disposable {
     public Array<Scene> scenes;
     public Bullets bullets;
     public Colliders colliders;
-    public int numElements;
-    public boolean[] foundCard;
+    public int numCardsFound;     // nr of cards found
+    public boolean[] foundCard; // which cards were found
     public Collider exitDoor;
     public PatrolBots patrolBots;
     public String message = null;   // to show in GUI via GameScreen
-    public float health;
-    public float painTimer = 0; // after getting shot
+    public float health;    // player health 0..100
+    public float painTimer = 0; // visual effect after getting shot
     public float batteryLevel;  // 0..100
-    public float deathTimer;
+    public float deathTimer;    // timer after death before prompting to restart
     public boolean completed;
     private Array<Collider>collisions;
     private boolean batteryWarningGiven;
-    public boolean menuRequested;   // hacky boolean
-    public boolean restartRequested;
+    public boolean menuRequested;   // hacky boolean to go from CameraController to GameScreen
+    public boolean restartRequested;// hacky boolean
 
     public World(Main game) {
         this.game = game;
@@ -63,21 +63,20 @@ public class World implements Disposable {
         // reset
         if(sceneAsset != null)
             sceneAsset.dispose();
+        if(sceneAsset2 != null)
+            sceneAsset2.dispose();
         scenes.clear();
 
         // create scene
         sceneAsset = new GLTFLoader().load(Gdx.files.internal("models/patrolbot.gltf"));
-//        patrolBot = new Scene(sceneAsset.scene, "Armature");
-//        //patrolBot.animationController.setAnimation("Idle", 1);
-//        scenes.add(patrolBot);
 
         sceneAsset2 = new GLTFLoader().load(Gdx.files.internal("models/officeMaze.gltf"));
-        //sceneAsset2 = new GLTFLoader().load(Gdx.files.internal("models/coltest.gltf"));
+
         Scene level = new Scene(sceneAsset2.scene);
         parseLevel( level );
         scenes.add( level  );
 
-        numElements = 0;
+        numCardsFound = 0;
         foundCard = new boolean[4];
         for(int i = 0; i < 4; i++)
             foundCard[i] = false;
@@ -105,7 +104,6 @@ public class World implements Disposable {
         for(Node node : level.modelInstance.nodes ){
             node.calculateBoundingBox(bbox);
             bbox.getCenter(ctr);
-            //Gdx.app.log("node:", node.id + " " +bbox.toString());
             Collider.Type type = Collider.Type.DEFAULT;
 
 
@@ -157,7 +155,6 @@ public class World implements Disposable {
                 exitDoor = collider;
 
         }
-        //Gdx.app.log("nodes:", ""+count);
 
         // choose 4 card locations out of the spawn points (no duplicates)
         int[] choice = new int[4];
@@ -173,6 +170,7 @@ public class World implements Disposable {
                 }
             } while (dupe);
             choice[i] = r;
+            //Gdx.app.log("card location", ""+r);
         }
 
         // now move the first 4 cards at the location of the 4 chosen spawn points
@@ -237,7 +235,6 @@ public class World implements Disposable {
         colliders.collisionTest(position, PLAYER_RADIUS, collisions);
         if (collisions.size > 0) {
             for(Collider collider : collisions) {
-                //Gdx.app.log("canReach: collision", collider.id);
                 if (collider.type == Collider.Type.PICKUP) {
                     pickUp(collider);
                     collisions.removeValue(collider, true);
@@ -254,7 +251,6 @@ public class World implements Disposable {
     }
 
     private void pickUp(Collider collider){
-        //Gdx.app.log("pickup",  collider.id);
         colliders.remove(collider);
         hideNode( collider.node );
 
@@ -270,8 +266,8 @@ public class World implements Disposable {
             case 3: message = "You have found an element: FIRE";break;
         }
 
-        numElements++;
-        if(numElements == 4){
+        numCardsFound++;
+        if(numCardsFound == 4){
             message = "You have all the elements. Now you can escape!";
             colliders.remove(exitDoor); // remove exit door collider
             hideNode(exitDoor.node);
@@ -289,7 +285,6 @@ public class World implements Disposable {
     }
 
     private void exitLevel(Collider collider){
-        //Gdx.app.log("all done",  collider.id);
         message = "You have escaped! Thank you for playing.";
         completed = true;
         colliders.remove(collider);

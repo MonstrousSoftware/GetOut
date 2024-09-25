@@ -44,9 +44,6 @@ public class LoadAssetsScreen extends StdScreenAdapter {
         progressBar.setSize(300, 50);
         progressBar.setValue(0);
 
-//        Label textLabel = new Label("Monstrous Software",skin,"default" );
-//        textLabel.setAlignment(Align.center);
-
         texture =  new Texture(Gdx.files.internal("images/monstrous.png"));
         Image logo = new Image( new TextureRegion(texture));
 
@@ -106,20 +103,17 @@ public class LoadAssetsScreen extends StdScreenAdapter {
     @Override
     public void resize(int w, int h) {
 
-        Gdx.app.log("LoadScreen resize()", "");
         stage.getViewport().update(w, h, true);
 
     }
 
     @Override
     public void hide() {
-        Gdx.app.log("LoadScreen hide()", "");
         dispose();
     }
 
     @Override
     public void dispose() {
-        Gdx.app.log("LoadScreen dispose()", "");
         stage.dispose();
         skin.dispose();
         texture.dispose();

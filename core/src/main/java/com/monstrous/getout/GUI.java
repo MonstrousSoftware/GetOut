@@ -29,7 +29,6 @@ public class GUI implements Disposable {
     private ProgressBar health;
 
     public GUI(Main game, World world) {
-        Gdx.app.log("GUI constructor", "");
         this.world = world;
         //this.assets = assets;
 
@@ -49,7 +48,6 @@ public class GUI implements Disposable {
 
 
     public void rebuild() {
-        Gdx.app.log("GUI rebuild", "");
         stage.clear();
 
         String labelType  = "default";
@@ -136,7 +134,7 @@ public class GUI implements Disposable {
     }
 
     public void resize(int width, int height) {
-        Gdx.app.log("GUI resize", "gui " + width + " x " + height);
+        //Gdx.app.log("GUI resize", "gui " + width + " x " + height);
         stage.getViewport().update(width, height, true);
         rebuild();
     }
@@ -145,7 +143,6 @@ public class GUI implements Disposable {
 
     @Override
     public void dispose () {
-        Gdx.app.log("GUI dispose()", "");
         stage.dispose();
     }
 }

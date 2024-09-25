@@ -24,7 +24,6 @@ public class PreGameScreen extends StdScreenAdapter {
     private PostProcessor filter;
 
     public PreGameScreen(Main game) {
-        Gdx.app.log("PreGameScreen constructor", "");
         this.game = game;
         titleTexture = new Texture("images/start.png");
         filter = new PostProcessor();
@@ -33,8 +32,6 @@ public class PreGameScreen extends StdScreenAdapter {
 
     @Override
     public void show() {
-        Gdx.app.log("PreGameScreen show()", "");
-
         batch = new SpriteBatch();
         cam = new OrthographicCamera();
 
@@ -71,7 +68,6 @@ public class PreGameScreen extends StdScreenAdapter {
     public void resize(int w, int h) {
         this.width = w;
         this.height = h;
-        Gdx.app.log("PreGameScreen resize()", "");
         cam.setToOrtho(false, width, height);
         if(fbo != null)
             fbo.dispose();
@@ -83,13 +79,11 @@ public class PreGameScreen extends StdScreenAdapter {
 
     @Override
     public void hide() {
-        Gdx.app.log("PreGameScreen hide()", "");
         dispose();
     }
 
     @Override
     public void dispose() {
-        Gdx.app.log("PreGameScreen dispose()", "");
         batch.dispose();
         fbo.dispose();
         filter.dispose();

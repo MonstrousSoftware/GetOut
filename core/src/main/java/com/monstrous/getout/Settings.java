@@ -31,7 +31,6 @@ public class Settings {
     public static float cascadeSplitDivisor = 4f;
 
     static public boolean supportControllers = (Gdx.app.getType() != Application.ApplicationType.WebGL);       // disable in case it causes issues
-    static public float verticalReadjustSpeed = 4f;
 
     static public float eyeHeight = 1.2f;   // meters
     static public float walkSpeed = 4f;    // m/s

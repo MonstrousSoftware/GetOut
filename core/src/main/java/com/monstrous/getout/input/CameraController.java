@@ -118,8 +118,6 @@ public class CameraController extends InputAdapter {
             collisions = world.canReach(newPos);
             if (collisions.size > 0) {
                 for (Collider collider : collisions) {
-                    //newPos.set(camera.position);// todo
-                    Gdx.app.log("collision", "");
                     collider.collisionResponse(camera.position, 0.5f, velocity, deltaTime); // modifies velocity
                 }
                 newPos.set(velocity).scl(deltaTime).add(camera.position);

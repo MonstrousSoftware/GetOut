@@ -3,19 +3,11 @@ package com.monstrous.getout.screens;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.monstrous.getout.input.KeyBinding;
-
-//import org.lwjgl.glfw.GLFW;
 
 // key bindings menu
 // shows key bindings and allows the user to modify them
@@ -40,7 +32,6 @@ public class KeysScreen extends MenuScreen implements InputProcessor {
 
     private String keyName( int keycode ){
         return Input.Keys.toString(keycode);
-        //return Main.keyName.getKeyName(keycode);
     }
 
     @Override

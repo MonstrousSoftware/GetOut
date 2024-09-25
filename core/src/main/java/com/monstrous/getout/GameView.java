@@ -38,9 +38,7 @@ public class GameView implements Disposable {
     private Cubemap specularCubemap;
     private Texture brdfLUT;
     private SceneSkybox skybox;
-    public DirectionalShadowLight light;
-    private float camDist;
-    private float time;
+    private DirectionalShadowLight light;
     private CascadeShadowMap csm;
     public CameraController camController;     // public so that GameScreen can link it to input multiplexer
     private FrameBuffer fbo;
@@ -53,9 +51,8 @@ public class GameView implements Disposable {
 
         PBRShaderConfig colorConfig = new PBRShaderConfig();
 
-        // todo tweak
-        colorConfig.numDirectionalLights = 1;
-        colorConfig.numPointLights = 1;
+        colorConfig.numDirectionalLights = 0;
+        colorConfig.numPointLights = 0;
         colorConfig.numSpotLights = 1;
         colorConfig.numBones = 12;      // patrol bot has 12 bones
 
@@ -71,7 +68,6 @@ public class GameView implements Disposable {
 
         // setup camera
         camera = new PerspectiveCamera(60, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        camDist = 5f;
         camera.near = 0.1f;
         camera.far = 150f;
         //camera.position.set(0,1.8f, 5).nor().scl(camDist);
@@ -85,7 +81,6 @@ public class GameView implements Disposable {
 
         torch = new SpotLight();
         torch.setColor(Color.WHITE);
-        torch.intensity = 150f;
         torch.cutoffAngle = 0.3f * (float)Math.PI;
         torch.exponent = 1f;
 
@@ -102,7 +97,7 @@ public class GameView implements Disposable {
         light.direction.set(0.3f, -1f, -0.5f).nor();
         light.color.set(Color.WHITE);
         light.intensity = Settings.directionalLightLevel;
-        //sceneManager.environment.add(light);      // sunlight
+
 
         if(Settings.cascadedShadows) {
             csm = new CascadeShadowMap(Settings.numCascades);
@@ -114,10 +109,9 @@ public class GameView implements Disposable {
 
         // setup quick IBL (image based lighting)
         IBLBuilder iblBuilder = IBLBuilder.createOutdoor(light);
-        environmentCubemap = EnvironmentUtil.createCubemap(new InternalFileHandleResolver(),
+        environmentCubemap = EnvironmentUtil.createCubemap(new InternalFileHandleResolver(),        // skybox
             "skybox/side-", ".png", EnvironmentUtil.FACE_NAMES_NEG_POS);
 
-//        environmentCubemap = iblBuilder.buildEnvMap(1024);
         diffuseCubemap = iblBuilder.buildIrradianceMap(256);
         specularCubemap = iblBuilder.buildRadianceMap(10);
         iblBuilder.dispose();
@@ -184,6 +178,7 @@ public class GameView implements Disposable {
 
         torch.position.set(camera.position);
         torch.direction.set(camera.direction);
+
         if(Settings.torchOn)
             torch.intensity = 0.25f * world.batteryLevel;
         else

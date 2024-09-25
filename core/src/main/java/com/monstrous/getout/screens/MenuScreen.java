@@ -85,7 +85,7 @@ public class MenuScreen extends StdScreenAdapter {
     public void resize(int width, int height) {
         // Resize your screen here. The parameters represent the new window size.
 
-        Gdx.app.log("MenuScreen","resize "+width+" x "+height);
+        //Gdx.app.log("MenuScreen","resize "+width+" x "+height);
         viewport.update(width, height, true);
         stage.getViewport().update(width, height, true);
         rebuild();

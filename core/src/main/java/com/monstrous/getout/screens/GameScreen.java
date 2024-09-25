@@ -7,15 +7,12 @@ import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.graphics.Cursor;
 import com.monstrous.getout.*;
 import com.monstrous.getout.collision.ColliderView;
-import com.monstrous.getout.input.KeyBinding;
 import com.monstrous.getout.input.MyControllerAdapter;
-
-import javax.swing.*;
 
 
 public class GameScreen extends StdScreenAdapter {
     private final Main game;
-    public World world;
+    private final World world;
     public GameView gameView;
     private ColliderView colliderView;
     private GUI gui;
@@ -30,11 +27,12 @@ public class GameScreen extends StdScreenAdapter {
         completed = false;
 
         world = new World(game);
-        gameView = new GameView(game.assets);  // need to keep persistent because it holds camera (player) position
+        gameView = new GameView(game.assets);  // need to keep persistent because it holds camera (player) position, hence not in show()
 
+        // don't use from Assets, doesn't work with teavm
         music = Gdx.audio.newMusic(Gdx.files.internal("music/bossa-nova-echo.ogg"));
         if(Settings.playMusic){
-            // don't use from Assets, broken on web?
+
             music.play();
             music.setLooping(true);
             music.setVolume(0.5f);
@@ -69,11 +67,8 @@ public class GameScreen extends StdScreenAdapter {
 
         if(Settings.fullScreen)
             toFullScreen();
-//        else
-//            toWindowedScreen();
 
         InputMultiplexer im = new InputMultiplexer();
-        //im.addProcessor(botController);
         im.addProcessor(gameView.camController);
         Gdx.input.setInputProcessor(im);
 
@@ -112,8 +107,8 @@ public class GameScreen extends StdScreenAdapter {
         if(Settings.showColliders)
             colliderView.render(gameView.camera);
 
-        if(world.numElements != numElements){   // force gui rebuild when new element is found
-            numElements = world.numElements;
+        if(world.numCardsFound != numElements){   // force gui rebuild when new element is found
+            numElements = world.numCardsFound;
             gui.rebuild();
         }
 
@@ -142,7 +137,6 @@ public class GameScreen extends StdScreenAdapter {
     @Override
     public void resize(int width, int height) {
         // Resize your screen here. The parameters represent the new window size.
-        Gdx.app.log("GameScreen.resize", ""+width+" x "+height);
         gameView.resize(width, height);
         gui.resize(width, height);
     }
