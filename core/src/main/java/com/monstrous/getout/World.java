@@ -244,7 +244,7 @@ public class World implements Disposable {
                     collisions.removeValue(collider, true);
                 }
                 else if (collider.type == Collider.Type.CLOSED_DOOR)
-                    message = "You lack the elements to open the door.";
+                    message = "You need all four elements to open the door.";
             }
         }
         return collisions;

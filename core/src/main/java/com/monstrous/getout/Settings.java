@@ -9,7 +9,7 @@ public class Settings {
 
 
     public static String title = "Get The Heck Out";
-    public static String version = "v1.0.3 September 2024";
+    public static String version = "v1.0.4 September 2024";
 
     public static boolean release = true;
 

@@ -37,6 +37,8 @@ Music:
 Music by Oleksii Kaplunskyi (via Pixabay)
 VHS font: https://www.fontspace.com/real-vhs-font-f44868
 
+Dev Log: https://monstroussoftware.github.io/2024/09/25/GTHO-post-mortem.html
+
 
 
 
