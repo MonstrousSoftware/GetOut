@@ -55,6 +55,7 @@ public class GameView implements Disposable {
         colorConfig.numPointLights = 0;
         colorConfig.numSpotLights = 1;
         colorConfig.numBones = 12;      // patrol bot has 12 bones
+        colorConfig.glslVersion = "#version 300 es\n" + "#define GLSL3\n";
 
         DepthShader.Config depthConfig= new DepthShader.Config();
         depthConfig.numBones = 12;

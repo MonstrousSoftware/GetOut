@@ -1,7 +1,9 @@
 package com.monstrous.getout.lwjgl3;
 
-import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
-import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
+import com.github.dgzt.gdx.lwjgl3.Lwjgl3ApplicationConfiguration;
+import com.github.dgzt.gdx.lwjgl3.Lwjgl3VulkanApplication;
+//import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
+//import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.monstrous.getout.Settings;
 import com.monstrous.getout.screens.Main;
 
@@ -12,8 +14,8 @@ public class Lwjgl3Launcher {
         createApplication();
     }
 
-    private static Lwjgl3Application createApplication() {
-        return new Lwjgl3Application(new Main(), getDefaultConfiguration());
+    private static Lwjgl3VulkanApplication createApplication() {
+        return new Lwjgl3VulkanApplication(new Main(), getDefaultConfiguration());
     }
 
     private static Lwjgl3ApplicationConfiguration getDefaultConfiguration() {
@@ -37,6 +39,9 @@ public class Lwjgl3Launcher {
         // Use OpenGL 3.2 to emulate GL ES 3.1
         // needed for AA frame buffer
 //        configuration.setOpenGLEmulation(Lwjgl3ApplicationConfiguration.GLEmulation.GL31, 3,2);
+
+        configuration.setOpenGLEmulation(Lwjgl3ApplicationConfiguration.GLEmulation.ANGLE_GLES32, 0, 0);
+        new Lwjgl3VulkanApplication(new Main(), configuration);
         return configuration;
     }
 }
